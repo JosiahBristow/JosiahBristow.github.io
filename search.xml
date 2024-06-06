@@ -1,21 +1,289 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>Hello World</title>
-    <url>/2024/06/06/hello-world/</url>
-    <content><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
+    <title>stl</title>
+    <url>/2024/06/06/stl/</url>
+    <content><![CDATA[<h1 id="C-STL入门"><a href="#C-STL入门" class="headerlink" title="C++ STL入门"></a>C++ STL入门</h1><h2 id="STL简介"><a href="#STL简介" class="headerlink" title="STL简介"></a>STL简介</h2><blockquote>
+<p>STL是Standard Template Library的简称，中文名标准模板库，惠普实验室开发的一系列软件的统称。它是由Alexander Stepanov、Meng Lee和David R Musser在惠普实验室工作时所开发出来的。从根本上说，STL是一些“容器”与“算法”的集合，所谓的这些“容器”无非就是已经实现好了数据结构，能够让程序设计者更为方便的进行调用，“算法”则顾名思义就是已预先实现好了的算法集合。</p>
+</blockquote>
+<pre><code>&gt; STL的目的是标准化组件，这样就不用重新开发，可以使用现成的组件。STL现在是C++的一部分，因此不用安装额外的库文件。STL的版本很多，有很多公司或者工作室自定义STL形成各种各样的自定义标准。
+</code></pre>
+<h2 id="在C-STL中最基本的15个头文件"><a href="#在C-STL中最基本的15个头文件" class="headerlink" title="在C++ STL中最基本的15个头文件"></a>在C++ STL中最基本的15个头文件</h2><p><algorithm> 	<deque> 	<functional> 	<iterator> 	<vector><br><list> 	<map> 	<memory> 	<numeric> 	<queue><br><set> 	<stack> 	<string> 	<array> 	<utility></p>
+<h2 id="STL中包含的六大内容"><a href="#STL中包含的六大内容" class="headerlink" title="STL中包含的六大内容"></a>STL中包含的六大内容</h2><h3 id="容器（Container）"><a href="#容器（Container）" class="headerlink" title="容器（Container）"></a>容器（Container）</h3><pre><code>是一种数据结构，也是本章节提的重点，如list(链表)，vector(向量数组)，stack(栈)，队列(queue) ，以模板类的方法提供，为了访问容器中的数据，可以使用由容器类输出的迭代器。
+</code></pre>
+<h3 id="迭代器（Iterator）"><a href="#迭代器（Iterator）" class="headerlink" title="迭代器（Iterator）"></a>迭代器（Iterator）</h3><pre><code>是一种特殊的指针，它提供了访问容器中对象的方法，在程序设计中，它扮演了容器和算法之间的胶合剂，利用迭代器可以快速而安全的对容器内容进行操作，或是进行算法模板的使用。
+</code></pre>
+<h3 id="算法（Algorithm）"><a href="#算法（Algorithm）" class="headerlink" title="算法（Algorithm）"></a>算法（Algorithm）</h3><pre><code>（部分书籍称为泛型算法，generic algorithms），是一类常用的算法模板，既可以对容器进行操作，同时其开放性也让算法类本身可以针对数组或者是自定义结构体等结构进行直接的操作。
+</code></pre>
+<h3 id="仿函数（Function-object）（又称为函数对象，function-object）"><a href="#仿函数（Function-object）（又称为函数对象，function-object）" class="headerlink" title="仿函数（Function object）（又称为函数对象，function object）"></a>仿函数（Function object）（又称为函数对象，function object）</h3><pre><code>是一种行为类似函数，这样讲可能有些抽象，我们可以理解为一种高级的，重载了()操作符的结构体与类。
+迭代适配器（Iterator Adaptor）
+是一种用来修饰容器或者仿函数的接口，它使得得带适配器使算法能够以逆向模式，安插模式进行工作，甚至还可以与流配合，它对容器起到非常大的辅助作用，同时他还将迭代器进行了更高级别的抽象。
+</code></pre>
+<h3 id="空间配制器（allocator）"><a href="#空间配制器（allocator）" class="headerlink" title="空间配制器（allocator）"></a>空间配制器（allocator）</h3><pre><code>是负责空间的配置与管理，重点就是对容器的空间申请和空间释放进行管理，你可以理解为C的malloc和free函数，C++的new和delete关键字。
+</code></pre>
+<p><strong>我们主要研究前三项</strong></p>
+<p><strong>容器篇</strong><br><a href="">Vector容器</a><br>持续更新中,敬请期待…</p>
+<p><strong>算法篇</strong><br>持续更新中,敬请期待…</p>
+<p><strong>迭代器篇</strong><br>持续更新中,敬请期待…</p>
 ]]></content>
+      <categories>
+        <category>C/C++</category>
+        <category>STL</category>
+      </categories>
+      <tags>
+        <tag>STL</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>stl</title>
+    <url>/2024/06/06/vector/</url>
+    <content><![CDATA[<h1 id="Vector容器"><a href="#Vector容器" class="headerlink" title="Vector容器"></a>Vector容器</h1><h2 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h2><blockquote>
+<p>Vector可以翻译为向量，或向量数组，至于为什么以向量命名，可以理解为一维空间也是存在向量的。<br>Vector是最简单的序列是容器，就像数组一样，向量使用连续的存储位置作为元素，这意味着它们的元素也可以使用常量指向其元素的偏移来访问，与数组一样有效。但与数组不同，它们的大小可以动态变化，其存储由容器自动处理。<br>总结一下Vector就是一个动态创建空间，且预先加载了常用的数组操作的数组</p>
+</blockquote>
+<h2 id="相关头文件"><a href="#相关头文件" class="headerlink" title="相关头文件"></a>相关头文件</h2><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;vector&gt;</span></span></span><br></pre></td></tr></table></figure>
+
+<h3 id="初始化"><a href="#初始化" class="headerlink" title="初始化"></a>初始化</h3><table>
+<thead>
+<tr>
+<th align="left">代码</th>
+<th align="right">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">vector<T> v1;</td>
+<td align="right">v1 是一个元素类型为 T 的空 vector</td>
+</tr>
+<tr>
+<td align="left">vector<T> v2(v1);</td>
+<td align="right">使用 v2 中所有元素初始化 v1</td>
+</tr>
+<tr>
+<td align="left">vector<T> v2 &#x3D; v1;</td>
+<td align="right">同上</td>
+</tr>
+<tr>
+<td align="left">vector<T> v3(n, val);</td>
+<td align="right">v3 中包含了 n 个值为 val 的元素</td>
+</tr>
+<tr>
+<td align="left">vector<T> v4(n);</td>
+<td align="right">v3 中包含了 n 个默认值初始化的元素</td>
+</tr>
+<tr>
+<td align="left">vector<T> v5{a, b, c…};</td>
+<td align="right">使用 a, b, c… 初始化 v5</td>
+</tr>
+<tr>
+<td align="left">vector<T> v1;</td>
+<td align="right">同上</td>
+</tr>
+<tr>
+<td align="left">vector&lt;vector<int>&gt; matrix(M,vector<int>(N));</td>
+<td align="right">二维数组初始化</td>
+</tr>
+</tbody></table>
+<h2 id="vector-常用基础操作"><a href="#vector-常用基础操作" class="headerlink" title="vector 常用基础操作"></a>vector 常用基础操作</h2><table>
+<thead>
+<tr>
+<th align="left">代码</th>
+<th align="right">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">v.empty();</td>
+<td align="right">如果 v 为空则返回 true，否则返回 false</td>
+</tr>
+<tr>
+<td align="left">v.size();</td>
+<td align="right">返回 v 中元素的个数</td>
+</tr>
+<tr>
+<td align="left">v.push_back(val);</td>
+<td align="right">向 vector 的尾端添加值为 val 的元素。</td>
+</tr>
+<tr>
+<td align="left">v.pop_back(val);</td>
+<td align="right">删除尾元素，返回void。vector同样 不支持 pop_front 操作。</td>
+</tr>
+<tr>
+<td align="left">v[n];</td>
+<td align="right">返回 v 中第 n 个位置上元素的引用，不能用下标操作添加元素</td>
+</tr>
+<tr>
+<td align="left">v.back();</td>
+<td align="right">返回 v 中最后一个元素的引用</td>
+</tr>
+<tr>
+<td align="left">v.front();</td>
+<td align="right">返回 v 中第一个元素的引用</td>
+</tr>
+<tr>
+<td align="left">v1 &#x3D; v2;</td>
+<td align="right">用 v2 中的元素替换 v1 中的元素</td>
+</tr>
+<tr>
+<td align="left">v1 &#x3D; {a, b, c…};</td>
+<td align="right">用元素 {a, b, c…} 替换 v1 中的元素</td>
+</tr>
+<tr>
+<td align="left">v1 &#x3D;&#x3D; v2;</td>
+<td align="right">当且仅当拥有相同数量且相同位置上值相同的元素时，v1 与 v2 相等</td>
+</tr>
+<tr>
+<td align="left">v1 !&#x3D; v2;</td>
+<td align="right">自行体会</td>
+</tr>
+<tr>
+<td align="left">&lt;, &lt;&#x3D;, &gt;, &gt;&#x3D;</td>
+<td align="right">以字典序进行比较</td>
+</tr>
+</tbody></table>
+<h2 id="插入和删除"><a href="#插入和删除" class="headerlink" title="插入和删除"></a>插入和删除</h2><p><strong>插入</strong></p>
+<table>
+<thead>
+<tr>
+<th align="left">代码</th>
+<th align="right">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">void push_back(const T&amp; x);</td>
+<td align="right">向量尾部增加一个元素X</td>
+</tr>
+<tr>
+<td align="left">iterator insert(iterator it,const T&amp; x);</td>
+<td align="right">向量中迭代器指向元素前增加一个元素x</td>
+</tr>
+<tr>
+<td align="left">iterator insert(iterator it,int n,const T&amp; x);</td>
+<td align="right">向量中迭代器指向元素前增加n个相同的元素x</td>
+</tr>
+<tr>
+<td align="left">iterator insert(iterator it,const_iterator first,const_iterator last);</td>
+<td align="right">向量中迭代器指向元素前插入另一个相同类型向量的[first,last)间的数据</td>
+</tr>
+</tbody></table>
+<p><strong>删除</strong></p>
+<table>
+<thead>
+<tr>
+<th align="left">代码</th>
+<th align="right">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">iterator erase(iterator it);</td>
+<td align="right">删除向量中迭代器指向元素</td>
+</tr>
+<tr>
+<td align="left">iterator erase(iterator first,iterator last);</td>
+<td align="right">删除向量中[first,last)中元素</td>
+</tr>
+<tr>
+<td align="left">void pop_back();</td>
+<td align="right">删除向量中最后一个元素</td>
+</tr>
+<tr>
+<td align="left">void clear();</td>
+<td align="right">清空向量中所有元素</td>
+</tr>
+</tbody></table>
+<h2 id="遍历"><a href="#遍历" class="headerlink" title="遍历"></a>遍历</h2><table>
+<thead>
+<tr>
+<th align="left">代码</th>
+<th align="right">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">reference at(int pos);</td>
+<td align="right">返回pos位置元素的引用</td>
+</tr>
+<tr>
+<td align="left">reference front();</td>
+<td align="right">返回首元素的引用</td>
+</tr>
+<tr>
+<td align="left">reference back();</td>
+<td align="right">返回尾元素的引用</td>
+</tr>
+<tr>
+<td align="left">iterator begin();</td>
+<td align="right">返回向量头指针，指向第一个元素</td>
+</tr>
+<tr>
+<td align="left">iterator end();</td>
+<td align="right">返回向量尾指针，指向向量最后一个元素的下一个位置</td>
+</tr>
+<tr>
+<td align="left">reverse_iterator rbegin();</td>
+<td align="right">反向迭代器，指向最后一个元素</td>
+</tr>
+<tr>
+<td align="left">reverse_iterator rend();</td>
+<td align="right">反向迭代器，指向第一个元素之前的位置</td>
+</tr>
+</tbody></table>
+<h2 id="大小"><a href="#大小" class="headerlink" title="大小"></a>大小</h2><table>
+<thead>
+<tr>
+<th align="left">代码</th>
+<th align="right">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">int size() const;</td>
+<td align="right">返回向量中元素的个数</td>
+</tr>
+<tr>
+<td align="left">int capacity() const;</td>
+<td align="right">返回当前向量所能容纳的最大元素值</td>
+</tr>
+<tr>
+<td align="left">int max_size() const;</td>
+<td align="right">返回最大可允许的vector元素数量值</td>
+</tr>
+</tbody></table>
+<h2 id="判断"><a href="#判断" class="headerlink" title="判断"></a>判断</h2><table>
+<thead>
+<tr>
+<th align="left">代码</th>
+<th align="right">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">bool empty() const;</td>
+<td align="right">判断向量是否为空，若为空，则向量中无元素</td>
+</tr>
+</tbody></table>
+<h2 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h2><table>
+<thead>
+<tr>
+<th align="left">代码</th>
+<th align="right">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">void swap(vector&amp;);</td>
+<td align="right">交换两个同类型向量的数据</td>
+</tr>
+<tr>
+<td align="left">void assign(int n,const T&amp; x);</td>
+<td align="right">设置向量中前n个元素的值为x</td>
+</tr>
+<tr>
+<td align="left">void assign(const_iterator first,const_iterator last);</td>
+<td align="right">向量中[first,last)中元素设置成当前向量元素</td>
+</tr>
+</tbody></table>
+]]></content>
+      <categories>
+        <category>C/C++</category>
+        <category>STL</category>
+        <category>vector</category>
+      </categories>
+      <tags>
+        <tag>STL</tag>
+      </tags>
   </entry>
 </search>
