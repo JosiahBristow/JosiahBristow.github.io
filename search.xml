@@ -634,6 +634,10 @@
 合并分支<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git merge [branch name] <span class="comment">#执行该命令前先切换到你要合并的分支，如master分支</span></span><br></pre></td></tr></table></figure></li>
 </ol>
 ]]></content>
+      <categories>
+        <category>Tools</category>
+        <category>Git</category>
+      </categories>
       <tags>
         <tag>Git</tag>
       </tags>
@@ -658,6 +662,220 @@
       </categories>
       <tags>
         <tag>牛顿法</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>为什么说10月24日是程序员的节日？</title>
+    <url>/2024/06/06/1024/</url>
+    <content><![CDATA[<h1 id="为什么说10月24日是程序员的节日？"><a href="#为什么说10月24日是程序员的节日？" class="headerlink" title="为什么说10月24日是程序员的节日？"></a>为什么说10月24日是程序员的节日？</h1><p>1024其实就是2的十次方，二进制计数的基本计量单位之一，是程序员每天都在打交道的数字。<br><img src="/2024/06/06/1024/1024.jpg" alt="1024"><br>1024也是一个很美妙的数字（别想歪），在数字世界里，1024BYTE(字节)&#x3D;1KB，1024 KB&#x3D;1MB，1024 MB&#x3D;1GB等等。<br>同时，1024MB是1GB，而1GB与1级谐音，也有一级棒的意思。<br>再加上每年10月24日是“联合国日”（1947年起），也是世界发展信息日<br>，所以这一天对于程序员来说非常有纪念意义。<br>国内许多互联网大厂都会在这个特殊的日子举办一些活动，纪念为公司和广大网友做出重大贡献的程序员们。</p>
+]]></content>
+      <tags>
+        <tag>1024</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>linus</title>
+    <url>/2024/06/06/linus/</url>
+    <content><![CDATA[<h1 id="《Just-for-fun》-Linux之父Linus的传奇人生"><a href="#《Just-for-fun》-Linux之父Linus的传奇人生" class="headerlink" title="《Just for fun》-Linux之父Linus的传奇人生"></a>《Just for fun》-Linux之父Linus的传奇人生</h1><h2 id="Linus-的计算机启蒙"><a href="#Linus-的计算机启蒙" class="headerlink" title="Linus 的计算机启蒙"></a>Linus 的计算机启蒙</h2><p>1969年12月28日，Linus 出生于芬兰赫尔辛基，他从小就是一个书呆子，矮个子，读书不错，但是不擅长运动，不善社交。</p>
+<p>Linus的外公是赫尔辛基大学的统计学教授，1981年Linus 11岁的时候，外公买回来一台Commodore vic-20计算机，用来在家进行统计学计算。Linus 就帮助外公输入他事先写在纸上的basic程序。一开始是机械的输入外公写好的程序，后来是根据计算机的使用手册，把示例程序敲出来。</p>
+<p>然后Linus 对计算机的兴趣就一发不可收拾，买了很多计算机的书和杂志，然年后发现计算机是机器语言来控制的，于是他开始研究机器语言编写程序，在外公过世后，这台计算机归了Linus 所用，从此，他开始了更疯狂的计算机学习（玩电脑）。<br><img src="/2024/06/06/linus/Commodore-VIC-20-FL.jpg" alt="commodore vic-20"><br>在家玩电脑，熬通宵是常有的事情，别的男孩是躲在被窝里悄悄的阅读《花花公子》，他则是假装睡着，等妈妈走开在坐到电脑跟前。因为玩的太沉迷，他妈妈会和她的一些记者朋友们说，Linus 是个很好养的小孩，只要把他和一台电脑关在一个黑乎乎的小屋里，再时不时的丢一点面条进去就行。</p>
+<p>Linus 的程序员气质也是从小养成的，小学的时候学校当时有好些女生想要得到他这位数学天才的辅导，他却都不理不睬的。到中学的时候，带女孩子回家辅导数学，就真的辅导数学，女生的暗示都没有听懂。</p>
+<p>这就是程序员的注孤生buff吧，女生哪有计算机有意思。</p>
+<h2 id="Linux操作系统的诞生"><a href="#Linux操作系统的诞生" class="headerlink" title="Linux操作系统的诞生"></a>Linux操作系统的诞生</h2><p>读高中的时候，因为数学特别好，拿了奖学金，加上日常攒钱和打工，Linus 花了2000美金，买了一台sinclairQL。</p>
+<p>Linus 的操作系统之旅是从驱动程序开始的，他买了一个软盘控制器，但是自带的驱动程序特别差，所以他就自己写了一个，结果在写驱动的时候，发现了sinclair自带的Q-DOS操作系统的bug，于是他开始对操作系统进行反汇编，把操作系统的机器语言翻译为汇编语言，但是Q-DOS只有钩子机制可以加载自己的代码，系统本身不支持任何修改，这给年轻的Linus 埋下了做操作系统的种子。<br><img src="/2024/06/06/linus/sinclairQL.jpg" alt="sinclairQL"><br>Linus 充分诠释了什么叫我行我上</p>
+<p>每个人都可能会遇到一本改变自己一生的书，对Linus 而言，改变他一生的书是安德鲁·坦尼鲍姆所著的《操作系统：设计与实现》。</p>
+<p>这本书里阿姆斯特丹自由大学的教授坦尼鲍姆讨论了他为Unix操作系统编写的教学辅助工具-Minix操作系统。Minix是一个小型的Unix系统，是为了介绍Unix操作系统如何实现而做，也是最好入门Unix操作系统的代码示例。这本书让Linus 脱胎换骨，在操作系统领域达到了一个全新的高度，为他编写Linux解决了大量技术问题。</p>
+<p>Linus 在学习Minix操作系统的过程中，对自带的终端仿真程序非常不满，于是自己写了一个。然后他不想在Minix系统里写，想要在无系统的裸硬件上写，来更好的理解计算机的执行原理。于是他需要知道cpu的工作原理，知道如何写入屏幕，如何读取键盘的输入，如何读写modem，这就是操作系统的雏形。Linus 用这个终端程序登入学校的电脑，查阅电子邮件，参加Minix新闻组的讨论，但是他还想上传和下载文件，于是还需要磁盘驱动程序和文件系统驱动，这是巨大的工作量。他的日程从此变成了编程-睡觉-编程-睡觉的循环，在过程中，这个终端越来越像操作系统，于是Linus 干脆决定把这个终端做成操作系统。</p>
+<p>要做成操作系统，还有一个巨大的挑战，那就是要实现Posix规范，也就是Unix系统里的系统调用，有了这些系统api，其他Unix的程序就可以在这个操作系统上运行。Linus 在电子邮件新闻组里求助未果后，找到Sun公司Unix系统的用户手册，然后根据基本版的系统调用标准，开始自己实现这些功能。</p>
+<p>同时他在电子邮件讨论组里的求助邮件，引起了赫尔辛基理工大学的助教阿里·克莱姆的注意，阿里为他提供了FTP站点，让Linus把他的操作系统代码可以共享出来。</p>
+<p>Linus在开发到一定程度之后，决定把代码开源出去。在1991年9月17日，Linus把操作系统上传到FTP上，那个时候的Linux操作系统大概1w行左右，而现在Linux超过1000w行代码。</p>
+<p>关于操作系统的命名，本来linus是打算叫freax，是发read，free，unix的合成词。但是阿里·莱姆克很讨厌这个名字，他挺喜欢另一个名字-Linux，也就是Linus的名字加上当时的操作系统命名习惯，结尾用x，Linux就此命名。<br><img src="/2024/06/06/linus/linux.jpg" alt="linux"></p>
+<h2 id="使用GPL许可，Linux的商业价值全面释放"><a href="#使用GPL许可，Linux的商业价值全面释放" class="headerlink" title="使用GPL许可，Linux的商业价值全面释放"></a>使用GPL许可，Linux的商业价值全面释放</h2><p>在发布Linux后，Linus本打算就此洗手不干，因为已经完成了操作系统中最有意思的工作，对后续的内容失去了兴趣。但是意外发生了，他写的程序因为bug，覆盖了硬盘分区，整个Minix系统文件没了，他要做一个选择，重新安装Minix，或者放弃使用Minix，使用Linux。为了完善Linux系统，他决定以后就用自己的系统，需要什么Minix的功能，就自己写到Linux上，于是他继续不断更新。</p>
+<p>与此同时，ftp上的Linux操作系统代码被人注意到，开始有人下载使用，并给与了很多反馈：新增功能，修复bug，支持新硬件等。Linus不断地满足这些用户的要求，其中最重要的是分页到磁盘功能，也就是现在操作系统必备的虚拟内存功能。虚拟内存可以在计算机内存不足的时候用硬盘来代替内存。这个程序让Linux名声鹊起，因为那个年代内存还是1mb，2mb的规格，非常捉襟见肘，为了在低配置的情况下运行程序，这个功能作用巨大，于是越来越多的人被这个功能吸引，来使用Linux。</p>
+<p>在当时的极客圈，有个不成文的规定：下载软件，最好给软件作者汇上10美元。但是Linus拒绝了，虽然他手头很紧，有5000美金的学生贷款，分期的电脑费用也没有还完，但是他觉得自己是在其他人的基础上做出linux，而用户的反馈可以改良Linux，所以实在不好意思索要报酬。</p>
+<p>但是Linus一时心血来潮，半开玩笑的向Linux用户索要明信片，结果几百张明信片从日本，新西兰，荷兰，美国等地蜂拥而至。这些全世界各地的用户反馈让Linus受到了极大的鼓舞，让他决定继续做下去。</p>
+<p>Linux越来越流行，Linus面临着另一个挑战，就是软件版权协议。Linus因为个人的道德洁癖和想要更好的发展Linux，一直要求Linux免费且开源，在版权说明中要求任何人只要不用于出售，都可以免费使用Linux操作系统，而且对Linux做的改进必须开源。</p>
+<p>但是慢慢的，有人开始把Linux下载到软盘上，然后卖给别人收取报酬，这让linus好好反省了“Linux是非卖品”这个原则。通过反复的思考和调研，他决定使用GPL许可证。<br><img src="/2024/06/06/linus/GPL.jpg" alt="GPL"><br>GPL许可证是通用公共版权许可证，最早是为GNU项目所写，主要内容是:任何遵守条款和条件的被授证人员都有权修改作品，以及复制和重新分发作品或任何派生版本。被许可人被允许为此服务收取费用，或无偿。</p>
+<p>简单来说，Linux本身是开源和免费的，但是也可以有人依靠卖Linux的拷贝和自己修改的Linux赚钱，但是基于Linux修改得到的系统，也必须符合GPL协议，而且提供给使用者的时候，必须提供源代码。</p>
+<p>GPL带来的，是Linux系统可以被人用于商业用途，比如你可以自己做一个Linux发行版本，卖给你的客户，愿意卖多贵都可以，然后你的客户得到了全部的源代码，他可以自己编译，自己修改你的系统，做成自己的Linux发行版，因为GPL规定客户可以随意使用这个源代码。那么你怎么赚钱呢？其实很简单，系统会不断的更新，安全补丁或者新功能，这些更新你的客户也是需要的。所以很多时候，你不是靠卖拷贝赚钱，而是卖维护Linux，提供功能，补丁，咨询服务等来赚钱，变成订阅业务模式。这也是现在Redhat公司主营业务模式。</p>
+<p>使用GPL，是Linux操作系统发展过程中的另一个里程碑，因为有很多公司和个人，可以依靠Linux赚钱了，有利益相关，Linux才能发展的更好</p>
+<h2 id="乘上开源软件的东风，Linux大器终成"><a href="#乘上开源软件的东风，Linux大器终成" class="headerlink" title="乘上开源软件的东风，Linux大器终成"></a>乘上开源软件的东风，Linux大器终成</h2><p>接下来Linux进入了发展的快车道，92年第一代x视窗系统被一个叫奥瑞斯特·扎布罗斯基的黑客，移植到Linux系统，并因此实现了socket层。这样Linux有了图形界面，Linus更是从中嗅出了机会，用sokcet可以实现联网能力，于是他花了2年，实现了Linux的网络功能，让Linux系统更加成熟。Linux邮件新闻组知名度也越来越高，Linus找到5个志同道合的高手，组成了Linux核心小组，通过开放源代码，Linus做仲裁的模式，Linux越来越成熟。</p>
+<p>到93年，Linus成为了大学助教，开始上课，而他带的第一批学生中，有一个女生给他发邮件邀他约会，她是Linus遇到的第一个通过互联网的方式接近他的女人，于是Linus把她娶回了家。（Linus的原话就是这样）</p>
+<p>接下来就是Linus的人生高光时刻，Linux1.0版本发布，因为Linux已经非常知名，所以赫尔辛基大学非常支持，主动将计算机系的大礼堂借给Linus，而且这次发布会，会在芬兰的电视上进行直播，这是他生平第一次有机会在电视上看到自己。<br><img src="/2024/06/06/linus/linus.jpg" alt="linus"><br>96年，Linus拿到了硕士学位，收到朋友邀请，准备去美国考察工作机会。作为业界知名技术大神，Linus没有准备简历，就收到了5个offer，硅谷公司全美达，Redhat红帽，芬兰的电视公司，DEC等。最后Linus选择了全美达。</p>
+<p>全美达在当时是整个硅谷最神秘的公司，没人知道这家公司是做什么的，公司所有员工都签署了保密协议，不能对外透露自己的工作内容。这份神秘保持到了2000年，全美达推出了一种全新架构的cpu—Crusoe，这种cpu最大的特点是低功耗，而且完全兼容x86指令集，依靠全新架构的cpu，全美达在2000年11月IPO成功，成为互联网泡沫破裂前最后一家上市的科技巨头。但是因为AMD和Intel的竞争，以及自己的研发出现问题，09年全美达被收购，同年收购全美达的novafora因为财务问题和经营不善破产，全美达从此成为历史。<br><img src="/2024/06/06/linus/CPUCrusoe.jpg" alt="CPUCrusoe"><br>全美达兼容x86指令集用了一个很惊人的方法，用软件翻译x86指令，转化为自己cpu的指令，而这个核心的x86解释程序，就是linus加盟后编写的。</p>
+<p>1998年，网景公司开放了mozila项目的源代码，这就是后来的firefox火狐浏览器的前身。2个月后，Sun公司也加入开源运动，成为第一个加盟Linux国际组织的硬件设备商，它们的服务器将支持使用Linux系统。（Sun公司当年还是类似IBM的主要销售服务器的公司，当然sun最大的贡献还是开发了java语言，多谢祖师爷赏饭吃，不过Sun后来被Oracle收购，现在也已经是历史名词了。）IBM随后加入，接下来是当年的数据库三巨头之一的Informix对linux系统开放数据库接口，Oracle也快速跟进，开放数据库接口。</p>
+<p>随着越来越多大公司的支持和技术人员的重视，Linux开始在服务器领域攻城略地，成为最受欢迎的服务器操作系统。</p>
+<h2 id="财务自由"><a href="#财务自由" class="headerlink" title="财务自由"></a>财务自由</h2><p>1999年8月11日，Redhat红帽挂牌上市，Redhat是专门Linux发行版和企业服务的公司。Redhat给了Linus一些股票期权，在上市的时候，Linus突然意识到，自己有了100w美金，随着后续股票价格的上涨，这些期权价值达到了500w美金。<br><img src="/2024/06/06/linus/redhat.jpg" alt="redhat"><br>而更疯狂的是VA Linux上市，VA Linux前身是VA research公司，最早的业务是构建和销售装有Linux操作系统的pc，在1998年就占了20%的linux硬件市场。在1999年，VA Linux进行了IPO，上市第一天，价格就从30美金涨到300美金，VA Linux和Redhat一样给了Linus一些股票期权。不过VA linux赶上了互联网泡沫破裂，在01年价格暴跌到7美元，在后续几经辗转，转型更名为Geeknet，并在15年被游戏连锁店GameStop收购。</p>
+<p>但是无论如何，Linus都在这两次IPO中获得了巨大的财富，成为财务自由人士。</p>
+<h2 id="Linus的人生哲学"><a href="#Linus的人生哲学" class="headerlink" title="Linus的人生哲学"></a>Linus的人生哲学</h2><p>Linus认为驱动人类的是三点动机：生存，人在社会秩序中的位置，以及娱乐。</p>
+<p>人类的进化就是从生存到社会行为，从社会行为到娱乐。</p>
+<p>在技术的世界里，这种进化模式在重演，现代技术的早期阶段是“技术的生存时代”，技术只是为了生存的更好些，比如更快的织出步，更快的运送商品。</p>
+<p>现在的时代是“信息时代”，科技被用于通讯和传播信息，这是社会化的行为，已经超脱出生存范畴。互联网就是典型的代表，有了互联网，通讯技术社会化的阶段就已经到来。</p>
+<p>终极目标则是进入娱乐化社会，在娱乐化社会，互联网和无线通讯都是理所当然，那时候思科公司已成往事，世界将有迪斯尼公司说了算。</p>
+<p>从这个角度看，生活的最终目的是为了享受乐趣。</p>
+<h2 id="个人感想"><a href="#个人感想" class="headerlink" title="个人感想"></a>个人感想</h2><p>这本传记写于2001年，叙事的部分，就讲到通过Redhat和VA Linux的IPO，Linus获得财务自由为止。在05年，Linus又做了一个改变世界的程序-分布式版本控制系统Git，现在Git已经是世界上最流行的版本控制软件，而这个世界级的软件，Linus只花了10天就完成了第一个版本的开发。</p>
+<p>Linus的成神之路，从兴趣开始个人项目，在合适的时间，选择了开源的协作模式，然后通过GPL协议开放，带来了商业的繁荣，最后在开源软件运动的帮助下，最终封神。作为Linux的核心贡献者和项目的领导者，数十年如一日的维护Linux内核，这在很大程度上就是源于他对编程的兴趣，就像黄易说的：唯能极于情,故能极于剑。正因为对编程的热爱，才有了Linus的传奇一生。</p>
+<p><strong>本文转载自 <a href="https://zhuanlan.zhihu.com/p/195193559">https://zhuanlan.zhihu.com/p/195193559</a> （有改动）</strong></p>
+]]></content>
+  </entry>
+  <entry>
+    <title>Markdown学习笔记</title>
+    <url>/2024/06/06/markdown/</url>
+    <content><![CDATA[<h1 id="Markdown学习笔记"><a href="#Markdown学习笔记" class="headerlink" title="Markdown学习笔记"></a>Markdown学习笔记</h1><h2 id="Markdown简介"><a href="#Markdown简介" class="headerlink" title="Markdown简介"></a>Markdown简介</h2><blockquote>
+<p>   Markdown 是一种轻量级标记语言，创始人为约翰·格鲁伯（John Gruber）。 它允许人们使用易读易写的纯文本格式编写文档，然后转换成有效的 XHTML（或者HTML）文档。这种语言吸收了很多在电子邮件中已有的纯文本标记的特性。<br>由于 Markdown 的轻量化、易读易写特性，并且对于图片，图表、数学式都有支持，许多网站都广泛使用 Markdown 来撰写帮助文档或是用于论坛上发表消息。 如 GitHub、Reddit、Diaspora、Stack Exchange、OpenStreetMap 、SourceForge、简书等，甚至还能被使用来撰写电子书。</p>
+</blockquote>
+<h2 id="基础语法"><a href="#基础语法" class="headerlink" title="基础语法"></a>基础语法</h2><h3 id="标题"><a href="#标题" class="headerlink" title="标题"></a>标题</h3><p>可以通过在一行的开头 使用 1-6个# 来创建标题，对应1-6个级别的标题：</p>
+<figure class="highlight markdown"><table><tr><td class="code"><pre><span class="line"><span class="section"># 一级标题</span></span><br><span class="line"></span><br><span class="line"><span class="section">## 二级标题</span></span><br><span class="line"></span><br><span class="line"><span class="section">### 三级标题</span></span><br></pre></td></tr></table></figure>
+<h3 id="段落"><a href="#段落" class="headerlink" title="段落"></a>段落</h3><p>段落的写法很简单，直接写文字就行</p>
+<figure class="highlight markdown"><table><tr><td class="code"><pre><span class="line">这是一个段落</span><br></pre></td></tr></table></figure>
+<h3 id="换行"><a href="#换行" class="headerlink" title="换行"></a>换行</h3><p>在一行的末尾添加两个或多个空格，然后按回车键,即可创建一个换行</p>
+<h3 id="引用"><a href="#引用" class="headerlink" title="引用"></a>引用</h3><p>Markdown使用邮件风格的&gt;符号来创建引用块。 例如：</p>
+<figure class="highlight markdown"><table><tr><td class="code"><pre><span class="line"><span class="quote">&gt; 这是一段引用</span></span><br></pre></td></tr></table></figure>
+<h3 id="强调"><a href="#强调" class="headerlink" title="强调"></a>强调</h3><p><strong>粗体</strong><br>要加粗文本，请在单词或短语的前后各添加两个星号或下划线。如需加粗一个单词或短语的中间部分用以表示强调的话，请在要加粗部分的两侧各添加两个星号</p>
+<figure class="highlight markdown"><table><tr><td class="code"><pre><span class="line"><span class="strong">**粗体文字**</span></span><br><span class="line"></span><br><span class="line"><span class="strong">__粗体文字__</span></span><br></pre></td></tr></table></figure>
+<p><strong>斜体</strong><br>要用斜体显示文本，请在单词或短语前后添加一个星号或下划线。要斜体突出单词的中间部分，请在字母前后各添加一个星号，中间不要带空格。</p>
+<figure class="highlight markdown"><table><tr><td class="code"><pre><span class="line"><span class="emphasis">*斜体文字*</span></span><br><span class="line"></span><br><span class="line"><span class="emphasis">_斜体文字_</span></span><br></pre></td></tr></table></figure>
+<p><strong>粗斜体</strong></p>
+<p>要同时用粗体和斜体突出显示文本，请在单词或短语的前后各添加三个星号或下划线。要加粗并用斜体显示单词或短语的中间部分，请在要突出显示的部分前后各添加三个星号，中间不要带空格。</p>
+<figure class="highlight markdown"><table><tr><td class="code"><pre><span class="line"><span class="strong">**<span class="emphasis">*粗斜体文字*</span>**</span></span><br><span class="line"></span><br><span class="line"><span class="strong">__<span class="emphasis">_粗斜体文字_</span>__</span></span><br><span class="line"></span><br><span class="line"><span class="strong">**<span class="emphasis">_粗斜体文字_</span>**</span></span><br><span class="line"></span><br><span class="line"><span class="emphasis">*<span class="strong">__粗斜体文字__</span>*</span></span><br></pre></td></tr></table></figure>
+<h3 id="列表"><a href="#列表" class="headerlink" title="列表"></a>列表</h3><p>输入 清单事项1 就会创建一个无序列表， 这里 可以用- 和 +代替;<br>输入 1. 清单事项1 就会创建一个有序列表;<br>要在保留列表连续性的同时在列表中添加另一种元素，请将该元素缩进四个空格或一个制表符<br>语法如下所示：</p>
+<h4 id="无序列表"><a href="#无序列表" class="headerlink" title="无序列表"></a>无序列表</h4><figure class="highlight markdown"><table><tr><td class="code"><pre><span class="line"><span class="bullet">*</span> 红色</span><br><span class="line"></span><br><span class="line"><span class="bullet">*</span> 绿色</span><br><span class="line"></span><br><span class="line"><span class="bullet">*</span> 蓝色</span><br></pre></td></tr></table></figure>
+<h4 id="有序列表"><a href="#有序列表" class="headerlink" title="有序列表"></a>有序列表</h4><figure class="highlight markdown"><table><tr><td class="code"><pre><span class="line"><span class="bullet">1.</span> 红色</span><br><span class="line"><span class="bullet">2.</span> 绿色</span><br><span class="line"><span class="bullet">3.</span> 蓝色</span><br></pre></td></tr></table></figure>
+<h3 id="代码块"><a href="#代码块" class="headerlink" title="代码块"></a>代码块</h3><p>要将单词或短语表示为代码，请将其包裹在反引号 (&#96;) 中</p>
+<figure class="highlight markdown"><table><tr><td class="code"><pre><span class="line"><span class="code">`print(&quot;hello&quot;)`</span></span><br></pre></td></tr></table></figure>
+<h3 id="分隔线"><a href="#分隔线" class="headerlink" title="分隔线"></a>分隔线</h3><p>要创建分隔线，请在单独一行上使用三个或多个星号 (***)、破折号 (—) 或下划线 (___) ，并且不能包含其他内容</p>
+<figure class="highlight markdown"><table><tr><td class="code"><pre><span class="line"><span class="strong">***</span></span><br><span class="line"><span class="strong"></span></span><br><span class="line"><span class="strong">---</span></span><br><span class="line"><span class="strong"></span></span><br><span class="line"><span class="strong">__<span class="emphasis">_</span></span></span><br></pre></td></tr></table></figure>
+<h3 id="链接"><a href="#链接" class="headerlink" title="链接"></a>链接</h3><p>链接文本放在中括号内，链接地址放在后面的括号中，链接title可选。</p>
+<p>超链接Markdown语法代码：</p>
+<figure class="highlight markdown"><table><tr><td class="code"><pre><span class="line">[<span class="string">超链接显示名</span>](<span class="link">超链接地址 &quot;超链接title&quot;</span>)</span><br></pre></td></tr></table></figure>
+<p>给链接增加 Title</p>
+<p>链接title是当鼠标悬停在链接上时会出现的文字，这个title是可选的，它放在圆括号中链接地址后面，跟链接地址之间以空格分隔。</p>
+<figure class="highlight markdown"><table><tr><td class="code"><pre><span class="line">[<span class="string">超链接显示名</span>](<span class="link">超链接地址 &quot;超链接title&quot;</span>) &quot;超链接titl&quot;</span><br></pre></td></tr></table></figure>
+<p>网址和Email地址<br>使用尖括号可以很方便地把URL或者email地址变成可点击的链接。</p>
+<figure class="highlight markdown"><table><tr><td class="code"><pre><span class="line">&lt;网址或邮箱&gt;</span><br></pre></td></tr></table></figure>
+<p>带格式化的链接<br>强调 链接, 在链接语法前后增加星号。 要将链接表示为代码，请在方括号中添加反引号。</p>
+<figure class="highlight markdown"><table><tr><td class="code"><pre><span class="line">I love supporting the <span class="strong">**[<span class="string">EFF</span>](<span class="link">https://eff.org</span>)**</span>.</span><br><span class="line">This is the <span class="emphasis">*[<span class="string">Markdown Guide</span>](<span class="link">https://www.markdownguide.org</span>)*</span>.</span><br><span class="line">See the section on [<span class="string">`code`</span>](<span class="link">#code</span>).</span><br></pre></td></tr></table></figure>
+<p>引用类型链接<br>引用样式链接是一种特殊的链接，它使URL在Markdown中更易于显示和阅读。参考样式链接分为两部分：与文本保持内联的部分以及存储在文件中其他位置的部分，以使文本易于阅读。</p>
+<figure class="highlight markdown"><table><tr><td class="code"><pre><span class="line">链接的第一部分格式</span><br><span class="line">引用类型的链接的第一部分使用两组括号进行格式设置。第一组方括号包围应显示为链接的文本。第二组括号显示了一个标签，该标签用于指向您存储在文档其他位置的链接。</span><br><span class="line">尽管不是必需的，可以在第一组和第二组括号之间包含一个空格。第二组括号中的标签不区分大小写，可以包含字母，数字，空格或标点符号。</span><br><span class="line">链接的第二部分格式</span><br><span class="line">引用类型链接的第二部分使用以下属性设置格式：</span><br><span class="line">放在括号中的标签，其后紧跟一个冒号和至少一个空格（例如[label]:）。</span><br><span class="line">链接的URL，可以选择将其括在尖括号中。</span><br><span class="line">链接的可选标题，可以将其括在双引号，单引号或括号中。</span><br></pre></td></tr></table></figure>
+<h3 id="图片"><a href="#图片" class="headerlink" title="图片"></a>图片</h3><p>要添加图像，请使用感叹号 (!), 然后在方括号增加替代文本，图片链接放在圆括号里，括号里的链接后可以增加一个可选的图片标题文本。<br>插入图片Markdown语法代码：!</p>
+<figure class="highlight markdown"><table><tr><td class="code"><pre><span class="line">[<span class="string">图片alt</span>](<span class="link">图片地址 &quot;图片title&quot;</span>)。 </span><br></pre></td></tr></table></figure>
+<p>链接图片<br>给图片增加链接，请将图像的Markdown 括在方括号中，然后将链接添加在圆括号中。</p>
+<figure class="highlight markdown"><table><tr><td class="code"><pre><span class="line">[<span class="string">![图片alt</span>](<span class="link">图片地址 &quot;图片title&quot;</span>)](<span class="link">链接地址</span>)</span><br></pre></td></tr></table></figure>
+<h3 id="转义字符"><a href="#转义字符" class="headerlink" title="转义字符"></a>转义字符</h3><p>要显示原本用于格式化 Markdown 文档的字符，请在字符前面添加反斜杠字符 \</p>
+<table>
+<thead>
+<tr>
+<th align="left">Character</th>
+<th align="right">Name</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">\</td>
+<td align="right">backslash</td>
+</tr>
+<tr>
+<td align="left">&#96;</td>
+<td align="right">backtick</td>
+</tr>
+<tr>
+<td align="left">*</td>
+<td align="right">asterisk</td>
+</tr>
+<tr>
+<td align="left">_</td>
+<td align="right">underscore</td>
+</tr>
+<tr>
+<td align="left">{ }</td>
+<td align="right">curly braces</td>
+</tr>
+<tr>
+<td align="left">[ ]</td>
+<td align="right">brackets</td>
+</tr>
+<tr>
+<td align="left">( )</td>
+<td align="right">parentheses</td>
+</tr>
+<tr>
+<td align="left">#</td>
+<td align="right">pound sign</td>
+</tr>
+<tr>
+<td align="left">+</td>
+<td align="right">plus sign</td>
+</tr>
+<tr>
+<td align="left">-</td>
+<td align="right">minus sign (hyphen)</td>
+</tr>
+<tr>
+<td align="left">.</td>
+<td align="right">dot</td>
+</tr>
+<tr>
+<td align="left">!</td>
+<td align="right">exclamation mark</td>
+</tr>
+</tbody></table>
+<h3 id="内嵌HTML"><a href="#内嵌HTML" class="headerlink" title="内嵌HTML"></a>内嵌HTML</h3><p>对于 Markdown 涵盖范围之外的标签，都可以直接在文件里面用 HTML 本身。如需使用 HTML，不需要额外标注这是 HTML 或是 Markdown，只需 HTML 标签添加到 Markdown 文本中即可</p>
+<h2 id="进阶语法"><a href="#进阶语法" class="headerlink" title="进阶语法"></a>进阶语法</h2><h3 id="表格"><a href="#表格" class="headerlink" title="表格"></a>表格</h3><p>要添加表，请使用三个或多个连字符（—）创建每列的标题，并使用管道（|）分隔每列。可以选择在表的任一端添加管道。</p>
+<figure class="highlight markdown"><table><tr><td class="code"><pre><span class="line">| Syntax    | Description |</span><br><span class="line">| --------- | ----------- |</span><br><span class="line">| Header    | Title       |</span><br><span class="line">| Paragraph | Text        |</span><br></pre></td></tr></table></figure>
+<p><strong>对齐</strong><br>可以通过在标题行中的连字符的左侧，右侧或两侧添加冒号（:），将列中的文本对齐到左侧，右侧或中心。</p>
+<figure class="highlight markdown"><table><tr><td class="code"><pre><span class="line">| Syntax    | Description |   Test Text |</span><br><span class="line">| :-------- | :---------: | ----------: |</span><br><span class="line">| Header    |    Title    | Here&#x27;s this |</span><br><span class="line">| Paragraph |    Text     |    And more |</span><br></pre></td></tr></table></figure>
+<p>格式化表格中的文字<br>可以在表格中设置文本格式。例如，可以添加链接，代码（仅反引号（&#96;）中的单词或短语，而不是代码块）和强调。<br>不能添加标题，块引用，列表，水平规则，图像或HTML标签。<br>在表中转义管道字符<br>可以使用表格的HTML字符代码（|）在表中显示竖线（|）字符。</p>
+<h3 id="围栏代码块"><a href="#围栏代码块" class="headerlink" title="围栏代码块"></a>围栏代码块</h3><p>Markdown基本语法允许通过将行缩进四个空格或一个制表符来创建代码块。如果发现不方便，请尝试使用受保护的代码块。根据Markdown处理器或编辑器的不同，将在代码块之前和之后的行上使用三个反引号（&#96;&#96;&#96;）或三个波浪号（~~~）</p>
+<figure class="highlight markdown"><table><tr><td class="code"><pre><span class="line"><span class="code">```</span></span><br><span class="line"><span class="code">&#123;</span></span><br><span class="line"><span class="code">        &quot;firstName&quot;: &quot;John&quot;,</span></span><br><span class="line"><span class="code">        &quot;lastName&quot;: &quot;Smith&quot;,</span></span><br><span class="line"><span class="code">        &quot;age&quot;: 25</span></span><br><span class="line"><span class="code">&#125;</span></span><br><span class="line"><span class="code">```</span></span><br></pre></td></tr></table></figure>
+<p><strong>语法高亮</strong><br>许多Markdown处理器都支持受围栏代码块的语法突出显示。使用此功能，可以为编写代码的任何语言添加颜色突出显示。要添加语法突出显示，请在受防护的代码块之前的反引号旁边指定一种语言</p>
+<figure class="highlight markdown"><table><tr><td class="code"><pre><span class="line"><span class="code">```json</span></span><br><span class="line"><span class="code">&#123;</span></span><br><span class="line"><span class="code">&quot;firstName&quot;: &quot;John&quot;,</span></span><br><span class="line"><span class="code">&quot;lastName&quot;: &quot;Smith&quot;,</span></span><br><span class="line"><span class="code">&quot;age&quot;: 25</span></span><br><span class="line"><span class="code">&#125;</span></span><br><span class="line"><span class="code">```</span></span><br></pre></td></tr></table></figure>
+<h3 id="脚注"><a href="#脚注" class="headerlink" title="脚注"></a>脚注</h3><p>脚注使可以添加注释和参考，而不会使文档正文混乱。当创建脚注时，带有脚注的上标数字会出现在您添加脚注参考的位置。读者可以单击链接以跳至页面底部的脚注内容。</p>
+<p>要创建脚注参考，请在方括号（[^1]）内添加插入符号和标识符。标识符可以是数字或单词，但不能包含空格或制表符。标识符仅将脚注参考与脚注本身相关联-在输出中，脚注按顺序编号。</p>
+<p>在括号内使用另一个插入符号和数字添加脚注，并用冒号和文本（[^1]: My footnote.）。您不必在文档末尾添加脚注。您可以将它们放在除列表，块引号和表之类的其他元素之外的任何位置。</p>
+<figure class="highlight markdown"><table><tr><td class="code"><pre><span class="line">Here&#x27;s a simple footnote,[^1] and here&#x27;s a longer one.[^bignote]</span><br><span class="line"></span><br><span class="line">[<span class="symbol">^1</span>]: <span class="link">This is the first footnote.</span></span><br><span class="line"></span><br><span class="line">[<span class="symbol">^bignote</span>]: <span class="link">Here&#x27;s one with multiple paragraphs and code.</span></span><br><span class="line"></span><br><span class="line"><span class="code">    Indent paragraphs to include them in the footnote.</span></span><br><span class="line"><span class="code"></span></span><br><span class="line"><span class="code">    `&#123; my code &#125;`</span></span><br><span class="line"><span class="code"></span></span><br><span class="line"><span class="code">    Add as many paragraphs as you like.</span></span><br></pre></td></tr></table></figure>
+<h3 id="标题编号"><a href="#标题编号" class="headerlink" title="标题编号"></a>标题编号</h3><p>许多Markdown处理器支持标题的自定义ID - 一些Markdown处理器会自动添加它们。添加自定义ID允许您直接链接到标题并使用CSS对其进行修改。要添加自定义标题ID，请在与标题相同的行上用大括号括起该自定义ID。</p>
+<figure class="highlight markdown"><table><tr><td class="code"><pre><span class="line"><span class="section">### My Great Heading &#123;#custom-id&#125;</span></span><br></pre></td></tr></table></figure>
+<p>链接到标题ID (#headid)</p>
+<p>通过创建带有数字符号（#）和自定义标题ID的标准链接，可以链接到文件中具有自定义ID的标题。</p>
+<figure class="highlight markdown"><table><tr><td class="code"><pre><span class="line">[<span class="string">Heading IDs</span>](<span class="link">#heading-ids</span>)</span><br></pre></td></tr></table></figure>
+<p>其他网站可以通过将自定义标题ID添加到网页的完整URL（例如<a href="https://markdown.com.cn/extended-syntax/heading-ids.html#headid">Heading IDs</a>）来链接到标题。</p>
+<h3 id="定义列表"><a href="#定义列表" class="headerlink" title="定义列表"></a>定义列表</h3><p>一些Markdown处理器允许您创建术语及其对应定义的定义列表。要创建定义列表，请在第一行上键入术语。在下一行，键入一个冒号，后跟一个空格和定义。</p>
+<figure class="highlight markdown"><table><tr><td class="code"><pre><span class="line">First Term</span><br><span class="line">: This is the definition of the first term.</span><br><span class="line"></span><br><span class="line">Second Term</span><br><span class="line">: This is one definition of the second term.</span><br><span class="line">: This is another definition of the second term.</span><br></pre></td></tr></table></figure>
+<h3 id="删除线"><a href="#删除线" class="headerlink" title="删除线"></a>删除线</h3><p>您可以通过在单词中心放置一条水平线来删除单词。结果看起来像这样。此功能使您可以指示某些单词是一个错误，要从文档中删除。若要删除单词，请在单词前后使用两个波浪号~~。</p>
+<figure class="highlight markdown"><table><tr><td class="code"><pre><span class="line">~~世界是平坦的。~~ 我们现在知道世界是圆的。</span><br></pre></td></tr></table></figure>
+<h3 id="任务列表"><a href="#任务列表" class="headerlink" title="任务列表"></a>任务列表</h3><p>任务列表使您可以创建带有复选框的项目列表。在支持任务列表的Markdown应用程序中，复选框将显示在内容旁边。要创建任务列表，请在任务列表项之前添加破折号-和方括号[ ]，并在[ ]前面加上空格。要选择一个复选框，请在方括号[x]之间添加 x 。</p>
+<figure class="highlight markdown"><table><tr><td class="code"><pre><span class="line"><span class="bullet">-</span> [x] Write the press release</span><br><span class="line"><span class="bullet">-</span> [ ] Update the website</span><br><span class="line"><span class="bullet">-</span> [ ] Contact the media</span><br></pre></td></tr></table></figure>
+<h3 id="使用-Emoji-表情"><a href="#使用-Emoji-表情" class="headerlink" title="使用 Emoji 表情"></a>使用 Emoji 表情</h3><p>有两种方法可以将表情符号添加到Markdown文件中：将表情符号复制并粘贴到Markdown格式的文本中，或者键入emoji shortcodes。<br>复制和粘贴表情符号<br>在大多数情况下，您可以简单地从Emojipedia<br>等来源复制表情符号并将其粘贴到文档中。许多Markdown应用程序会自动以Markdown格式的文本显示表情符号。从Markdown应用程序导出的HTML和PDF文件应显示表情符号。<br>Tip: 如果您使用的是静态网站生成器，请确保将HTML页面编码为UTF-8。.<br>使用表情符号简码<br>一些Markdown应用程序允许您通过键入表情符号短代码来插入表情符号。这些以冒号开头和结尾，并包含表情符号的名称。</p>
+<figure class="highlight markdown"><table><tr><td class="code"><pre><span class="line">去露营了！ :tent: 很快回来。</span><br><span class="line">真好笑！ :joy:</span><br></pre></td></tr></table></figure>
+
+<h3 id="自动网址链接"><a href="#自动网址链接" class="headerlink" title="自动网址链接"></a>自动网址链接</h3><p>许多Markdown处理器会自动将URL转换为链接。这意味着如果您输入’<a href="http://www.example.com',即使您未使用方括号,您的markdown处理器也会自动将其转换为链接./">http://www.example.com&#39;，即使您未使用方括号，您的Markdown处理器也会自动将其转换为链接。</a></p>
+<figure class="highlight markdown"><table><tr><td class="code"><pre><span class="line">http://www.example.com</span><br></pre></td></tr></table></figure>
+<p>禁用自动URL链接<br>如果您不希望自动链接URL，则可以通过将URL表示为带反引号的代码来删除该链接。</p>
+<figure class="highlight markdown"><table><tr><td class="code"><pre><span class="line"><span class="code">`http://www.example.com`</span></span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>Tools</category>
+        <category>Markdown</category>
+      </categories>
+      <tags>
+        <tag>Markdown</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>读懂C/C++类型声明的黄金法则</title>
+    <url>/2024/06/06/type/</url>
+    <content><![CDATA[<h1 id="读懂C-C-类型声明的黄金法则"><a href="#读懂C-C-类型声明的黄金法则" class="headerlink" title="读懂C&#x2F;C++类型声明的黄金法则"></a>读懂C&#x2F;C++类型声明的黄金法则</h1><ol>
+<li>找到变量名，如果没有变量名，找到最里面的结构</li>
+<li>向右看，读出你看到的东西，但不要跳过括号</li>
+<li>再向左看，读出你看到的东西，但不要也跳过括号</li>
+<li>如果有括号，跳出一层括号</li>
+<li>重复上述步骤，直到你读出最终类型</li>
+</ol>
+<iframe src="//player.bilibili.com/player.html?isOutside=true&aid=602127548&bvid=BV1mB4y1L7HB&cid=807847346&p=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"></iframe>]]></content>
+      <categories>
+        <category>C/C++</category>
+      </categories>
+      <tags>
+        <tag>C/C++类型声明</tag>
       </tags>
   </entry>
 </search>
