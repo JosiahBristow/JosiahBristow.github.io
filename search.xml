@@ -674,7 +674,7 @@
       </tags>
   </entry>
   <entry>
-    <title>linus</title>
+    <title>《Just for fun》-Linux之父Linus的传奇人生</title>
     <url>/2024/06/06/linus/</url>
     <content><![CDATA[<h1 id="《Just-for-fun》-Linux之父Linus的传奇人生"><a href="#《Just-for-fun》-Linux之父Linus的传奇人生" class="headerlink" title="《Just for fun》-Linux之父Linus的传奇人生"></a>《Just for fun》-Linux之父Linus的传奇人生</h1><h2 id="Linus-的计算机启蒙"><a href="#Linus-的计算机启蒙" class="headerlink" title="Linus 的计算机启蒙"></a>Linus 的计算机启蒙</h2><p>1969年12月28日，Linus 出生于芬兰赫尔辛基，他从小就是一个书呆子，矮个子，读书不错，但是不擅长运动，不善社交。</p>
 <p>Linus的外公是赫尔辛基大学的统计学教授，1981年Linus 11岁的时候，外公买回来一台Commodore vic-20计算机，用来在家进行统计学计算。Linus 就帮助外公输入他事先写在纸上的basic程序。一开始是机械的输入外公写好的程序，后来是根据计算机的使用手册，把示例程序敲出来。</p>
@@ -717,6 +717,12 @@
 <p>Linus的成神之路，从兴趣开始个人项目，在合适的时间，选择了开源的协作模式，然后通过GPL协议开放，带来了商业的繁荣，最后在开源软件运动的帮助下，最终封神。作为Linux的核心贡献者和项目的领导者，数十年如一日的维护Linux内核，这在很大程度上就是源于他对编程的兴趣，就像黄易说的：唯能极于情,故能极于剑。正因为对编程的热爱，才有了Linus的传奇一生。</p>
 <p><strong>本文转载自 <a href="https://zhuanlan.zhihu.com/p/195193559">https://zhuanlan.zhihu.com/p/195193559</a> （有改动）</strong></p>
 ]]></content>
+      <categories>
+        <category>Book</category>
+      </categories>
+      <tags>
+        <tag>linux</tag>
+      </tags>
   </entry>
   <entry>
     <title>Markdown学习笔记</title>
