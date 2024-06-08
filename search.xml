@@ -830,8 +830,7 @@
 <p>关于牛顿迭代法，可以参考<a href="https://baike.baidu.com/item/%E7%89%9B%E9%A1%BF%E8%BF%AD%E4%BB%A3%E6%B3%95/10887580">百度百科</a>。</p>
 ]]></content>
       <categories>
-        <category>Algorithm</category>
-        <category>Other</category>
+        <category>Math</category>
       </categories>
       <tags>
         <tag>牛顿法</tag>
@@ -877,5 +876,36 @@
       <tags>
         <tag>链表</tag>
       </tags>
+  </entry>
+  <entry>
+    <title>figure_diff</title>
+    <url>/2024/06/09/figure-diff/</url>
+    <content><![CDATA[<h1 id="三角函数与二次函数图像对比"><a href="#三角函数与二次函数图像对比" class="headerlink" title="三角函数与二次函数图像对比"></a>三角函数与二次函数图像对比</h1><p>我们先来看一张图<br><img src="/2024/06/09/figure-diff/1.png" alt="图"><br>可以看到在[0, 2π]区间内</p>
+]]></content>
+      <categories>
+        <category>Math</category>
+      </categories>
+      <tags>
+        <tag>数学趣闻</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Neovim配置教学</title>
+    <url>/2024/06/08/neovim/</url>
+    <content><![CDATA[<h1 id="Neovim配置教学"><a href="#Neovim配置教学" class="headerlink" title="Neovim配置教学"></a>Neovim配置教学</h1><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p><strong>也许你使用过 Vi 或者 Vim ，但你要明确的是 Neovim 与这两者并不是同一软件。</strong></p>
+<blockquote>
+<p>Vim本身是由Bram Moolenaar在90年代初对已经过时的Vi进行改进的克隆。Moolenaar本人忽略了Vim的发展和行动过程。经过几十年的发展，Vim的源代码开始变得陈旧和难以维护。它很臃肿，一些代码没有被优化，而且它目前的功能集也没有很好的老化。<br>但是，Neovim是从头开始重建的。冗余的和几十年前的代码被清除掉了。与此同时，维护者们试图为用户提供和Vim一样的功能。虽然，它确实预先打包了 “可选类固醇”来消费。在文章的其余部分会有更多关于它的内容。</p>
+</blockquote>
+<p>至于为什我们要使用 Neovim 可以参考这篇文章 <a href="https://juejin.cn/post/7090094882588459045">Vim还是Neovim？为什么你应该使用后者？</a></p>
+<p><strong>另外我们将使用 Lua 语言来配置 Neovim</strong></p>
+<p>是如果你还不会使用 Lua 最好先去学习一下<br>可以搜索一下 <a href="https://learnxinyminutes.com/docs/lua/s">Learn Lua in Y minutes</a> ,学习一下 Lua</p>
+<h2 id="开始配置"><a href="#开始配置" class="headerlink" title="开始配置"></a>开始配置</h2><h3 id="来看一下我的的目录结构⬇️"><a href="#来看一下我的的目录结构⬇️" class="headerlink" title="来看一下我的的目录结构⬇️"></a>来看一下我的的目录结构⬇️</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">nvim</span><br><span class="line">├── ftplugin</span><br><span class="line">│   ├── cpp.vim</span><br><span class="line">│   ├── c.vim</span><br><span class="line">│   └── python.vim</span><br><span class="line">├── init.lua</span><br><span class="line">├── lazy-lock.json</span><br><span class="line">└── lua</span><br><span class="line">    ├── config</span><br><span class="line">    │   ├── vim-autocmds.lua</span><br><span class="line">    │   ├── vim-keymaps.lua</span><br><span class="line">    │   └── vim-options.lua</span><br><span class="line">    └── plugins</span><br><span class="line">        ├── alpha.lua</span><br><span class="line">        ├── autopairs.lua</span><br><span class="line">        ├── bufferline.lua</span><br><span class="line">        ├── catppuccin.lua</span><br><span class="line">        ├── comment.lua</span><br><span class="line">        ├── competitive.lua</span><br><span class="line">        ├── completions.lua</span><br><span class="line">        ├── dap.lua</span><br><span class="line">        ├── dressing.lua</span><br><span class="line">        ├── flash.lua</span><br><span class="line">        ├── floaterm.lua</span><br><span class="line">        ├── increname.lua</span><br><span class="line">        ├── lsp-config.lua</span><br><span class="line">        ├── lualine.lua</span><br><span class="line">        ├── mini.lua</span><br><span class="line">        ├── multicursors.lua</span><br><span class="line">        ├── neotree.lua</span><br><span class="line">        ├── noice.lua</span><br><span class="line">        ├── telescope.lua</span><br><span class="line">        ├── toggleterm.lua</span><br><span class="line">        ├── treesitter.lua</span><br><span class="line">        ├── trouble.lua</span><br><span class="line">        └── which-key.lua</span><br></pre></td></tr></table></figure>
+<p>你将会在下面的教学中逐一创建它们。</p>
+<h3 id=""><a href="#" class="headerlink" title=""></a></h3><p>。。。<br>。。。</p>
+]]></content>
+      <categories>
+        <category>Tools</category>
+        <category>Neovim</category>
+      </categories>
   </entry>
 </search>
