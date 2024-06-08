@@ -489,10 +489,10 @@
   <entry>
     <title>C语言sqrt()函数实现</title>
     <url>/2024/06/06/sqrt/</url>
-    <content><![CDATA[<h1 id="C语言sqrt-函数实现"><a href="#C语言sqrt-函数实现" class="headerlink" title="C语言sqrt()函数实现"></a>C语言sqrt()函数实现</h1><p>计算x^2^ &#x3D; n的解，令f(x)&#x3D;x^2^-n，相当于求解f(x)&#x3D;0的解，如i下图所示。<br><img src="/2024/06/06/sqrt/image.png" alt="牛顿迭代法"><br><strong>牛顿迭代法</strong><br>首先取x0，如果x0不是解，做一个经过(x0,f(x0))这个点的切线，与x轴的交点为x1。</p>
-<p>同样的道理，如果x1不是解，做一个经过(x1,f(x1))这个点的切线，与x轴的交点为x2。</p>
+    <content><![CDATA[<h1 id="C语言sqrt-函数实现"><a href="#C语言sqrt-函数实现" class="headerlink" title="C语言sqrt()函数实现"></a>C语言sqrt()函数实现</h1><p>计算 $$ x^2^ &#x3D; n $$ 的解，令 $$ f(x)&#x3D;x^2^-n $$，相当于求解f(x)&#x3D;0的解，如i下图所示。<br><img src="/2024/06/06/sqrt/image.png" alt="牛顿迭代法"><br><strong>牛顿迭代法</strong><br>首先取x0，如果x0不是解，做一个经过 $$ (x0,f(x0)) $$ 这个点的切线，与x轴的交点为x1。</p>
+<p>同样的道理，如果x1不是解，做一个经过 $$ (x1,f(x1)) $$ 这个点的切线，与x轴的交点为x2。</p>
 <p>以此类推。</p>
-<p>以这样的方式得到的xi会无限趋近于f(x)&#x3D;0的解。</p>
+<p>以这样的方式得到的xi会无限趋近于 $$ f(x)&#x3D;0 $$ 的解。</p>
 <p>判断xi是否是f(x)&#x3D;0的解有两种方法：</p>
 <p>一是直接计算f(xi)的值判断是否为0，二是判断前后两个解xi和xi-1是否无限接近。</p>
 <p>经过(xi, f(xi))这个点的切线方程为f(x) &#x3D; f(xi) + f’(xi)(x - xi)，其中f’(x)为f(x)的导数，本题中为2x。令切线方程等于0，即可求出xi+1&#x3D;xi - f(xi) &#x2F; f’(xi)。</p>
