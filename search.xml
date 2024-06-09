@@ -59,8 +59,7 @@
     <title>Git学习笔记</title>
     <url>/2024/06/06/git/</url>
     <content><![CDATA[<p><img src="/2024/06/06/git/1.png" alt="git"><br>Git[<a href="https://git-scm.com/]">https://git-scm.com/]</a></p>
-<h1 id="Git学习笔记"><a href="#Git学习笔记" class="headerlink" title="Git学习笔记"></a>Git学习笔记</h1><h2 id="Ubuntu环境下安装Git"><a href="#Ubuntu环境下安装Git" class="headerlink" title="Ubuntu环境下安装Git"></a>Ubuntu环境下安装Git</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo apt-get install git</span><br></pre></td></tr></table></figure>
-<ol>
+<h1 id="Git学习笔记"><a href="#Git学习笔记" class="headerlink" title="Git学习笔记"></a>Git学习笔记</h1><h2 id="使用之前"><a href="#使用之前" class="headerlink" title="使用之前"></a>使用之前</h2><ol>
 <li><strong>产看Git版本号</strong><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git -v</span><br></pre></td></tr></table></figure>
 或者<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git --version</span><br></pre></td></tr></table></figure></li>
 <li><strong>绑定用户信息</strong></li>
@@ -917,5 +916,61 @@
         <category>Tools</category>
         <category>Neovim</category>
       </categories>
+  </entry>
+  <entry>
+    <title>CMake学习笔记</title>
+    <url>/2024/06/10/cmake/</url>
+    <content><![CDATA[<p><img src="/2024/06/10/cmake/CMake-Logo.svg" alt="CMake-Logo"><br>CMake[<a href="https://cmake.org/]">https://cmake.org/]</a></p>
+<h1 id="CMake学习笔记-🎉"><a href="#CMake学习笔记-🎉" class="headerlink" title="CMake学习笔记 🎉"></a>CMake学习笔记 🎉</h1><h2 id="Cmake-简介"><a href="#Cmake-简介" class="headerlink" title="Cmake 简介"></a>Cmake 简介</h2><blockquote>
+<p>CMake 是一个项目构建工具，并且是跨平台的。关于项目构建我们所熟知的还有Makefile（通过 make 命令进行项目的构建），大多是IDE软件都集成了make，比如：VS 的 nmake、linux 下的 GNU make、Qt 的 qmake等，如果自己动手写 makefile，会发现，makefile 通常依赖于当前的编译平台，而且编写 makefile 的工作量比较大，解决依赖关系时也容易出错。<br>而 CMake 恰好能解决上述问题， 其允许开发者指定整个工程的编译流程，在根据编译平台，自动生成本地化的Makefile和工程文件，最后用户只需make编译即可，所以可以把CMake看成一款自动生成 Makefile的工具，其编译<br>流程如下图：<br><img src="/2024/06/10/cmake/image-20230309130644912.png" alt="流程图"></p>
+<ul>
+<li>蓝色🟦虚线表示使用makefile构建项目的过程</li>
+<li>红色🟥实线表示使用cmake构建项目的过程<br>介绍完CMake的作用之后，再来总结一下它的优点：</li>
+<li>跨平台</li>
+<li>能够管理大型项目</li>
+<li>简化编译构建过程和编译过程</li>
+<li>可扩展：可以为 Cmake 编写特定功能的模块，扩充 Cmake 功能</li>
+</ul>
+</blockquote>
+<h2 id="CMake基本语法"><a href="#CMake基本语法" class="headerlink" title="CMake基本语法"></a>CMake基本语法</h2><p>CMake支持大写、小写、混合大小写的命令，按自己喜好来就可以。不过为了方便，本文大多数采用小写。</p>
+<h3 id="注释"><a href="#注释" class="headerlink" title="注释"></a>注释</h3><p>CMake 使用 # 进行行注释，使用 #[[ ]] 形式进行块注释。</p>
+<figure class="highlight cmake"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 行注释</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#[[</span></span><br><span class="line"><span class="comment">	块注释</span></span><br><span class="line"><span class="comment">]]</span></span><br></pre></td></tr></table></figure>
+<h3 id="基础框架"><a href="#基础框架" class="headerlink" title="基础框架"></a>基础框架</h3><p>以下三个命令是使用CMake构建最简单的一个项目所需要的命令。<br><code>cmake_minimum_required</code>：指定使用的 CMake 的最低版本；<br><code>project</code>：定义工程名称，并可指定工程的版本、工程描述等；<br><code>add_executable</code>：将指定的源码编译生成为一个可执行程序。</p>
+<figure class="highlight cmake"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 示例</span></span><br><span class="line"><span class="keyword">cmake_minimum_required</span>(VERSION <span class="number">3.0</span>)</span><br><span class="line"><span class="keyword">project</span>(CALC)</span><br><span class="line"><span class="keyword">set</span>(CMAKE_CXX_STANDARD <span class="number">11</span>) <span class="comment"># 指定使用的 C++ 标准，</span></span><br><span class="line"><span class="keyword">add_executable</span>(app add.c div.c main.c mult.c sub.c)</span><br></pre></td></tr></table></figure>
+<h3 id="定义变量"><a href="#定义变量" class="headerlink" title="定义变量"></a>定义变量</h3><p>在 CMake 中，变量的值始终是字符串类型，且区分大小写。</p>
+<figure class="highlight cmake"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 设置一个普通变量，&lt;variable&gt; 表示变量名，&lt;value&gt;... 表示一个或多个参数</span></span><br><span class="line"><span class="keyword">set</span>(&lt;variable&gt; &lt;value&gt;... [PARENT_SCOPE]) </span><br><span class="line"><span class="comment"># 使用 $&#123;&lt;variable&gt;&#125; 的形式取变量的值。</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight cmake"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 示例</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 将 add.c div.c main.c mult.c sub.c 存储到 SRC 变量中</span></span><br><span class="line"><span class="keyword">set</span>(SRC add.c div.c main.c mult.c sub.c)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 取变量 SRC 的值</span></span><br><span class="line"><span class="keyword">add_executable</span>(app <span class="variable">$&#123;SRC&#125;</span>) </span><br></pre></td></tr></table></figure>
+<h3 id="指定输出路径"><a href="#指定输出路径" class="headerlink" title="指定输出路径"></a>指定输出路径</h3><p>程序的输出可能是一个可执行文件、可能是制作的共享库，可以通过以下命令设置指定的输出路径。</p>
+<figure class="highlight cmake"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 将输出路径指定为 /xxx/xxx</span></span><br><span class="line"><span class="keyword">set</span>(EXECUTABLE_OUTPUT_PATH /xxx/xxx)</span><br><span class="line"><span class="comment"># or</span></span><br><span class="line"><span class="keyword">set</span>(RUNTIME_OUTPUT_DIRECTORY /xxx/xxx)</span><br></pre></td></tr></table></figure>
+<p><strong>注意⚠️</strong><br><code>EXECUTABLE_OUTPUT_PATH</code> 和 <code>RUNTIME_OUTPUT_DIRECTORY</code> 是预定义的宏，当设置了 <code>RUNTIME_OUTPUT_DIRECTORY</code> 时<code>EXECUTABLE_OUTPUT_PATH</code> 就失效了。</p>
+<h3 id="搜索文件"><a href="#搜索文件" class="headerlink" title="搜索文件"></a>搜索文件</h3><p>在 CMake 中，可以使用 <code>aux_source_directory</code> 命令或者 <code>file</code> 命令 搜索项目中的头文件或源文件。</p>
+<figure class="highlight cmake"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 将 &lt;dir&gt; 目录下的源文件存储到 &lt;variable&gt; 变量中</span></span><br><span class="line"><span class="keyword">aux_source_directory</span>(&lt;dir&gt; &lt;variable&gt;)</span><br></pre></td></tr></table></figure>
+<p><code>file</code> 命令具有很多功能，这里介绍搜索文件的功能。</p>
+<figure class="highlight cmake"><table><tr><td class="code"><pre><span class="line"><span class="keyword">file</span>(GLOB &lt;variable&gt; [LIST_DIRECTORIES <span class="keyword">true</span>|<span class="keyword">false</span>] [RELATIVE &lt;path&gt;] [CONFIGURE_DEPENDS] [&lt;globbing-expressions&gt;...])</span><br><span class="line"></span><br><span class="line"><span class="keyword">file</span>(GLOB_RECURSE &lt;variable&gt; [FOLLOW_SYMLINKS] [LIST_DIRECTORIES <span class="keyword">true</span>|<span class="keyword">false</span>] [RELATIVE &lt;path&gt;] [CONFIGURE_DEPENDS] [&lt;globbing-expressions&gt;...])</span><br><span class="line"></span><br><span class="line"><span class="comment"># &lt;globbing-expressions&gt;... 搜索的表达式，可以是指定目录，指定目录下的某种文件，理解为一种正则表达式就好了；GLOB 非递归搜索；GLOB_RECURSE 递归搜索；&lt;variable&gt; 搜索结果保存的变量名</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight cmake"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 示例</span></span><br><span class="line"><span class="comment"># 非递归搜索 /xxx/xxx 下的 *.cpp 源文件</span></span><br><span class="line"><span class="keyword">file</span>(GLOB SRC /xxx/xxx/*.cpp)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 递归搜索 /xxx/xxx 下的所有 *.h 头文件</span></span><br><span class="line"><span class="keyword">file</span>(GLOB_RECURSE HEADER /xxx/xxx/*.h)</span><br></pre></td></tr></table></figure>
+<h3 id="包含头文件"><a href="#包含头文件" class="headerlink" title="包含头文件"></a>包含头文件</h3><p>指定源文件对应的头文件，<code>include_directories(/xxx/include)</code> ，源文件对应的头文件指定在 &#x2F;xxx&#x2F;include 目录下。</p>
+<h3 id="制作动态库和静态库"><a href="#制作动态库和静态库" class="headerlink" title="制作动态库和静态库"></a>制作动态库和静态库</h3><figure class="highlight cmake"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 函数作用：生成库。</span></span><br><span class="line"><span class="comment"># 参数lib_name：是要生成的库名称，</span></span><br><span class="line"><span class="comment"># 参数STATIC/SHARED：指定生成静态库或动态库，</span></span><br><span class="line"><span class="comment"># 参数src：指明库的生成所需要的源文件</span></span><br><span class="line"><span class="keyword">add_library</span>(lib_name STATIC/SHARED src) </span><br></pre></td></tr></table></figure>
+<figure class="highlight cmake"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 将目标名称 target1 的 prop1 属性设置为 value1；</span></span><br><span class="line"><span class="comment"># 将目标名称 target2 的 prop2 属性设置为 value2.</span></span><br><span class="line"><span class="comment"># ...</span></span><br><span class="line"><span class="keyword">set_target_properties</span>(target1 target2 ...</span><br><span class="line">                      PROPERTIES prop1 value1</span><br><span class="line">                      prop2 value2 ...)</span><br></pre></td></tr></table></figure>
+<h3 id="链接静态库和动态库"><a href="#链接静态库和动态库" class="headerlink" title="链接静态库和动态库"></a>链接静态库和动态库</h3><pre><code class="cmake"># 函数作用：查找库，并把库的绝对路径和名称存储到第一个参数里
+# 参数var：用于存储查找到的库
+# 参数lib_name：想要查找的库的名称，默认是查找动态库，想要指定查找动态库或静态库
+#       可以加后缀，例如 funcname.so 或 funcname.a 
+# 参数lib_path：想要从哪个路径下查找库，可以指定多个路径
+find_library(var lib_name lib_path1 lib_path2)
+
+# 指定静态库的路径，&lt;lib path&gt; 表示静态库的路径
+link_directories(&lt;lib path&gt;)
+
+# 链接静态库的命令，&lt;static lib&gt; 表示静态库的名称，可以是全名 libxxx.a，或掐头去尾 xxx
+link_libraries(&lt;static lib&gt; [&lt;static lib&gt;...])
+</code></pre>
+]]></content>
+      <categories>
+        <category>Tools</category>
+        <category>CMake</category>
+      </categories>
+      <tags>
+        <tag>CMake</tag>
+      </tags>
   </entry>
 </search>
