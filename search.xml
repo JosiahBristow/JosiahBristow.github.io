@@ -951,20 +951,7 @@
 <h3 id="包含头文件"><a href="#包含头文件" class="headerlink" title="包含头文件"></a>包含头文件</h3><p>指定源文件对应的头文件，<code>include_directories(/xxx/include)</code> ，源文件对应的头文件指定在 &#x2F;xxx&#x2F;include 目录下。</p>
 <h3 id="制作动态库和静态库"><a href="#制作动态库和静态库" class="headerlink" title="制作动态库和静态库"></a>制作动态库和静态库</h3><figure class="highlight cmake"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 函数作用：生成库。</span></span><br><span class="line"><span class="comment"># 参数lib_name：是要生成的库名称，</span></span><br><span class="line"><span class="comment"># 参数STATIC/SHARED：指定生成静态库或动态库，</span></span><br><span class="line"><span class="comment"># 参数src：指明库的生成所需要的源文件</span></span><br><span class="line"><span class="keyword">add_library</span>(lib_name STATIC/SHARED src) </span><br></pre></td></tr></table></figure>
 <figure class="highlight cmake"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 将目标名称 target1 的 prop1 属性设置为 value1；</span></span><br><span class="line"><span class="comment"># 将目标名称 target2 的 prop2 属性设置为 value2.</span></span><br><span class="line"><span class="comment"># ...</span></span><br><span class="line"><span class="keyword">set_target_properties</span>(target1 target2 ...</span><br><span class="line">                      PROPERTIES prop1 value1</span><br><span class="line">                      prop2 value2 ...)</span><br></pre></td></tr></table></figure>
-<h3 id="链接静态库和动态库"><a href="#链接静态库和动态库" class="headerlink" title="链接静态库和动态库"></a>链接静态库和动态库</h3><pre><code class="cmake"># 函数作用：查找库，并把库的绝对路径和名称存储到第一个参数里
-# 参数var：用于存储查找到的库
-# 参数lib_name：想要查找的库的名称，默认是查找动态库，想要指定查找动态库或静态库
-#       可以加后缀，例如 funcname.so 或 funcname.a 
-# 参数lib_path：想要从哪个路径下查找库，可以指定多个路径
-find_library(var lib_name lib_path1 lib_path2)
-
-# 指定静态库的路径，&lt;lib path&gt; 表示静态库的路径
-link_directories(&lt;lib path&gt;)
-
-# 链接静态库的命令，&lt;static lib&gt; 表示静态库的名称，可以是全名 libxxx.a，或掐头去尾 xxx
-link_libraries(&lt;static lib&gt; [&lt;static lib&gt;...])
-</code></pre>
-]]></content>
+<h3 id="链接静态库和动态库"><a href="#链接静态库和动态库" class="headerlink" title="链接静态库和动态库"></a>链接静态库和动态库</h3><figure class="highlight cmake"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 函数作用：查找库，并把库的绝对路径和名称存储到第一个参数里</span></span><br><span class="line"><span class="comment"># 参数var：用于存储查找到的库</span></span><br><span class="line"><span class="comment"># 参数lib_name：想要查找的库的名称，默认是查找动态库，想要指定查找动态库或静态库</span></span><br><span class="line"><span class="comment">#       可以加后缀，例如 funcname.so 或 funcname.a </span></span><br><span class="line"><span class="comment"># 参数lib_path：想要从哪个路径下查找库，可以指定多个路径</span></span><br><span class="line"><span class="keyword">find_library</span>(var lib_name lib_path1 lib_path2)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 指定静态库的路径，&lt;lib path&gt; 表示静态库的路径</span></span><br><span class="line"><span class="keyword">link_directories</span>(&lt;lib path&gt;)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 链接静态库的命令，&lt;static lib&gt; 表示静态库的名称，可以是全名 libxxx.a，或掐头去尾 xxx</span></span><br><span class="line"><span class="keyword">link_libraries</span>(&lt;static lib&gt; [&lt;static lib&gt;...])</span><br></pre></td></tr></table></figure>]]></content>
       <categories>
         <category>Tools</category>
         <category>CMake</category>
