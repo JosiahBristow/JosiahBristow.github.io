@@ -40,7 +40,7 @@
 <h2 id="我的2种证明方法😀"><a href="#我的2种证明方法😀" class="headerlink" title="我的2种证明方法😀"></a>我的2种证明方法😀</h2><h3 id="方法1-–-定义法"><a href="#方法1-–-定义法" class="headerlink" title="方法1 – 定义法"></a>方法1 – 定义法</h3><blockquote>
 <p>抛物线定义：平面内与一个定点 $F$ 和一条直线l 的距离相等的点的轨迹叫做抛物线，点 $F$ 叫做抛物线的焦点，直线 $l$ 叫做抛物线的准线，定点 $F$ 不在定直线上。它与椭圆、双曲线的第二定义相仿，仅比值（离心率 $e$）不同，当 $e&#x3D;1$ 时为抛物线，当 $0&lt;e&lt;1$ 时为椭圆，当 $e&gt;1$ 时为双曲线。</p>
 </blockquote>
-<p>根据定义很容易证明<br>$y &#x3D; \frac{4}{\pi^{2}}x^{2}-\frac{4}{\pi}x$ 的图像是抛物线 <a href="%5B%E4%BA%8C%E6%AC%A1%E5%87%BD%E6%95%B0%E6%98%AF%E6%8A%9B%E7%89%A9%E7%BA%BF%E7%9A%84%E8%AF%81%E6%98%8E%5D(https://zhidao.baidu.com/question/489205493320671732.html)">^1</a>，而$y&#x3D;\sin x$ 的图像不是</p>
+<p>根据定义很容易证明<br>$y &#x3D; \frac{4}{\pi^{2}}x^{2}-\frac{4}{\pi}x$ 的图像是抛物线 (<a href="https://zhidao.baidu.com/question/489205493320671732.html">二次函数是抛物线的证明</a>)，而$y&#x3D;\sin x$ 的图像不是</p>
 <p>由此我们得出二者图像是不同的</p>
 <h3 id="方法2-–-面积法"><a href="#方法2-–-面积法" class="headerlink" title="方法2 – 面积法"></a>方法2 – 面积法</h3><p>用定积分可算出 $y &#x3D; \frac{4}{\pi^{2}}x^{2}-\frac{4}{\pi}x$ 的图像 $[0, \pi]$ 区间内与 $x轴$ 围成的面积 </p>
 <p>$<br>S_{1} &#x3D; \left|\int_{0}^{\pi} \frac{4}{\pi^{2}}x^{2}-\frac{4}{\pi}xdx\right| &#x3D;\left|\frac{4}{3\pi^{2}}x^{3} - \frac{2}{\pi}x^{2}|_{0}^{\pi}\right|&#x3D;\frac{2\pi}{3}<br>$</p>
