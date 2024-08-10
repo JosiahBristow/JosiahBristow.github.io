@@ -195,15 +195,19 @@
 
                     // 根据direction属性确定蛇头移动的方向并改变小蛇的头的坐标位置
                     switch (this.direction) {
+                        case "d":
                         case "right":
                             this.body[0].x += 1;
                             break;
+                        case "a":
                         case "left":
                             this.body[0].x -= 1;
                             break;
+                        case "w":
                         case "top":
                             this.body[0].y -= 1;
                             break;
+                        case "s":
                         case "bottom":
                             this.body[0].y += 1;
                             break;
