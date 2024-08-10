@@ -34,6 +34,49 @@
       </tags>
   </entry>
   <entry>
+    <title>CMake学习笔记</title>
+    <url>/2024/06/10/cmake/</url>
+    <content><![CDATA[<p><img src="/2024/06/10/cmake/CMake-Logo.svg" alt="CMake-Logo"><br>CMake[<a href="https://cmake.org/]">https://cmake.org/]</a></p>
+<h1 id="CMake学习笔记-🎉"><a href="#CMake学习笔记-🎉" class="headerlink" title="CMake学习笔记 🎉"></a>CMake学习笔记 🎉</h1><h2 id="Cmake-简介"><a href="#Cmake-简介" class="headerlink" title="Cmake 简介"></a>Cmake 简介</h2><blockquote>
+<p>CMake 是一个项目构建工具，并且是跨平台的。关于项目构建我们所熟知的还有Makefile（通过 make 命令进行项目的构建），大多是IDE软件都集成了make，比如：VS 的 nmake、linux 下的 GNU make、Qt 的 qmake等，如果自己动手写 makefile，会发现，makefile 通常依赖于当前的编译平台，而且编写 makefile 的工作量比较大，解决依赖关系时也容易出错。<br>而 CMake 恰好能解决上述问题， 其允许开发者指定整个工程的编译流程，在根据编译平台，自动生成本地化的Makefile和工程文件，最后用户只需make编译即可，所以可以把CMake看成一款自动生成 Makefile的工具，其编译<br>流程如下图：<br><img src="/2024/06/10/cmake/image-20230309130644912.png" alt="流程图"></p>
+<ul>
+<li>蓝色🟦虚线表示使用makefile构建项目的过程</li>
+<li>红色🟥实线表示使用cmake构建项目的过程<br>介绍完CMake的作用之后，再来总结一下它的优点：</li>
+<li>跨平台</li>
+<li>能够管理大型项目</li>
+<li>简化编译构建过程和编译过程</li>
+<li>可扩展：可以为 Cmake 编写特定功能的模块，扩充 Cmake 功能</li>
+</ul>
+</blockquote>
+<h2 id="CMake基本语法"><a href="#CMake基本语法" class="headerlink" title="CMake基本语法"></a>CMake基本语法</h2><p>CMake支持大写、小写、混合大小写的命令，按自己喜好来就可以。不过为了方便，本文大多数采用小写。</p>
+<h3 id="注释"><a href="#注释" class="headerlink" title="注释"></a>注释</h3><p>CMake 使用 # 进行行注释，使用 #[[ ]] 形式进行块注释。</p>
+<figure class="highlight cmake"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 行注释</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#[[</span></span><br><span class="line"><span class="comment">	块注释</span></span><br><span class="line"><span class="comment">]]</span></span><br></pre></td></tr></table></figure>
+<h3 id="基础框架"><a href="#基础框架" class="headerlink" title="基础框架"></a>基础框架</h3><p>以下三个命令是使用CMake构建最简单的一个项目所需要的命令。<br><code>cmake_minimum_required</code>：指定使用的 CMake 的最低版本；<br><code>project</code>：定义工程名称，并可指定工程的版本、工程描述等；<br><code>add_executable</code>：将指定的源码编译生成为一个可执行程序。</p>
+<figure class="highlight cmake"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 示例</span></span><br><span class="line"><span class="keyword">cmake_minimum_required</span>(VERSION <span class="number">3.0</span>)</span><br><span class="line"><span class="keyword">project</span>(CALC)</span><br><span class="line"><span class="keyword">set</span>(CMAKE_CXX_STANDARD <span class="number">11</span>) <span class="comment"># 指定使用的 C++ 标准，</span></span><br><span class="line"><span class="keyword">add_executable</span>(app add.c div.c main.c mult.c sub.c)</span><br></pre></td></tr></table></figure>
+<h3 id="定义变量"><a href="#定义变量" class="headerlink" title="定义变量"></a>定义变量</h3><p>在 CMake 中，变量的值始终是字符串类型，且区分大小写。</p>
+<figure class="highlight cmake"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 设置一个普通变量，&lt;variable&gt; 表示变量名，&lt;value&gt;... 表示一个或多个参数</span></span><br><span class="line"><span class="keyword">set</span>(&lt;variable&gt; &lt;value&gt;... [PARENT_SCOPE]) </span><br><span class="line"><span class="comment"># 使用 $&#123;&lt;variable&gt;&#125; 的形式取变量的值。</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight cmake"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 示例</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 将 add.c div.c main.c mult.c sub.c 存储到 SRC 变量中</span></span><br><span class="line"><span class="keyword">set</span>(SRC add.c div.c main.c mult.c sub.c)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 取变量 SRC 的值</span></span><br><span class="line"><span class="keyword">add_executable</span>(app <span class="variable">$&#123;SRC&#125;</span>) </span><br></pre></td></tr></table></figure>
+<h3 id="指定输出路径"><a href="#指定输出路径" class="headerlink" title="指定输出路径"></a>指定输出路径</h3><p>程序的输出可能是一个可执行文件、可能是制作的共享库，可以通过以下命令设置指定的输出路径。</p>
+<figure class="highlight cmake"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 将输出路径指定为 /xxx/xxx</span></span><br><span class="line"><span class="keyword">set</span>(EXECUTABLE_OUTPUT_PATH /xxx/xxx)</span><br><span class="line"><span class="comment"># or</span></span><br><span class="line"><span class="keyword">set</span>(RUNTIME_OUTPUT_DIRECTORY /xxx/xxx)</span><br></pre></td></tr></table></figure>
+<p><strong>注意⚠️</strong><br><code>EXECUTABLE_OUTPUT_PATH</code> 和 <code>RUNTIME_OUTPUT_DIRECTORY</code> 是预定义的宏，当设置了 <code>RUNTIME_OUTPUT_DIRECTORY</code> 时<code>EXECUTABLE_OUTPUT_PATH</code> 就失效了。</p>
+<h3 id="搜索文件"><a href="#搜索文件" class="headerlink" title="搜索文件"></a>搜索文件</h3><p>在 CMake 中，可以使用 <code>aux_source_directory</code> 命令或者 <code>file</code> 命令 搜索项目中的头文件或源文件。</p>
+<figure class="highlight cmake"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 将 &lt;dir&gt; 目录下的源文件存储到 &lt;variable&gt; 变量中</span></span><br><span class="line"><span class="keyword">aux_source_directory</span>(&lt;dir&gt; &lt;variable&gt;)</span><br></pre></td></tr></table></figure>
+<p><code>file</code> 命令具有很多功能，这里介绍搜索文件的功能。</p>
+<figure class="highlight cmake"><table><tr><td class="code"><pre><span class="line"><span class="keyword">file</span>(GLOB &lt;variable&gt; [LIST_DIRECTORIES <span class="keyword">true</span>|<span class="keyword">false</span>] [RELATIVE &lt;path&gt;] [CONFIGURE_DEPENDS] [&lt;globbing-expressions&gt;...])</span><br><span class="line"></span><br><span class="line"><span class="keyword">file</span>(GLOB_RECURSE &lt;variable&gt; [FOLLOW_SYMLINKS] [LIST_DIRECTORIES <span class="keyword">true</span>|<span class="keyword">false</span>] [RELATIVE &lt;path&gt;] [CONFIGURE_DEPENDS] [&lt;globbing-expressions&gt;...])</span><br><span class="line"></span><br><span class="line"><span class="comment"># &lt;globbing-expressions&gt;... 搜索的表达式，可以是指定目录，指定目录下的某种文件，理解为一种正则表达式就好了；GLOB 非递归搜索；GLOB_RECURSE 递归搜索；&lt;variable&gt; 搜索结果保存的变量名</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight cmake"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 示例</span></span><br><span class="line"><span class="comment"># 非递归搜索 /xxx/xxx 下的 *.cpp 源文件</span></span><br><span class="line"><span class="keyword">file</span>(GLOB SRC /xxx/xxx/*.cpp)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 递归搜索 /xxx/xxx 下的所有 *.h 头文件</span></span><br><span class="line"><span class="keyword">file</span>(GLOB_RECURSE HEADER /xxx/xxx/*.h)</span><br></pre></td></tr></table></figure>
+<h3 id="包含头文件"><a href="#包含头文件" class="headerlink" title="包含头文件"></a>包含头文件</h3><p>指定源文件对应的头文件，<code>include_directories(/xxx/include)</code> ，源文件对应的头文件指定在 &#x2F;xxx&#x2F;include 目录下。</p>
+<h3 id="制作动态库和静态库"><a href="#制作动态库和静态库" class="headerlink" title="制作动态库和静态库"></a>制作动态库和静态库</h3><figure class="highlight cmake"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 函数作用：生成库。</span></span><br><span class="line"><span class="comment"># 参数lib_name：是要生成的库名称，</span></span><br><span class="line"><span class="comment"># 参数STATIC/SHARED：指定生成静态库或动态库，</span></span><br><span class="line"><span class="comment"># 参数src：指明库的生成所需要的源文件</span></span><br><span class="line"><span class="keyword">add_library</span>(lib_name STATIC/SHARED src) </span><br></pre></td></tr></table></figure>
+<figure class="highlight cmake"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 将目标名称 target1 的 prop1 属性设置为 value1；</span></span><br><span class="line"><span class="comment"># 将目标名称 target2 的 prop2 属性设置为 value2.</span></span><br><span class="line"><span class="comment"># ...</span></span><br><span class="line"><span class="keyword">set_target_properties</span>(target1 target2 ...</span><br><span class="line">                      PROPERTIES prop1 value1</span><br><span class="line">                      prop2 value2 ...)</span><br></pre></td></tr></table></figure>
+<h3 id="链接静态库和动态库"><a href="#链接静态库和动态库" class="headerlink" title="链接静态库和动态库"></a>链接静态库和动态库</h3><figure class="highlight cmake"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 函数作用：查找库，并把库的绝对路径和名称存储到第一个参数里</span></span><br><span class="line"><span class="comment"># 参数var：用于存储查找到的库</span></span><br><span class="line"><span class="comment"># 参数lib_name：想要查找的库的名称，默认是查找动态库，想要指定查找动态库或静态库</span></span><br><span class="line"><span class="comment">#       可以加后缀，例如 funcname.so 或 funcname.a </span></span><br><span class="line"><span class="comment"># 参数lib_path：想要从哪个路径下查找库，可以指定多个路径</span></span><br><span class="line"><span class="keyword">find_library</span>(var lib_name lib_path1 lib_path2)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 指定静态库的路径，&lt;lib path&gt; 表示静态库的路径</span></span><br><span class="line"><span class="keyword">link_directories</span>(&lt;lib path&gt;)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 链接静态库的命令，&lt;static lib&gt; 表示静态库的名称，可以是全名 libxxx.a，或掐头去尾 xxx</span></span><br><span class="line"><span class="keyword">link_libraries</span>(&lt;static lib&gt; [&lt;static lib&gt;...])</span><br></pre></td></tr></table></figure>]]></content>
+      <categories>
+        <category>Tools</category>
+        <category>CMake</category>
+      </categories>
+      <tags>
+        <tag>CMake</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>三角函数与二次函数图像对比</title>
     <url>/2024/06/09/figure-diff/</url>
     <content><![CDATA[<h1 id="三角函数与二次函数图像对比"><a href="#三角函数与二次函数图像对比" class="headerlink" title="三角函数与二次函数图像对比"></a>三角函数与二次函数图像对比</h1><p>我们先来看一张图<br><img src="/2024/06/09/figure-diff/1.png" alt="图"><br>可以看到 $y &#x3D; \frac{4}{\pi^{2}}x^{2}-\frac{4}{\pi}x$ 的图像在 $[0, \pi]$ 区间内 与 $y&#x3D;\sin x$ 的图像在 $[\pi，2\pi]$ 区间内，形状极为相似，但通过仔细看图像，发现它们并不相同，但数学是一个严谨的学科，我们该如何证明呢？</p>
@@ -468,6 +511,46 @@
       </tags>
   </entry>
   <entry>
+    <title>Neovim配置教学</title>
+    <url>/2024/06/08/neovim/</url>
+    <content><![CDATA[<h1 id="Neovim配置教学"><a href="#Neovim配置教学" class="headerlink" title="Neovim配置教学"></a>Neovim配置教学</h1><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p><strong>也许你使用过 Vi 或者 Vim ，但你要明确的是 Neovim 与这两者并不是同一软件。</strong></p>
+<blockquote>
+<p>Vim本身是由Bram Moolenaar在90年代初对已经过时的Vi进行改进的克隆。Moolenaar本人忽略了Vim的发展和行动过程。经过几十年的发展，Vim的源代码开始变得陈旧和难以维护。它很臃肿，一些代码没有被优化，而且它目前的功能集也没有很好的老化。<br>但是，Neovim是从头开始重建的。冗余的和几十年前的代码被清除掉了。与此同时，维护者们试图为用户提供和Vim一样的功能。虽然，它确实预先打包了 “可选类固醇”来消费。在文章的其余部分会有更多关于它的内容。</p>
+</blockquote>
+<p>至于为什我们要使用 Neovim 可以参考这篇文章 <a href="https://juejin.cn/post/7090094882588459045">Vim还是Neovim？为什么你应该使用后者？</a></p>
+<p><strong>另外我们将使用 Lua 语言来配置 Neovim</strong></p>
+<p>是如果你还不会使用 Lua 最好先去学习一下<br>可以搜索一下 <a href="https://learnxinyminutes.com/docs/lua/s">Learn Lua in Y minutes</a> ,学习一下 Lua</p>
+<h2 id="开始配置"><a href="#开始配置" class="headerlink" title="开始配置"></a>开始配置</h2><h3 id="来看一下我的的目录结构⬇️"><a href="#来看一下我的的目录结构⬇️" class="headerlink" title="来看一下我的的目录结构⬇️"></a>来看一下我的的目录结构⬇️</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">nvim</span><br><span class="line">├── ftplugin</span><br><span class="line">│   ├── cpp.vim</span><br><span class="line">│   ├── c.vim</span><br><span class="line">│   └── python.vim</span><br><span class="line">├── init.lua</span><br><span class="line">├── lazy-lock.json</span><br><span class="line">└── lua</span><br><span class="line">    ├── config</span><br><span class="line">    │   ├── vim-autocmds.lua</span><br><span class="line">    │   ├── vim-keymaps.lua</span><br><span class="line">    │   └── vim-options.lua</span><br><span class="line">    └── plugins</span><br><span class="line">        ├── alpha.lua</span><br><span class="line">        ├── autopairs.lua</span><br><span class="line">        ├── bufferline.lua</span><br><span class="line">        ├── catppuccin.lua</span><br><span class="line">        ├── comment.lua</span><br><span class="line">        ├── competitive.lua</span><br><span class="line">        ├── completions.lua</span><br><span class="line">        ├── dap.lua</span><br><span class="line">        ├── dressing.lua</span><br><span class="line">        ├── flash.lua</span><br><span class="line">        ├── floaterm.lua</span><br><span class="line">        ├── increname.lua</span><br><span class="line">        ├── lsp-config.lua</span><br><span class="line">        ├── lualine.lua</span><br><span class="line">        ├── mini.lua</span><br><span class="line">        ├── multicursors.lua</span><br><span class="line">        ├── neotree.lua</span><br><span class="line">        ├── noice.lua</span><br><span class="line">        ├── telescope.lua</span><br><span class="line">        ├── toggleterm.lua</span><br><span class="line">        ├── treesitter.lua</span><br><span class="line">        ├── trouble.lua</span><br><span class="line">        └── which-key.lua</span><br></pre></td></tr></table></figure>
+<p>你将会在下面的教学中逐一创建它们。</p>
+<h3 id=""><a href="#" class="headerlink" title=""></a></h3><p>。。。<br>。。。</p>
+]]></content>
+      <categories>
+        <category>Tools</category>
+        <category>Neovim</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>C语言sqrt()函数实现</title>
+    <url>/2024/06/06/sqrt/</url>
+    <content><![CDATA[<h1 id="C语言sqrt-函数实现"><a href="#C语言sqrt-函数实现" class="headerlink" title="C语言sqrt()函数实现"></a>C语言sqrt()函数实现</h1><p>计算 $x^{2} &#x3D; n$ 的解，令 $f(x)&#x3D;x^{2}-n$，相当于求解 $f(x)&#x3D;0$ 的解，如下图所示。<br><img src="/2024/06/06/sqrt/image.png" alt="牛顿迭代法"><br><strong>牛顿迭代法</strong><br>首先取 $x_{0}$，如果 $x_{0}$ 不是解，做一个经过 $(x_{0},f(x_{0}))$ 这个点的切线，与x轴的交点为 $x_{1}$。</p>
+<p>同样的道理，如果 $x_{1}$ 不是解，做一个经过 $(x_{1},f(x_{1}))$ 这个点的切线，与x轴的交点为 $x_{2}$。</p>
+<p>以此类推。</p>
+<p>以这样的方式得到的xi会无限趋近于 $f(x)&#x3D;0$ 的解。</p>
+<p>判断 $x_{i}$是否是 $f(x)&#x3D;0$ 的解有两种方法：</p>
+<p>一是直接计算 $f(x_{i})$ 的值判断是否为 $0$，二是判断前后两个解 $x_{i}$ 和 $x_{i}-1$ 是否无限接近。</p>
+<p>经过 $(x_{i}, f(x_{i}))$ 这个点的切线方程为 $f(x)&#x3D;f(x_{i})+f^\prime(x_{i})(x - x_{i})$ ，其中 $f^\prime(x)$ 为 $f(x)$ 的导数，本题中为 $2x$。令切线方程等于 $0$，即可求出 $x_{i}+1&#x3D;x_{i} - \frac{f(x_{i})}{f^\prime(x_{i})}$。</p>
+<p>继续化简，<br>$$ x_{i}+1&#x3D;x_{i} - \frac{x_{i}^{2} - n}{2x_{i}} &#x3D; x_{i} - \frac{x_{i}}{2} + \frac{n}{2x_{i}} &#x3D; \frac{x_{i}}{2} + \frac{n}{2x_{i}} &#x3D; \frac{x_{i} + \frac{n}{x_{i}}}{2} $$</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">double</span> <span class="title function_">sqrt</span><span class="params">(<span class="type">double</span> x)</span></span><br><span class="line">&#123;</span><br><span class="line">        <span class="keyword">if</span> (x == <span class="number">0</span>) </span><br><span class="line">                <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        <span class="type">double</span> last = <span class="number">0.0</span>;</span><br><span class="line">        <span class="type">double</span> res = <span class="number">1.0</span>;</span><br><span class="line">        <span class="keyword">while</span> (res != last) &#123;</span><br><span class="line">                last = res;</span><br><span class="line">                res = (res + x / res) / <span class="number">2</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>关于牛顿迭代法，可以参考<a href="https://baike.baidu.com/item/%E7%89%9B%E9%A1%BF%E8%BF%AD%E4%BB%A3%E6%B3%95/10887580">百度百科</a>。</p>
+]]></content>
+      <categories>
+        <category>Math</category>
+      </categories>
+      <tags>
+        <tag>牛顿法</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>C++ STL入门</title>
     <url>/2024/06/06/stl/</url>
     <content><![CDATA[<h1 id="C-STL入门"><a href="#C-STL入门" class="headerlink" title="C++ STL入门"></a>C++ STL入门</h1><h2 id="STL简介"><a href="#STL简介" class="headerlink" title="STL简介"></a>STL简介</h2><blockquote>
@@ -493,27 +576,6 @@
       </categories>
       <tags>
         <tag>STL</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>C语言sqrt()函数实现</title>
-    <url>/2024/06/06/sqrt/</url>
-    <content><![CDATA[<h1 id="C语言sqrt-函数实现"><a href="#C语言sqrt-函数实现" class="headerlink" title="C语言sqrt()函数实现"></a>C语言sqrt()函数实现</h1><p>计算 $x^{2} &#x3D; n$ 的解，令 $f(x)&#x3D;x^{2}-n$，相当于求解 $f(x)&#x3D;0$ 的解，如下图所示。<br><img src="/2024/06/06/sqrt/image.png" alt="牛顿迭代法"><br><strong>牛顿迭代法</strong><br>首先取 $x_{0}$，如果 $x_{0}$ 不是解，做一个经过 $(x_{0},f(x_{0}))$ 这个点的切线，与x轴的交点为 $x_{1}$。</p>
-<p>同样的道理，如果 $x_{1}$ 不是解，做一个经过 $(x_{1},f(x_{1}))$ 这个点的切线，与x轴的交点为 $x_{2}$。</p>
-<p>以此类推。</p>
-<p>以这样的方式得到的xi会无限趋近于 $f(x)&#x3D;0$ 的解。</p>
-<p>判断 $x_{i}$是否是 $f(x)&#x3D;0$ 的解有两种方法：</p>
-<p>一是直接计算 $f(x_{i})$ 的值判断是否为 $0$，二是判断前后两个解 $x_{i}$ 和 $x_{i}-1$ 是否无限接近。</p>
-<p>经过 $(x_{i}, f(x_{i}))$ 这个点的切线方程为 $f(x)&#x3D;f(x_{i})+f^\prime(x_{i})(x - x_{i})$ ，其中 $f^\prime(x)$ 为 $f(x)$ 的导数，本题中为 $2x$。令切线方程等于 $0$，即可求出 $x_{i}+1&#x3D;x_{i} - \frac{f(x_{i})}{f^\prime(x_{i})}$。</p>
-<p>继续化简，<br>$$ x_{i}+1&#x3D;x_{i} - \frac{x_{i}^{2} - n}{2x_{i}} &#x3D; x_{i} - \frac{x_{i}}{2} + \frac{n}{2x_{i}} &#x3D; \frac{x_{i}}{2} + \frac{n}{2x_{i}} &#x3D; \frac{x_{i} + \frac{n}{x_{i}}}{2} $$</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">double</span> <span class="title function_">sqrt</span><span class="params">(<span class="type">double</span> x)</span></span><br><span class="line">&#123;</span><br><span class="line">        <span class="keyword">if</span> (x == <span class="number">0</span>) </span><br><span class="line">                <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        <span class="type">double</span> last = <span class="number">0.0</span>;</span><br><span class="line">        <span class="type">double</span> res = <span class="number">1.0</span>;</span><br><span class="line">        <span class="keyword">while</span> (res != last) &#123;</span><br><span class="line">                last = res;</span><br><span class="line">                res = (res + x / res) / <span class="number">2</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>关于牛顿迭代法，可以参考<a href="https://baike.baidu.com/item/%E7%89%9B%E9%A1%BF%E8%BF%AD%E4%BB%A3%E6%B3%95/10887580">百度百科</a>。</p>
-]]></content>
-      <categories>
-        <category>Math</category>
-      </categories>
-      <tags>
-        <tag>牛顿法</tag>
       </tags>
   </entry>
   <entry>
@@ -896,68 +958,6 @@
       </categories>
       <tags>
         <tag>STL</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Neovim配置教学</title>
-    <url>/2024/06/08/neovim/</url>
-    <content><![CDATA[<h1 id="Neovim配置教学"><a href="#Neovim配置教学" class="headerlink" title="Neovim配置教学"></a>Neovim配置教学</h1><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p><strong>也许你使用过 Vi 或者 Vim ，但你要明确的是 Neovim 与这两者并不是同一软件。</strong></p>
-<blockquote>
-<p>Vim本身是由Bram Moolenaar在90年代初对已经过时的Vi进行改进的克隆。Moolenaar本人忽略了Vim的发展和行动过程。经过几十年的发展，Vim的源代码开始变得陈旧和难以维护。它很臃肿，一些代码没有被优化，而且它目前的功能集也没有很好的老化。<br>但是，Neovim是从头开始重建的。冗余的和几十年前的代码被清除掉了。与此同时，维护者们试图为用户提供和Vim一样的功能。虽然，它确实预先打包了 “可选类固醇”来消费。在文章的其余部分会有更多关于它的内容。</p>
-</blockquote>
-<p>至于为什我们要使用 Neovim 可以参考这篇文章 <a href="https://juejin.cn/post/7090094882588459045">Vim还是Neovim？为什么你应该使用后者？</a></p>
-<p><strong>另外我们将使用 Lua 语言来配置 Neovim</strong></p>
-<p>是如果你还不会使用 Lua 最好先去学习一下<br>可以搜索一下 <a href="https://learnxinyminutes.com/docs/lua/s">Learn Lua in Y minutes</a> ,学习一下 Lua</p>
-<h2 id="开始配置"><a href="#开始配置" class="headerlink" title="开始配置"></a>开始配置</h2><h3 id="来看一下我的的目录结构⬇️"><a href="#来看一下我的的目录结构⬇️" class="headerlink" title="来看一下我的的目录结构⬇️"></a>来看一下我的的目录结构⬇️</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">nvim</span><br><span class="line">├── ftplugin</span><br><span class="line">│   ├── cpp.vim</span><br><span class="line">│   ├── c.vim</span><br><span class="line">│   └── python.vim</span><br><span class="line">├── init.lua</span><br><span class="line">├── lazy-lock.json</span><br><span class="line">└── lua</span><br><span class="line">    ├── config</span><br><span class="line">    │   ├── vim-autocmds.lua</span><br><span class="line">    │   ├── vim-keymaps.lua</span><br><span class="line">    │   └── vim-options.lua</span><br><span class="line">    └── plugins</span><br><span class="line">        ├── alpha.lua</span><br><span class="line">        ├── autopairs.lua</span><br><span class="line">        ├── bufferline.lua</span><br><span class="line">        ├── catppuccin.lua</span><br><span class="line">        ├── comment.lua</span><br><span class="line">        ├── competitive.lua</span><br><span class="line">        ├── completions.lua</span><br><span class="line">        ├── dap.lua</span><br><span class="line">        ├── dressing.lua</span><br><span class="line">        ├── flash.lua</span><br><span class="line">        ├── floaterm.lua</span><br><span class="line">        ├── increname.lua</span><br><span class="line">        ├── lsp-config.lua</span><br><span class="line">        ├── lualine.lua</span><br><span class="line">        ├── mini.lua</span><br><span class="line">        ├── multicursors.lua</span><br><span class="line">        ├── neotree.lua</span><br><span class="line">        ├── noice.lua</span><br><span class="line">        ├── telescope.lua</span><br><span class="line">        ├── toggleterm.lua</span><br><span class="line">        ├── treesitter.lua</span><br><span class="line">        ├── trouble.lua</span><br><span class="line">        └── which-key.lua</span><br></pre></td></tr></table></figure>
-<p>你将会在下面的教学中逐一创建它们。</p>
-<h3 id=""><a href="#" class="headerlink" title=""></a></h3><p>。。。<br>。。。</p>
-]]></content>
-      <categories>
-        <category>Tools</category>
-        <category>Neovim</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>CMake学习笔记</title>
-    <url>/2024/06/10/cmake/</url>
-    <content><![CDATA[<p><img src="/2024/06/10/cmake/CMake-Logo.svg" alt="CMake-Logo"><br>CMake[<a href="https://cmake.org/]">https://cmake.org/]</a></p>
-<h1 id="CMake学习笔记-🎉"><a href="#CMake学习笔记-🎉" class="headerlink" title="CMake学习笔记 🎉"></a>CMake学习笔记 🎉</h1><h2 id="Cmake-简介"><a href="#Cmake-简介" class="headerlink" title="Cmake 简介"></a>Cmake 简介</h2><blockquote>
-<p>CMake 是一个项目构建工具，并且是跨平台的。关于项目构建我们所熟知的还有Makefile（通过 make 命令进行项目的构建），大多是IDE软件都集成了make，比如：VS 的 nmake、linux 下的 GNU make、Qt 的 qmake等，如果自己动手写 makefile，会发现，makefile 通常依赖于当前的编译平台，而且编写 makefile 的工作量比较大，解决依赖关系时也容易出错。<br>而 CMake 恰好能解决上述问题， 其允许开发者指定整个工程的编译流程，在根据编译平台，自动生成本地化的Makefile和工程文件，最后用户只需make编译即可，所以可以把CMake看成一款自动生成 Makefile的工具，其编译<br>流程如下图：<br><img src="/2024/06/10/cmake/image-20230309130644912.png" alt="流程图"></p>
-<ul>
-<li>蓝色🟦虚线表示使用makefile构建项目的过程</li>
-<li>红色🟥实线表示使用cmake构建项目的过程<br>介绍完CMake的作用之后，再来总结一下它的优点：</li>
-<li>跨平台</li>
-<li>能够管理大型项目</li>
-<li>简化编译构建过程和编译过程</li>
-<li>可扩展：可以为 Cmake 编写特定功能的模块，扩充 Cmake 功能</li>
-</ul>
-</blockquote>
-<h2 id="CMake基本语法"><a href="#CMake基本语法" class="headerlink" title="CMake基本语法"></a>CMake基本语法</h2><p>CMake支持大写、小写、混合大小写的命令，按自己喜好来就可以。不过为了方便，本文大多数采用小写。</p>
-<h3 id="注释"><a href="#注释" class="headerlink" title="注释"></a>注释</h3><p>CMake 使用 # 进行行注释，使用 #[[ ]] 形式进行块注释。</p>
-<figure class="highlight cmake"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 行注释</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#[[</span></span><br><span class="line"><span class="comment">	块注释</span></span><br><span class="line"><span class="comment">]]</span></span><br></pre></td></tr></table></figure>
-<h3 id="基础框架"><a href="#基础框架" class="headerlink" title="基础框架"></a>基础框架</h3><p>以下三个命令是使用CMake构建最简单的一个项目所需要的命令。<br><code>cmake_minimum_required</code>：指定使用的 CMake 的最低版本；<br><code>project</code>：定义工程名称，并可指定工程的版本、工程描述等；<br><code>add_executable</code>：将指定的源码编译生成为一个可执行程序。</p>
-<figure class="highlight cmake"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 示例</span></span><br><span class="line"><span class="keyword">cmake_minimum_required</span>(VERSION <span class="number">3.0</span>)</span><br><span class="line"><span class="keyword">project</span>(CALC)</span><br><span class="line"><span class="keyword">set</span>(CMAKE_CXX_STANDARD <span class="number">11</span>) <span class="comment"># 指定使用的 C++ 标准，</span></span><br><span class="line"><span class="keyword">add_executable</span>(app add.c div.c main.c mult.c sub.c)</span><br></pre></td></tr></table></figure>
-<h3 id="定义变量"><a href="#定义变量" class="headerlink" title="定义变量"></a>定义变量</h3><p>在 CMake 中，变量的值始终是字符串类型，且区分大小写。</p>
-<figure class="highlight cmake"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 设置一个普通变量，&lt;variable&gt; 表示变量名，&lt;value&gt;... 表示一个或多个参数</span></span><br><span class="line"><span class="keyword">set</span>(&lt;variable&gt; &lt;value&gt;... [PARENT_SCOPE]) </span><br><span class="line"><span class="comment"># 使用 $&#123;&lt;variable&gt;&#125; 的形式取变量的值。</span></span><br></pre></td></tr></table></figure>
-<figure class="highlight cmake"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 示例</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 将 add.c div.c main.c mult.c sub.c 存储到 SRC 变量中</span></span><br><span class="line"><span class="keyword">set</span>(SRC add.c div.c main.c mult.c sub.c)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 取变量 SRC 的值</span></span><br><span class="line"><span class="keyword">add_executable</span>(app <span class="variable">$&#123;SRC&#125;</span>) </span><br></pre></td></tr></table></figure>
-<h3 id="指定输出路径"><a href="#指定输出路径" class="headerlink" title="指定输出路径"></a>指定输出路径</h3><p>程序的输出可能是一个可执行文件、可能是制作的共享库，可以通过以下命令设置指定的输出路径。</p>
-<figure class="highlight cmake"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 将输出路径指定为 /xxx/xxx</span></span><br><span class="line"><span class="keyword">set</span>(EXECUTABLE_OUTPUT_PATH /xxx/xxx)</span><br><span class="line"><span class="comment"># or</span></span><br><span class="line"><span class="keyword">set</span>(RUNTIME_OUTPUT_DIRECTORY /xxx/xxx)</span><br></pre></td></tr></table></figure>
-<p><strong>注意⚠️</strong><br><code>EXECUTABLE_OUTPUT_PATH</code> 和 <code>RUNTIME_OUTPUT_DIRECTORY</code> 是预定义的宏，当设置了 <code>RUNTIME_OUTPUT_DIRECTORY</code> 时<code>EXECUTABLE_OUTPUT_PATH</code> 就失效了。</p>
-<h3 id="搜索文件"><a href="#搜索文件" class="headerlink" title="搜索文件"></a>搜索文件</h3><p>在 CMake 中，可以使用 <code>aux_source_directory</code> 命令或者 <code>file</code> 命令 搜索项目中的头文件或源文件。</p>
-<figure class="highlight cmake"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 将 &lt;dir&gt; 目录下的源文件存储到 &lt;variable&gt; 变量中</span></span><br><span class="line"><span class="keyword">aux_source_directory</span>(&lt;dir&gt; &lt;variable&gt;)</span><br></pre></td></tr></table></figure>
-<p><code>file</code> 命令具有很多功能，这里介绍搜索文件的功能。</p>
-<figure class="highlight cmake"><table><tr><td class="code"><pre><span class="line"><span class="keyword">file</span>(GLOB &lt;variable&gt; [LIST_DIRECTORIES <span class="keyword">true</span>|<span class="keyword">false</span>] [RELATIVE &lt;path&gt;] [CONFIGURE_DEPENDS] [&lt;globbing-expressions&gt;...])</span><br><span class="line"></span><br><span class="line"><span class="keyword">file</span>(GLOB_RECURSE &lt;variable&gt; [FOLLOW_SYMLINKS] [LIST_DIRECTORIES <span class="keyword">true</span>|<span class="keyword">false</span>] [RELATIVE &lt;path&gt;] [CONFIGURE_DEPENDS] [&lt;globbing-expressions&gt;...])</span><br><span class="line"></span><br><span class="line"><span class="comment"># &lt;globbing-expressions&gt;... 搜索的表达式，可以是指定目录，指定目录下的某种文件，理解为一种正则表达式就好了；GLOB 非递归搜索；GLOB_RECURSE 递归搜索；&lt;variable&gt; 搜索结果保存的变量名</span></span><br></pre></td></tr></table></figure>
-<figure class="highlight cmake"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 示例</span></span><br><span class="line"><span class="comment"># 非递归搜索 /xxx/xxx 下的 *.cpp 源文件</span></span><br><span class="line"><span class="keyword">file</span>(GLOB SRC /xxx/xxx/*.cpp)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 递归搜索 /xxx/xxx 下的所有 *.h 头文件</span></span><br><span class="line"><span class="keyword">file</span>(GLOB_RECURSE HEADER /xxx/xxx/*.h)</span><br></pre></td></tr></table></figure>
-<h3 id="包含头文件"><a href="#包含头文件" class="headerlink" title="包含头文件"></a>包含头文件</h3><p>指定源文件对应的头文件，<code>include_directories(/xxx/include)</code> ，源文件对应的头文件指定在 &#x2F;xxx&#x2F;include 目录下。</p>
-<h3 id="制作动态库和静态库"><a href="#制作动态库和静态库" class="headerlink" title="制作动态库和静态库"></a>制作动态库和静态库</h3><figure class="highlight cmake"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 函数作用：生成库。</span></span><br><span class="line"><span class="comment"># 参数lib_name：是要生成的库名称，</span></span><br><span class="line"><span class="comment"># 参数STATIC/SHARED：指定生成静态库或动态库，</span></span><br><span class="line"><span class="comment"># 参数src：指明库的生成所需要的源文件</span></span><br><span class="line"><span class="keyword">add_library</span>(lib_name STATIC/SHARED src) </span><br></pre></td></tr></table></figure>
-<figure class="highlight cmake"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 将目标名称 target1 的 prop1 属性设置为 value1；</span></span><br><span class="line"><span class="comment"># 将目标名称 target2 的 prop2 属性设置为 value2.</span></span><br><span class="line"><span class="comment"># ...</span></span><br><span class="line"><span class="keyword">set_target_properties</span>(target1 target2 ...</span><br><span class="line">                      PROPERTIES prop1 value1</span><br><span class="line">                      prop2 value2 ...)</span><br></pre></td></tr></table></figure>
-<h3 id="链接静态库和动态库"><a href="#链接静态库和动态库" class="headerlink" title="链接静态库和动态库"></a>链接静态库和动态库</h3><figure class="highlight cmake"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 函数作用：查找库，并把库的绝对路径和名称存储到第一个参数里</span></span><br><span class="line"><span class="comment"># 参数var：用于存储查找到的库</span></span><br><span class="line"><span class="comment"># 参数lib_name：想要查找的库的名称，默认是查找动态库，想要指定查找动态库或静态库</span></span><br><span class="line"><span class="comment">#       可以加后缀，例如 funcname.so 或 funcname.a </span></span><br><span class="line"><span class="comment"># 参数lib_path：想要从哪个路径下查找库，可以指定多个路径</span></span><br><span class="line"><span class="keyword">find_library</span>(var lib_name lib_path1 lib_path2)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 指定静态库的路径，&lt;lib path&gt; 表示静态库的路径</span></span><br><span class="line"><span class="keyword">link_directories</span>(&lt;lib path&gt;)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 链接静态库的命令，&lt;static lib&gt; 表示静态库的名称，可以是全名 libxxx.a，或掐头去尾 xxx</span></span><br><span class="line"><span class="keyword">link_libraries</span>(&lt;static lib&gt; [&lt;static lib&gt;...])</span><br></pre></td></tr></table></figure>]]></content>
-      <categories>
-        <category>Tools</category>
-        <category>CMake</category>
-      </categories>
-      <tags>
-        <tag>CMake</tag>
       </tags>
   </entry>
 </search>
