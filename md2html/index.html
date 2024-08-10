@@ -45,6 +45,9 @@
 			  <li class="ml-auto">
 				<button class="btn btn-success btn-sm"  id="btnCopyToClipboard">Copy to clipboard</button>
 			  </li>
+			  <li class="ml-auto">
+				<button class="btn btn-success btn-sm"  id="goHome">Go Home</button>
+			  </li>
 			</ul>
 			<div style="height:4px;"></div>
 			<div style="height:4px;"></div>
@@ -85,6 +88,10 @@ function copyToClipboard (text) {
   }
 }
 
+function goHome () {
+	window.location.replace("https://josiahbristow.github.io")
+}
+
 window.addEventListener("DOMContentLoaded", function(){
 	var converter = new Markdown.Converter();
 	
@@ -105,6 +112,8 @@ window.addEventListener("DOMContentLoaded", function(){
 				break;
 		}
 	});
+
+	$("#goHome").click(goHome)
 	
 	$("#navCompose .nav-link").click(function(){
 		console.log("clicked!");
@@ -127,7 +136,7 @@ window.addEventListener("DOMContentLoaded", function(){
 <script src="static/js/external/jquery-1.11.1.min.js"></script>
 <script src="static/js/external/popper-1.16.0.min.js"></script>
 <script src="static/js/external/bootstrap.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pagedown/1.0/Markdown.Converter.min.js"></script>
+<script src="Markdown.Converter.min.js"></script>
 <!-- <script src="https://unpkg.com/turndown/dist/turndown.js"></script> -->
 </body>
 </html>
