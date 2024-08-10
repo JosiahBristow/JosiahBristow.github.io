@@ -960,4 +960,56 @@
         <tag>STL</tag>
       </tags>
   </entry>
+  <entry>
+    <title>Tutorial of pacman in Archlinux</title>
+    <url>/2024/08/10/pacman/</url>
+    <content><![CDATA[<h1 id="Tutorial-of-pacman-in-Archlinux"><a href="#Tutorial-of-pacman-in-Archlinux" class="headerlink" title="Tutorial of pacman in Archlinux"></a>Tutorial of pacman in Archlinux</h1><p><em>Preface</em>: if you are not root user, please add <code>sudo</code> at the head of every commends in below.</p>
+<h2 id="Install-Software"><a href="#Install-Software" class="headerlink" title="Install Software"></a>Install Software</h2><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">pacman -S package1 [package2 ...]</span><br></pre></td></tr></table></figure>
+<p><code>-S</code> option means “Synchronization”, pacman will synchronizes the package repository before installation.</p>
+<ul>
+<li>Explicit installation: Packages that are installed directly by the <em>pacman -S or -U</em> command</li>
+<li>Dependent Installation: A package that is automatically installed because it is dependent on another explicitly installed package</li>
+</ul>
+<h2 id="Uninstall-Software"><a href="#Uninstall-Software" class="headerlink" title="Uninstall Software"></a>Uninstall Software</h2><p>Remove a package:</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">pacman -R package</span><br></pre></td></tr></table></figure>
+<p>Remove a package ant its dependencies which are not needed by other packages:</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">pacman -Rs package</span><br></pre></td></tr></table></figure>
+<p>If the package which requires the dependencies had been deleted, this commend can remove all dependencies which are no longer needed:</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">pacman -Qdtq | pacman -Rs -</span><br></pre></td></tr></table></figure>
+
+<h2 id="Update-Software"><a href="#Update-Software" class="headerlink" title="Update Software"></a>Update Software</h2><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">pacman -Syu</span><br></pre></td></tr></table></figure>
+<p>This commend could synchronize repository databases and update all the packages which have been installed but not includes locally installed packages that is not in the repository.</p>
+<ul>
+<li><code>-S</code> means “Synchronize”</li>
+<li><code>-y</code> means “refresh”</li>
+<li><code>-u</code> means “update”</li>
+</ul>
+<h2 id="Search-Package"><a href="#Search-Package" class="headerlink" title="Search Package"></a>Search Package</h2><p>Find packages’s name or description in the databases:</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">pacman -Ss string1 [string2 ...]</span><br></pre></td></tr></table></figure>
+<p>Search the packages which have been installed:</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">pacman -Qs string1 [string2 ...]</span><br></pre></td></tr></table></figure>
+<p>Find the package it belongs to in the remote package based on the file name:</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">pacman -F string1 [string2 ...]</span><br></pre></td></tr></table></figure>
+<p>Look at the dependency tree of a package</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">pactree package</span><br></pre></td></tr></table></figure>
+
+<h2 id="Clear-Package-Cache"><a href="#Clear-Package-Cache" class="headerlink" title="Clear Package Cache"></a>Clear Package Cache</h2><p>Pacman storages the downloaded packages in path “&#x2F;var&#x2F;cache&#x2F;Pacman&#x2F;pkg&#x2F;“, and doesn’t clear the old version or uninstalled version.<br>This has a few advance:</p>
+<ol>
+<li>It allows downgrading a package without the need to retrieve previous versions through other sources.</li>
+<li>Uninstalled packages can be easily reinstalled directly from cache folder.<br>However, it’s is necessary to clear the cache regularly to prevent the folder from growing to big.<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">paccache -r</span><br></pre></td></tr></table></figure>
+This commend can remove all packages that are not installed and the unused synchronization database:<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">pacman -Sc</span><br></pre></td></tr></table></figure>
+If you wanna delete all files in cache, use <code>-c</code> twice(⚠️This will remain nothing in the folder. USE WITH CAUTIONS!!!)<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">pacman -Scc</span><br></pre></td></tr></table></figure></li>
+</ol>
+<h2 id="Install-Local-or-Third-Party-Packages"><a href="#Install-Local-or-Third-Party-Packages" class="headerlink" title="Install Local or Third-Party Packages"></a>Install Local or Third-Party Packages</h2><p>Install the local package which doesn’t come from remote repository:</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">pacman -U loacl_package_path.pkg.tar.xz</span><br></pre></td></tr></table></figure>
+<p>Install the remote package which isn’t included in the official repository:</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">pacman -U http://www.example.com/repo/exmaple.pkg.tar.xz</span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>Linux</category>
+      </categories>
+      <tags>
+        <tag>Archlinux</tag>
+      </tags>
+  </entry>
 </search>
