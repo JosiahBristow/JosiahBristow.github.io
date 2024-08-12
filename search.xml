@@ -1141,4 +1141,67 @@ If you wanna delete all files in cache, use <code>-c</code> twice(⚠️This wil
         <tag>STL</tag>
       </tags>
   </entry>
+  <entry>
+    <title>Tmux Basic Operater</title>
+    <url>/2024/08/12/tmux/</url>
+    <content><![CDATA[<h1 id="🖥️-Tmux-Basic-Operations"><a href="#🖥️-Tmux-Basic-Operations" class="headerlink" title="🖥️ Tmux Basic Operations"></a>🖥️ Tmux Basic Operations</h1><p><img src="/2024/08/12/tmux/tmux.png" alt="tmux"></p>
+<h2 id="Preface"><a href="#Preface" class="headerlink" title="Preface"></a>Preface</h2><blockquote>
+<p>Tmux is a terminal multiplexer. It lets you switch easily between several programs in one terminal, detach them (they keep running in the background) and reattach them to a different terminal.</p>
+</blockquote>
+<h2 id="Tmux-Core-Feature"><a href="#Tmux-Core-Feature" class="headerlink" title="Tmux Core Feature"></a>Tmux Core Feature</h2><ol>
+<li><p>tmux can create multiple panes within a single window.</p>
+</li>
+<li><p>after restarting the tmux, you can recover the last session through the commond line.</p>
+</li>
+<li><p>there are lots of plugins that you can extend your tmux.</p>
+</li>
+</ol>
+<p>‼️ In tmux, all shortcuts must be preceded by the prefix key <code>ctrl + b</code>.</p>
+<h2 id="Pane-Operations"><a href="#Pane-Operations" class="headerlink" title="Pane Operations"></a>Pane Operations</h2><ul>
+<li><code>%</code> Split the window into two panes side by side.</li>
+<li><code>&quot;</code> Split the window into two panes top and bottom.</li>
+<li><code>x</code> Close the current pane.</li>
+<li><code>&#123;</code> Move the current pane one position forward.</li>
+<li><code>&#125;</code> Move the current pane one position backward.</li>
+<li><code>;</code> Select the last used panes</li>
+<li><code>o</code> Selected the next pane, or you can use the arrow key to select.</li>
+<li><code>space</code> Switch panel layout, tmux has 5 built-in layouts.</li>
+<li><code>z</code> Maximize the current pane, and execute again to restore the original size.</li>
+<li><code>q</code> Display the numbers of all panes, and press the corresponding while the number are displayed to switch to the corresponding pane.</li>
+</ul>
+<h2 id="Session-Operations"><a href="#Session-Operations" class="headerlink" title="Session Operations"></a>Session Operations</h2><p>In shell, each time you enter tmux, a tmux session is created.<br>Common tmux operations include:</p>
+<ul>
+<li><code>$</code> Rename current session.</li>
+<li><code>s</code> Switch session list.</li>
+<li><code>d</code> Detach current session(You will exit the tmux process and return to the shell main process).</li>
+</ul>
+<p>You can also operate sessions directly in the shell process:</p>
+<p>create a session named foo:</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">tmux new -s foo</span><br></pre></td></tr></table></figure>
+<p>list all tmux sessions:</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">tmux ls</span><br></pre></td></tr></table></figure>
+<p>recover the last session:</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">tmux a</span><br></pre></td></tr></table></figure>
+<p>recover the session named foo:</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">tmux a -t foo</span><br></pre></td></tr></table></figure>
+<p>delete the session named foo:</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">tmux kill-session -t foo</span><br></pre></td></tr></table></figure>
+<p>delete all sessions:</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">tmux kill-server</span><br></pre></td></tr></table></figure>
+
+<h2 id="Others"><a href="#Others" class="headerlink" title="Others"></a>Others</h2><p>enter the commend mode:</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">ctrl+b :</span><br></pre></td></tr></table></figure>
+<p>list all shortcuts:</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">ctrl+b ?</span><br></pre></td></tr></table></figure>
+<p>Display a digital clock in the center of the current window:</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">ctrl+b t</span><br></pre></td></tr></table></figure>
+<p>❤️ <a href="https://github.com/tmux/tmux/wiki">More tmux inforamtion</a></p>
+]]></content>
+      <categories>
+        <category>Tools</category>
+      </categories>
+      <tags>
+        <tag>Tmux</tag>
+      </tags>
+  </entry>
 </search>
