@@ -566,7 +566,7 @@
 <h3 id="迭代适配器（Iterator-Adaptor）"><a href="#迭代适配器（Iterator-Adaptor）" class="headerlink" title="迭代适配器（Iterator Adaptor）"></a>迭代适配器（Iterator Adaptor）</h3><p>是一种用来修饰容器或者仿函数的接口，它使得得带适配器使算法能够以逆向模式，安插模式进行工作，甚至还可以与流配合，它对容器起到非常大的辅助作用，同时他还将迭代器进行了更高级别的抽象。</p>
 <h3 id="空间配制器（allocator）"><a href="#空间配制器（allocator）" class="headerlink" title="空间配制器（allocator）"></a>空间配制器（allocator）</h3><p>是负责空间的配置与管理，重点就是对容器的空间申请和空间释放进行管理，你可以理解为C的malloc和free函数，C++的new和delete关键字。</p>
 <p><strong>我们主要研究前三项</strong></p>
-<p><strong>容器篇</strong><br><a href="https://josiahbristow.github.io/2024/06/06/vector/">Vector容器</a><br>持续更新中,敬请期待…</p>
+<p><strong>容器篇</strong><br><a href="https://josiahbristow.github.io/2024/06/06/vector/">Vector容器</a><br><a href="https://josiahbristow.github.io/2024/08/12/cpp-map">Map和Unordered_Map容器</a><br>持续更新中,敬请期待…</p>
 <p><strong>算法篇</strong><br>持续更新中,敬请期待…</p>
 <p><strong>迭代器篇</strong><br>持续更新中,敬请期待…</p>
 ]]></content>
@@ -1010,6 +1010,135 @@ If you wanna delete all files in cache, use <code>-c</code> twice(⚠️This wil
       </categories>
       <tags>
         <tag>Archlinux</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>C++: std::map and std::unordered_map</title>
+    <url>/2024/08/12/cpp-map/</url>
+    <content><![CDATA[<h1 id="C-std-map-and-std-unordered-map"><a href="#C-std-map-and-std-unordered-map" class="headerlink" title="C++: std::map and std::unordered_map"></a>C++: std::map and std::unordered_map</h1><h2 id="What-is-Map"><a href="#What-is-Map" class="headerlink" title="What is Map?"></a>What is Map?</h2><p>Maps are associative containers that store elements in a mapped fashion.</p>
+<p>Each element has a key value and a mapped value. ⚠️ One key can only map one mapped value, but same mapped values can have different key values.</p>
+<h2 id="Map-in-C-STL"><a href="#Map-in-C-STL" class="headerlink" title="Map in C++ STL"></a>Map in C++ STL</h2><p><strong>std::map</strong> is the class template for map containers and it’s defined inside the <code>&lt;map&gt;</code> header file.</p>
+<h3 id="Basic-std-map-Member-Functions"><a href="#Basic-std-map-Member-Functions" class="headerlink" title="Basic std::map Member Functions"></a>Basic std::map Member Functions</h3><ul>
+<li><code>begin()</code> – Returns an iterator to the first element in map.</li>
+<li><code>end()</code> – Returns an iterator to the theoretical element that follows the last element in the map.</li>
+<li><code>size()</code> – Returns the number of elements in map.</li>
+<li><code>max_size()</code> – Returns the maximum number of elements that the map can hold.</li>
+<li><code>empty()</code> – Returns whether the map is empty.</li>
+<li><code>pair_insert(key_value, map_value)</code> – Adds a new element to the map.</li>
+<li><code>erase(iterator position)</code> – Removes the element at the position pointed by the iterator.</li>
+<li><code>erase(const g)</code> – Removes the key-value ‘g’ from the map.</li>
+<li><code>clear()</code> – Removes all the elements from the map.</li>
+</ul>
+<p>More detail of std::map please refer this <a href="https://en.cppreference.com/w/cpp/container/map">page</a>.</p>
+<h2 id="Unordered-map-in-C"><a href="#Unordered-map-in-C" class="headerlink" title="Unordered_map in C++"></a>Unordered_map in C++</h2><p>unordered map is an associated container that stores elements formed by the combination of a key value and a mapped value. The key value is used to uniquely identify the element and the mapped value is the content associated with the key. Both key and value can be of any type predefined or user-defined. In simple terms, an unordered_map is like a data structure of dictionary type that stores elements in itself. It contains successive pairs (key, value), which allows fast retrieval of an individual element based on its unique key.</p>
+<p><strong>std::unordered_map</strong> is the class template for unordered map containers and it’s defined inside the <code>&lt;unordered_map&gt;</code> header file.</p>
+<p>The below table shows the complete list of the methods of an unordered_map:</p>
+<table>
+<thead>
+<tr>
+<th align="left">Methods&#x2F;Functions</th>
+<th align="center">Description</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">at()</td>
+<td align="center">This function in C++ unordered_map returns the reference to the value with the element as key k</td>
+</tr>
+<tr>
+<td align="left">begin()</td>
+<td align="center">Returns an iterator pointing to the first element in the container in the unordered_map container</td>
+</tr>
+<tr>
+<td align="left">end()</td>
+<td align="center">Returns an iterator pointing to the position past the last element in the container in the unordered_map container</td>
+</tr>
+<tr>
+<td align="left">bucket()</td>
+<td align="center">Returns the bucket number where the element with the key k is located in the map</td>
+</tr>
+<tr>
+<td align="left">bucket_count</td>
+<td align="center">Bucket_count is used to count the total no. of buckets in the unordered_map. No parameter is required to pass into this function</td>
+</tr>
+<tr>
+<td align="left">bucket_size</td>
+<td align="center">Returns the number of elements in each bucket of the unordered_map</td>
+</tr>
+<tr>
+<td align="left">count()</td>
+<td align="center">Count the number of elements present in an unordered_map with a given key</td>
+</tr>
+<tr>
+<td align="left">equal_range()</td>
+<td align="center">Return the bounds of a range that includes all the elements in the container with a key that compares equal to k</td>
+</tr>
+<tr>
+<td align="left">find()</td>
+<td align="center">Returns iterator to the element</td>
+</tr>
+<tr>
+<td align="left">empty()</td>
+<td align="center">Checks whether the container is empty in the unordered_map container</td>
+</tr>
+<tr>
+<td align="left">erase()</td>
+<td align="center">Erase elements in the container in the unordered_map container</td>
+</tr>
+</tbody></table>
+<p>More detail of std::unordered_map please refer this <a href="https://en.cppreference.com/w/cpp/container/unordered_map">page</a>.</p>
+<h2 id="Difference"><a href="#Difference" class="headerlink" title="Difference"></a>Difference</h2><table>
+<thead>
+<tr>
+<th align="left"></th>
+<th align="center">map</th>
+<th align="center">unordered_map</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">Ordering</td>
+<td align="center">increasing order of keys(by default)</td>
+<td align="center">no ordering</td>
+</tr>
+<tr>
+<td align="left">Implementation</td>
+<td align="center">Self balancing BST like Red-Black Tree</td>
+<td align="center">Hash Table</td>
+</tr>
+<tr>
+<td align="left">Search time</td>
+<td align="center">log(n)</td>
+<td align="center">O(1) -&gt; Average, O(n) -&gt; Worst Case</td>
+</tr>
+<tr>
+<td align="left">Insertion time</td>
+<td align="center">log(n) + Rebalance</td>
+<td align="center">Same as search</td>
+</tr>
+<tr>
+<td align="left">Deletion time</td>
+<td align="center">log(n) + Rebalance</td>
+<td align="center">Same as search</td>
+</tr>
+</tbody></table>
+<p><em><strong>use std::map when</strong></em></p>
+<ul>
+<li>You need ordered data;</li>
+<li>You would have to access the data in sorted order;</li>
+<li>You need predecessor of elements;</li>
+</ul>
+<p><em><strong>use std::unordered map when</strong></em></p>
+<ul>
+<li>You need to keep count of some data and no ordering is required;</li>
+<li>You need single element access i.e. no travcersal.</li>
+</ul>
+]]></content>
+      <categories>
+        <category>C/C++</category>
+        <category>STL</category>
+        <category>map</category>
+      </categories>
+      <tags>
+        <tag>STL</tag>
       </tags>
   </entry>
 </search>
