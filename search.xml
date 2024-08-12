@@ -1142,7 +1142,7 @@ If you wanna delete all files in cache, use <code>-c</code> twice(⚠️This wil
       </tags>
   </entry>
   <entry>
-    <title>Tmux Basic Operater</title>
+    <title>🖥️ Tmux Basic Operations</title>
     <url>/2024/08/12/tmux/</url>
     <content><![CDATA[<h1 id="🖥️-Tmux-Basic-Operations"><a href="#🖥️-Tmux-Basic-Operations" class="headerlink" title="🖥️ Tmux Basic Operations"></a>🖥️ Tmux Basic Operations</h1><p><img src="/2024/08/12/tmux/tmux.png" alt="tmux"></p>
 <h2 id="Preface"><a href="#Preface" class="headerlink" title="Preface"></a>Preface</h2><blockquote>
@@ -1198,7 +1198,8 @@ If you wanna delete all files in cache, use <code>-c</code> twice(⚠️This wil
 <p>❤️ <a href="https://github.com/tmux/tmux/wiki">More tmux inforamtion</a></p>
 ]]></content>
       <categories>
-        <category>Tools</category>
+        <category>Tool</category>
+        <category>Tmux</category>
       </categories>
       <tags>
         <tag>Tmux</tag>
