@@ -1198,11 +1198,62 @@ If you wanna delete all files in cache, use <code>-c</code> twice(⚠️This wil
 <p>❤️ <a href="https://github.com/tmux/tmux/wiki">More tmux inforamtion</a></p>
 ]]></content>
       <categories>
-        <category>Tool</category>
+        <category>Tools</category>
         <category>Tmux</category>
       </categories>
       <tags>
         <tag>Tmux</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>C++: std::set</title>
+    <url>/2024/08/14/cpp-set/</url>
+    <content><![CDATA[<h1 id="C-std-set"><a href="#C-std-set" class="headerlink" title="C++: std::set"></a>C++: std::set</h1><h2 id="What’s-set"><a href="#What’s-set" class="headerlink" title="What’s set?"></a>What’s set?</h2><p>sets are associative containers that store unique elements and sorted in a certain order.</p>
+<h2 id="Set-in-C"><a href="#Set-in-C" class="headerlink" title="Set in C++"></a>Set in C++</h2><p><code>std::set</code> provided efficient operations to search, insert and delete elements. It’s implemented based on a <strong>Red-Black Tree</strong> and therefore has find, insert and delete performance with <strong>logarithmic time complexity</strong>.</p>
+<p><code>std::set</code> is the class template for map containers and it’s defined inside the <code>&lt;set&gt;</code> header file.</p>
+<p>elements which can be stored in <code>std::set</code> must follow these condition:</p>
+<ul>
+<li>the type of elements must can be comparable;</li>
+<li>the type of elements must can be removed and assigned;</li>
+</ul>
+<h2 id="Common-Operations"><a href="#Common-Operations" class="headerlink" title="Common Operations"></a>Common Operations</h2><table>
+<thead>
+<tr>
+<th align="left">method</th>
+<th align="center">description</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">insert(elem)</td>
+<td align="center">insert a element</td>
+</tr>
+<tr>
+<td align="left">erase(elem)</td>
+<td align="center">remove a element</td>
+</tr>
+<tr>
+<td align="left">find(elem)</td>
+<td align="center">search a element</td>
+</tr>
+<tr>
+<td align="left">size()</td>
+<td align="center">return the number of element in set</td>
+</tr>
+<tr>
+<td align="left">empty</td>
+<td align="center">check if the set is empty</td>
+</tr>
+</tbody></table>
+<h2 id="Example"><a href="#Example" class="headerlink" title="Example"></a>Example</h2><h3 id="Code"><a href="#Code" class="headerlink" title="Code"></a>Code</h3><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;set&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">        <span class="comment">// declare a set of int named my_set</span></span><br><span class="line">        set&lt;<span class="type">int</span>&gt; my_set;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// insert elements</span></span><br><span class="line">        my_set.<span class="built_in">insert</span>(<span class="number">10</span>);</span><br><span class="line">        my_set.<span class="built_in">insert</span>(<span class="number">20</span>);</span><br><span class="line">        my_set.<span class="built_in">insert</span>(<span class="number">30</span>);</span><br><span class="line">        my_set.<span class="built_in">insert</span>(<span class="number">40</span>);</span><br><span class="line">        my_set.<span class="built_in">insert</span>(<span class="number">40</span>);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// print elements in my_set</span></span><br><span class="line">        cout &lt;&lt; <span class="string">&quot;Set contains: &quot;</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> num : my_set)</span><br><span class="line">                cout &lt;&lt; num &lt;&lt; <span class="string">&quot; &quot;</span>;</span><br><span class="line">        cout &lt;&lt; endl;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// delete an element</span></span><br><span class="line">        my_set.<span class="built_in">erase</span>(<span class="number">20</span>);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// print elements in my_set after deleting</span></span><br><span class="line">        cout &lt;&lt; <span class="string">&quot;Set contains: &quot;</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> num : my_set)</span><br><span class="line">                cout &lt;&lt; num &lt;&lt; <span class="string">&quot; &quot;</span>;</span><br><span class="line">        cout &lt;&lt; endl;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// check if set is empty</span></span><br><span class="line">        <span class="keyword">if</span> (my_set.<span class="built_in">empty</span>())</span><br><span class="line">                cout &lt;&lt; <span class="string">&quot;The set is empty.&quot;</span> &lt;&lt; endl;</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">                cout &lt;&lt; <span class="string">&quot;The set isn&#x27;t empty.&quot;</span> &lt;&lt; endl;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// print the number of elements in my_set</span></span><br><span class="line">        cout &lt;&lt; <span class="string">&quot;The set contains &quot;</span> &lt;&lt; my_set.<span class="built_in">size</span>() &lt;&lt; endl;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="Results"><a href="#Results" class="headerlink" title="Results"></a>Results</h3><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">Set contains: 10 20 30 40</span><br><span class="line">20 is in the set.</span><br><span class="line">After erasing 20, set contains: 10 30 40</span><br><span class="line">The set is not empty.</span><br><span class="line">The set contains 3 elements.</span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>C/C++</category>
+        <category>STL</category>
+        <category>set</category>
+      </categories>
+      <tags>
+        <tag>STL</tag>
       </tags>
   </entry>
 </search>
