@@ -851,7 +851,7 @@ If you wanna delete all files in cache, use <code>-c</code> twice(⚠️This wil
 <h3 id="迭代适配器（Iterator-Adaptor）"><a href="#迭代适配器（Iterator-Adaptor）" class="headerlink" title="迭代适配器（Iterator Adaptor）"></a>迭代适配器（Iterator Adaptor）</h3><p>是一种用来修饰容器或者仿函数的接口，它使得得带适配器使算法能够以逆向模式，安插模式进行工作，甚至还可以与流配合，它对容器起到非常大的辅助作用，同时他还将迭代器进行了更高级别的抽象。</p>
 <h3 id="空间配制器（allocator）"><a href="#空间配制器（allocator）" class="headerlink" title="空间配制器（allocator）"></a>空间配制器（allocator）</h3><p>是负责空间的配置与管理，重点就是对容器的空间申请和空间释放进行管理，你可以理解为C的malloc和free函数，C++的new和delete关键字。</p>
 <p><strong>我们主要研究前三项</strong></p>
-<p><strong>容器篇</strong><br><a href="https://josiahbristow.github.io/2024/06/06/vector/">Vector容器</a><br><a href="https://josiahbristow.github.io/2024/08/14/cpp-set/">Set容器</a><br><a href="https://josiahbristow.github.io/2024/08/12/cpp-map">Map和Unordered_Map容器</a><br>持续更新中,敬请期待…</p>
+<p><strong>容器篇</strong><br><a href="https://josiahbristow.github.io/2024/06/06/vector/">Vector容器</a><br><a href="https://josiahbristow.github.io/2024/08/14/cpp-list/">List容器</a><br><a href="https://josiahbristow.github.io/2024/08/14/cpp-queue/">Queue容器</a><br><a href="https://josiahbristow.github.io/2024/08/14/cpp-stack/">Stack容器</a><br><a href="https://josiahbristow.github.io/2024/08/14/cpp-set/">Set容器</a><br><a href="https://josiahbristow.github.io/2024/08/12/cpp-map">Map和Unordered_Map容器</a><br>持续更新中,敬请期待…</p>
 <p><strong>算法篇</strong><br>持续更新中,敬请期待…</p>
 <p><strong>迭代器篇</strong><br>持续更新中,敬请期待…</p>
 ]]></content>
@@ -1318,7 +1318,7 @@ If you wanna delete all files in cache, use <code>-c</code> twice(⚠️This wil
 <li>elements can only be removed from the head of the queue.</li>
 </ul>
 <h2 id="Queue-in-C"><a href="#Queue-in-C" class="headerlink" title="Queue in C++"></a>Queue in C++</h2><p>std::queue is the class template for container and it’s defined inside the <queue> header file.</p>
-<h2 id="Common-Opertions"><a href="#Common-Opertions" class="headerlink" title="Common Opertions"></a>Common Opertions</h2><table>
+<h2 id="Common-Operations"><a href="#Common-Operations" class="headerlink" title="Common Operations"></a>Common Operations</h2><table>
 <thead>
 <tr>
 <th align="left">method</th>
@@ -1403,6 +1403,63 @@ If you wanna delete all files in cache, use <code>-c</code> twice(⚠️This wil
         <category>C/C++</category>
         <category>STL</category>
         <category>stack</category>
+      </categories>
+      <tags>
+        <tag>STL</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>C++: Std::list</title>
+    <url>/2024/08/14/cpp-list/</url>
+    <content><![CDATA[<h1 id="C-std-list"><a href="#C-std-list" class="headerlink" title="C++: std::list"></a>C++: std::list</h1><h2 id="What-is-linked-list"><a href="#What-is-linked-list" class="headerlink" title="What is linked list?"></a>What is linked list?</h2><p>A linked list is a linear data structure that consists of a series of nodes connected by pointers (in C or C++) or references (in Java, Python and JavaScript). Each node contains data and a pointer&#x2F;reference to the next node in the list. Unlike arrays, linked lists allow for efficient insertion or removal of elements from any position in the list, as the nodes are not stored contiguously in memory.</p>
+<h2 id="List-in-C"><a href="#List-in-C" class="headerlink" title="List in C++"></a>List in C++</h2><p>std::list is the class template for container and it’s defined inside the <code>&lt;list&gt;</code> header file.<br>It’s allow quickly insert&#x2F;remove elements in anywhere.<br>Being different from std::array and std::vector, std::list needn’t to specify a size at creation tine, and elements can be added or removed anywhere without reallocating memory.</p>
+<h2 id="Commend-Operations"><a href="#Commend-Operations" class="headerlink" title="Commend Operations"></a>Commend Operations</h2><table>
+<thead>
+<tr>
+<th align="left">method</th>
+<th align="center">description</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">push_front(item)</td>
+<td align="center">add element to the head of list</td>
+</tr>
+<tr>
+<td align="left">push_back(item)</td>
+<td align="center">add element to the tail of list</td>
+</tr>
+<tr>
+<td align="left">pop_front()</td>
+<td align="center">remove element to the head of list</td>
+</tr>
+<tr>
+<td align="left">void pop_back()</td>
+<td align="center">remove element to the tail of list</td>
+</tr>
+<tr>
+<td align="left">erase(iter)</td>
+<td align="center">remove the value maped by iter of lisr</td>
+</tr>
+<tr>
+<td align="left">front()</td>
+<td align="center">return the first element of list</td>
+</tr>
+<tr>
+<td align="left">back</td>
+<td align="center">return the lasr element of list</td>
+</tr>
+<tr>
+<td align="left">size()</td>
+<td align="center">return the element’s number of list</td>
+</tr>
+</tbody></table>
+<h2 id="Example"><a href="#Example" class="headerlink" title="Example"></a>Example</h2><h3 id="Code"><a href="#Code" class="headerlink" title="Code"></a>Code</h3><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;list&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="comment">// create a list named numbers to store int</span></span><br><span class="line">    std::list&lt;<span class="type">int</span>&gt; numbers;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// add element to numbers</span></span><br><span class="line">    numbers.<span class="built_in">push_back</span>(<span class="number">10</span>);</span><br><span class="line">    numbers.<span class="built_in">push_back</span>(<span class="number">20</span>);</span><br><span class="line">    numbers.<span class="built_in">push_back</span>(<span class="number">30</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// visit and print the first element of numbers</span></span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot;First element: &quot;</span> &lt;&lt; numbers.<span class="built_in">front</span>() &lt;&lt; std::endl;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// visit and print the last element of numbers</span></span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot;Last element: &quot;</span> &lt;&lt; numbers.<span class="built_in">back</span>() &lt;&lt; std::endl;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// iterate through the list and print all the elements</span></span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot;List elements: &quot;</span>;</span><br><span class="line">    <span class="keyword">for</span> (std::list&lt;<span class="type">int</span>&gt;::iterator it = numbers.<span class="built_in">begin</span>(); it != numbers.<span class="built_in">end</span>(); ++it) &#123;</span><br><span class="line">        std::cout &lt;&lt; *it &lt;&lt; <span class="string">&quot; &quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    std::cout &lt;&lt; std::endl;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// remove the last element of numbers</span></span><br><span class="line">    numbers.<span class="built_in">pop_back</span>();</span><br><span class="line"></span><br><span class="line">    <span class="comment">// iterate through the list and print all the elements again</span></span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot;List elements after removing the last element: &quot;</span>;</span><br><span class="line">    <span class="keyword">for</span> (std::list&lt;<span class="type">int</span>&gt;::iterator it = numbers.<span class="built_in">begin</span>(); it != numbers.<span class="built_in">end</span>(); ++it) &#123;</span><br><span class="line">        std::cout &lt;&lt; *it &lt;&lt; <span class="string">&quot; &quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    std::cout &lt;&lt; std::endl;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="Results"><a href="#Results" class="headerlink" title="Results"></a>Results</h3><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">First element: 10</span><br><span class="line">Last element: 30</span><br><span class="line">List elements: 10 20 30</span><br><span class="line">List elements after removing the last element: 10 20</span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>C/C++</category>
+        <category>STL</category>
+        <category>list</category>
       </categories>
       <tags>
         <tag>STL</tag>
