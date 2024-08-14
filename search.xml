@@ -1310,14 +1310,14 @@ If you wanna delete all files in cache, use <code>-c</code> twice(⚠️This wil
       </tags>
   </entry>
   <entry>
-    <title>cpp-queue</title>
+    <title>C++: Std::queue</title>
     <url>/2024/08/14/cpp-queue/</url>
     <content><![CDATA[<h1 id="C-std-queue"><a href="#C-std-queue" class="headerlink" title="C++: std::queue"></a>C++: std::queue</h1><h2 id="What-is-queue"><a href="#What-is-queue" class="headerlink" title="What is queue?"></a>What is queue?</h2><p>Queue is a FIFO(First IN, First Out) data structure.<br>It allow add elements at one end and remove elements in the other end.<br>Queue is a linear data structure that follow these rules:</p>
 <ul>
 <li>elements can only be added from the tail of the queue;</li>
 <li>elements can only be removed from the head of the queue.</li>
 </ul>
-<h2 id="Queue-in-C"><a href="#Queue-in-C" class="headerlink" title="Queue in C++"></a>Queue in C++</h2><p>std::queue is the class template for map container and it’s defined inside the <queue> header file.</p>
+<h2 id="Queue-in-C"><a href="#Queue-in-C" class="headerlink" title="Queue in C++"></a>Queue in C++</h2><p>std::queue is the class template for container and it’s defined inside the <queue> header file.</p>
 <h2 id="Common-Opertions"><a href="#Common-Opertions" class="headerlink" title="Common Opertions"></a>Common Opertions</h2><table>
 <thead>
 <tr>
@@ -1358,6 +1358,51 @@ If you wanna delete all files in cache, use <code>-c</code> twice(⚠️This wil
         <category>C/C++</category>
         <category>STL</category>
         <category>queue</category>
+      </categories>
+      <tags>
+        <tag>STL</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>C++: Std::stack</title>
+    <url>/2024/08/14/cpp-stack/</url>
+    <content><![CDATA[<h1 id="C-std-stack"><a href="#C-std-stack" class="headerlink" title="C++: std::stack"></a>C++: std::stack</h1><h2 id="What-is-stack"><a href="#What-is-stack" class="headerlink" title="What is stack?"></a>What is stack?</h2><p>Stack is a FILO(First IN, Last Out) data structure.<br>It allow add elements at one end and remove elements in the same end.</p>
+<h2 id="Stack-in-C"><a href="#Stack-in-C" class="headerlink" title="Stack in C++"></a>Stack in C++</h2><p>std::stack is the class template container and it’s defined inside the <code>&lt;stack&gt;</code> header file.<br>std::stack bases on other containers such as std::dequeue and std::vector.</p>
+<h2 id="Commend-Operations"><a href="#Commend-Operations" class="headerlink" title="Commend Operations"></a>Commend Operations</h2><table>
+<thead>
+<tr>
+<th align="left">method</th>
+<th align="center">description</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">push(item)</td>
+<td align="center">push a element in the top of stack</td>
+</tr>
+<tr>
+<td align="left">pop()</td>
+<td align="center">pop the top element of stack , and return it</td>
+</tr>
+<tr>
+<td align="left">top()</td>
+<td align="center">return the top element’s reference of stack</td>
+</tr>
+<tr>
+<td align="left">empty()</td>
+<td align="center">check if the stack is empty</td>
+</tr>
+<tr>
+<td align="left">size()</td>
+<td align="center">return the element’s number of stack</td>
+</tr>
+</tbody></table>
+<h2 id="Example"><a href="#Example" class="headerlink" title="Example"></a>Example</h2><h3 id="Code"><a href="#Code" class="headerlink" title="Code"></a>Code</h3><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stack&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">        <span class="comment">// declare a stack called s</span></span><br><span class="line">        stack&lt;<span class="type">int</span>&gt; s;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// push elements</span></span><br><span class="line">        s.<span class="built_in">push</span>(<span class="number">1</span>);</span><br><span class="line">        s.<span class="built_in">push</span>(<span class="number">2</span>);</span><br><span class="line">        s.<span class="built_in">push</span>(<span class="number">3</span>);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// print the top element of s</span></span><br><span class="line">        cout &lt;&lt; <span class="string">&quot;Top element is: &quot;</span> &lt;&lt; s.<span class="built_in">top</span>() &lt;&lt; endl;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// pop element</span></span><br><span class="line">        s.<span class="built_in">pop</span>();</span><br><span class="line"></span><br><span class="line">        <span class="comment">// print the top element of s again</span></span><br><span class="line">        cout &lt;&lt; <span class="string">&quot;After popping, top element is: &quot;</span> &lt;&lt; s.<span class="built_in">top</span>() &lt;&lt; endl;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// check if s is empty</span></span><br><span class="line">        <span class="keyword">if</span> (!s.<span class="built_in">empty</span>())</span><br><span class="line">                cout &lt;&lt; <span class="string">&quot;Stack is not empty.&quot;</span> &lt;&lt; endl;</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">                cout &lt;&lt; <span class="string">&quot;Stack is empty.&quot;</span> &lt;&lt; endl;</span><br><span class="line"></span><br><span class="line">        cout &lt;&lt; <span class="string">&quot;Size of stack: &quot;</span> &lt;&lt; s.<span class="built_in">size</span>() &lt;&lt; endl;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="Results"><a href="#Results" class="headerlink" title="Results"></a>Results</h3><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">Top element is: 3</span><br><span class="line">After popping, top element is: 2</span><br><span class="line">Stack is not empty.</span><br><span class="line">Size of stack: 2</span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>C/C++</category>
+        <category>STL</category>
+        <category>stack</category>
       </categories>
       <tags>
         <tag>STL</tag>
