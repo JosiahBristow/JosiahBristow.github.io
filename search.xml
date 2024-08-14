@@ -1309,4 +1309,58 @@ If you wanna delete all files in cache, use <code>-c</code> twice(⚠️This wil
         <tag>STL</tag>
       </tags>
   </entry>
+  <entry>
+    <title>cpp-queue</title>
+    <url>/2024/08/14/cpp-queue/</url>
+    <content><![CDATA[<h1 id="C-std-queue"><a href="#C-std-queue" class="headerlink" title="C++: std::queue"></a>C++: std::queue</h1><h2 id="What-is-queue"><a href="#What-is-queue" class="headerlink" title="What is queue?"></a>What is queue?</h2><p>Queue is a FIFO(First IN, First Out) data structure.<br>It allow add elements at one end and remove elements in the other end.<br>Queue is a linear data structure that follow these rules:</p>
+<ul>
+<li>elements can only be added from the tail of the queue;</li>
+<li>elements can only be removed from the head of the queue.</li>
+</ul>
+<h2 id="Queue-in-C"><a href="#Queue-in-C" class="headerlink" title="Queue in C++"></a>Queue in C++</h2><p>std::queue is the class template for map container and it’s defined inside the <queue> header file.</p>
+<h2 id="Common-Opertions"><a href="#Common-Opertions" class="headerlink" title="Common Opertions"></a>Common Opertions</h2><table>
+<thead>
+<tr>
+<th align="left">method</th>
+<th align="center">description</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">empty()</td>
+<td align="center">check if the queue is empty</td>
+</tr>
+<tr>
+<td align="left">size()</td>
+<td align="center">return the elements’ number of queue</td>
+</tr>
+<tr>
+<td align="left">front()</td>
+<td align="center">return the front element of queue</td>
+</tr>
+<tr>
+<td align="left">back()</td>
+<td align="center">return the rear element of queue</td>
+</tr>
+<tr>
+<td align="left">push(item)</td>
+<td align="center">add element to the end of the queue</td>
+</tr>
+<tr>
+<td align="left">pop()</td>
+<td align="center">remove tail element of the queue and return it</td>
+</tr>
+</tbody></table>
+<h2 id="Example"><a href="#Example" class="headerlink" title="Example"></a>Example</h2><h3 id="Code"><a href="#Code" class="headerlink" title="Code"></a>Code</h3><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;queue&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span> <span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="comment">// declare a queue named q to store int</span></span><br><span class="line">        queue&lt;<span class="type">int</span>&gt; q;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// push elements</span></span><br><span class="line">        q.<span class="built_in">push</span>(<span class="number">10</span>);</span><br><span class="line">        q.<span class="built_in">push</span>(<span class="number">20</span>);</span><br><span class="line">        q.<span class="built_in">push</span>(<span class="number">30</span>);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// print the elements number of q</span></span><br><span class="line">        cout &lt;&lt; <span class="string">&quot;the elements number of q: &quot;</span> &lt;&lt; q.<span class="built_in">size</span>() &lt;&lt; endl;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// print the front element of q</span></span><br><span class="line">        cout &lt;&lt; <span class="string">&quot;front element: &quot;</span> &lt;&lt; q.<span class="built_in">front</span>() &lt;&lt; endl;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// print the end element of q</span></span><br><span class="line">        cout &lt;&lt; <span class="string">&quot;end element: &quot;</span> &lt;&lt; q.<span class="built_in">back</span>() &lt;&lt; endl;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// pop element</span></span><br><span class="line">        q.<span class="built_in">pop</span>();</span><br><span class="line">        cout &lt;&lt; <span class="string">&quot;the front element of q after pop: &quot;</span> &lt;&lt; q.<span class="built_in">front</span>() &lt;&lt; endl;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// print the elements number of q again</span></span><br><span class="line">        cout &lt;&lt; <span class="string">&quot;the elements number of q: &quot;</span> &lt;&lt; q.<span class="built_in">size</span>() &lt;&lt; endl;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="Results"><a href="#Results" class="headerlink" title="Results"></a>Results</h3><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">the elements number of q: 3</span><br><span class="line">front element: 10</span><br><span class="line">end element: 30</span><br><span class="line">the front element of q, after pop: 20</span><br><span class="line">the elements number of q: 2</span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>C/C++</category>
+        <category>STL</category>
+        <category>queue</category>
+      </categories>
+      <tags>
+        <tag>STL</tag>
+      </tags>
+  </entry>
 </search>
