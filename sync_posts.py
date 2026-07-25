@@ -20,7 +20,7 @@ ROOT = os.path.dirname(os.path.abspath(__file__))
 POST_TPL = '''\
     <article class="post">
       <div class="post-header">
-        <img class="post-thumb" src="{thumb}" alt="{alt}" loading="lazy">
+        <img class="post-thumb" src="{thumb}" alt="{alt}" loading="lazy" referrerpolicy="no-referrer">
         <div>
           <h2 class="post-title"><a href="{url}">{title}</a></h2>
           <div class="post-excerpt">{excerpt}</div>
@@ -169,8 +169,9 @@ def _categorize(posts):
     return dict(cats)
 
 # ── network ─────────────────────────────────────────────────
-def fetch_html():
-    req = urllib.request.Request(CNBLOGS_URL, headers={
+def fetch_page(page=1):
+    url = f'{CNBLOGS_URL}?page={page}' if page > 1 else CNBLOGS_URL
+    req = urllib.request.Request(url, headers={
         'User-Agent': 'Mozilla/5.0 (compatible; BlogSync/1.0)'
     })
     with urllib.request.urlopen(req, timeout=30) as resp:
@@ -221,7 +222,7 @@ def parse_posts(html):
     return posts
 
 def _extract_count(text, label):
-    m = re.search(rf'{label}[^)]*(\d+)', text)
+    m = re.search(rf'{label}\((\d+)\)', text)
     return m.group(1) if m else '0'
 
 # ── file injection ──────────────────────────────────────────
@@ -247,15 +248,20 @@ def inject(filepath, marker, new_content):
 # ── main ────────────────────────────────────────────────────
 def main():
     print('Fetching posts from cnblogs...')
+    posts = []
     try:
-        html = fetch_html()
-        posts = parse_posts(html)
+        for page in range(1, 100):
+            html = fetch_page(page)
+            batch = parse_posts(html)
+            if not batch:
+                break
+            posts.extend(batch)
+            print(f'  page {page}: {len(batch)} posts')
+        if not posts:
+            print('No posts found — aborting.', file=sys.stderr)
+            return 1
     except Exception as e:
         print(f'Error: {e}', file=sys.stderr)
-        return 1
-
-    if not posts:
-        print('No posts found — aborting.', file=sys.stderr)
         return 1
 
     posts.sort(key=lambda p: p['date'] + p['time'], reverse=True)

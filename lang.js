@@ -14,7 +14,6 @@
     'stat-reads': { zh: '阅读', en: 'Reads' },
     'stat-comments': { zh: '评论', en: 'Comments' },
     'sidebar-categories': { zh: '分类', en: 'Categories' },
-    'next-page': { zh: '下一页 →', en: 'Next →' },
     'archive-title': { zh: '归档', en: 'Archive' },
     'archive-count': { zh: '共 10 篇随笔', en: '10 posts total' },
     'categories-title': { zh: '分类', en: 'Categories' },
