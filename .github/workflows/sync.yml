@@ -1,0 +1,27 @@
+name: Sync blog posts from cnblogs
+
+on:
+  schedule:
+    - cron: '0 6 * * *'       # daily at 6:00 UTC
+  workflow_dispatch:           # manual trigger
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Run sync script
+        run: python3 sync_posts.py
+
+      - name: Commit changes
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email 'github-actions[bot]@users.noreply.github.com'
+          git add index.html archive.html categories.html
+          git diff --cached --quiet || \
+            git commit -m 'auto-sync: update blog posts from cnblogs'
+          git push
