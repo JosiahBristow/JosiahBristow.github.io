@@ -149,9 +149,12 @@ flatpak uninstall --unused --runtime # 卸载未使用的 Flatpak 运行时
   <script>
     (function() {
       var theme = 'catppuccin_latte';
+      var lang = 'zh-CN';
       try {
-        var s = localStorage.getItem('theme');
-        if (s === 'dark') theme = 'catppuccin_mocha';
+        var ts = localStorage.getItem('theme');
+        if (ts === 'dark') theme = 'catppuccin_mocha';
+        var ls = localStorage.getItem('lang');
+        if (ls === 'en') lang = 'en';
       } catch(e) {}
       var c = document.getElementById('giscus-container');
       var sc = document.createElement('script');
@@ -166,7 +169,7 @@ flatpak uninstall --unused --runtime # 卸载未使用的 Flatpak 运行时
       sc.setAttribute('data-emit-metadata', '0');
       sc.setAttribute('data-input-position', 'bottom');
       sc.setAttribute('data-theme', theme);
-      sc.setAttribute('data-lang', 'zh-CN');
+      sc.setAttribute('data-lang', lang);
       sc.setAttribute('crossorigin', 'anonymous');
       sc.async = true;
       c.appendChild(sc);

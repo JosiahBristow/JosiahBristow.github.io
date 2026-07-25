@@ -73,11 +73,21 @@
   var currentLang = loadLang();
   applyLanguage(currentLang);
 
+  function setGiscusLang(lang) {
+    var iframe = document.querySelector('iframe.giscus-frame');
+    if (iframe) {
+      iframe.contentWindow.postMessage({
+        giscus: { setConfig: { lang: lang === 'zh' ? 'zh-CN' : 'en' } }
+      }, 'https://giscus.app');
+    }
+  }
+
   toggle.addEventListener('click', function() {
     currentLang = currentLang === 'zh' ? 'en' : 'zh';
     try { localStorage.setItem('lang', currentLang); } catch (e) {}
     window.name = 'lang=' + currentLang;
     history.replaceState(null, '', '?lang=' + currentLang);
     applyLanguage(currentLang);
+    setGiscusLang(currentLang);
   });
 })();

@@ -100,9 +100,12 @@ POST_PAGE_TPL = '''\
   <script>
     (function() {{
       var theme = 'catppuccin_latte';
+      var lang = 'zh-CN';
       try {{
-        var s = localStorage.getItem('theme');
-        if (s === 'dark') theme = 'catppuccin_mocha';
+        var ts = localStorage.getItem('theme');
+        if (ts === 'dark') theme = 'catppuccin_mocha';
+        var ls = localStorage.getItem('lang');
+        if (ls === 'en') lang = 'en';
       }} catch(e) {{}}
       var c = document.getElementById('giscus-container');
       var sc = document.createElement('script');
@@ -117,7 +120,7 @@ POST_PAGE_TPL = '''\
       sc.setAttribute('data-emit-metadata', '0');
       sc.setAttribute('data-input-position', 'bottom');
       sc.setAttribute('data-theme', theme);
-      sc.setAttribute('data-lang', 'zh-CN');
+      sc.setAttribute('data-lang', lang);
       sc.setAttribute('crossorigin', 'anonymous');
       sc.async = true;
       c.appendChild(sc);
