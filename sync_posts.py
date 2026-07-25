@@ -109,8 +109,8 @@ POST_PAGE_TPL = '''\
       sc.src = 'https://giscus.app/client.js';
       sc.setAttribute('data-repo', 'JosiahBristow/JosiahBristow.github.io');
       sc.setAttribute('data-repo-id', 'R_kgDOTi7MtA');
-      sc.setAttribute('data-category', 'Blog Comments');
-      sc.setAttribute('data-category-id', 'REPLACE_WITH_CATEGORY_ID');
+      sc.setAttribute('data-category', 'Announcements');
+      sc.setAttribute('data-category-id', 'DIC_kwDOTi7MtM4DB-Fn');
       sc.setAttribute('data-mapping', 'pathname');
       sc.setAttribute('data-strict', '0');
       sc.setAttribute('data-reactions-enabled', '1');
