@@ -96,21 +96,28 @@ POST_PAGE_TPL = '''\
 
 <div class="post-comments">
   <h2 class="post-comments-title">\U0001f4ac <span data-i18n="comments-title">\u8bc4\u8bba</span></h2>
-  <div id="utterances-container"></div>
+  <div id="giscus-container"></div>
   <script>
     (function() {{
-      var theme = 'github-light';
+      var theme = 'catppuccin_latte';
       try {{
         var s = localStorage.getItem('theme');
-        if (s === 'dark') theme = 'github-dark';
+        if (s === 'dark') theme = 'catppuccin_mocha';
       }} catch(e) {{}}
-      var c = document.getElementById('utterances-container');
+      var c = document.getElementById('giscus-container');
       var sc = document.createElement('script');
-      sc.src = 'https://utteranc.es/client.js';
+      sc.src = 'https://giscus.app/client.js';
       sc.setAttribute('data-repo', 'JosiahBristow/JosiahBristow.github.io');
-      sc.setAttribute('data-issue-term', 'pathname');
+      sc.setAttribute('data-repo-id', 'R_kgDOTi7MtA');
+      sc.setAttribute('data-category', 'Blog Comments');
+      sc.setAttribute('data-category-id', 'REPLACE_WITH_CATEGORY_ID');
+      sc.setAttribute('data-mapping', 'pathname');
+      sc.setAttribute('data-strict', '0');
+      sc.setAttribute('data-reactions-enabled', '1');
+      sc.setAttribute('data-emit-metadata', '0');
+      sc.setAttribute('data-input-position', 'bottom');
       sc.setAttribute('data-theme', theme);
-      sc.setAttribute('data-label', 'comments');
+      sc.setAttribute('data-lang', 'zh-CN');
       sc.setAttribute('crossorigin', 'anonymous');
       sc.async = true;
       c.appendChild(sc);
