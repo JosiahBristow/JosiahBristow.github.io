@@ -83,6 +83,30 @@ if __name__ == '__main__':
   </div>
 </article>
 
+<div class="post-comments">
+  <h2 class="post-comments-title">💬 <span data-i18n="comments-title">评论</span></h2>
+  <div id="utterances-container"></div>
+  <script>
+    (function() {
+      var theme = 'github-light';
+      try {
+        var s = localStorage.getItem('theme');
+        if (s === 'dark') theme = 'github-dark';
+      } catch(e) {}
+      var c = document.getElementById('utterances-container');
+      var sc = document.createElement('script');
+      sc.src = 'https://utteranc.es/client.js';
+      sc.setAttribute('data-repo', 'JosiahBristow/JosiahBristow.github.io');
+      sc.setAttribute('data-issue-term', 'pathname');
+      sc.setAttribute('data-theme', theme);
+      sc.setAttribute('data-label', 'comments');
+      sc.setAttribute('crossorigin', 'anonymous');
+      sc.async = true;
+      c.appendChild(sc);
+    })();
+  </script>
+</div>
+
 </div>
 
 <div class="float-group">

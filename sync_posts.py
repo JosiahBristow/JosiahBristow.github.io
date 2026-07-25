@@ -94,6 +94,30 @@ POST_PAGE_TPL = '''\
   </div>
 </article>
 
+<div class="post-comments">
+  <h2 class="post-comments-title">\U0001f4ac <span data-i18n="comments-title">\u8bc4\u8bba</span></h2>
+  <div id="utterances-container"></div>
+  <script>
+    (function() {{
+      var theme = 'github-light';
+      try {{
+        var s = localStorage.getItem('theme');
+        if (s === 'dark') theme = 'github-dark';
+      }} catch(e) {{}}
+      var c = document.getElementById('utterances-container');
+      var sc = document.createElement('script');
+      sc.src = 'https://utteranc.es/client.js';
+      sc.setAttribute('data-repo', 'JosiahBristow/JosiahBristow.github.io');
+      sc.setAttribute('data-issue-term', 'pathname');
+      sc.setAttribute('data-theme', theme);
+      sc.setAttribute('data-label', 'comments');
+      sc.setAttribute('crossorigin', 'anonymous');
+      sc.async = true;
+      c.appendChild(sc);
+    }})();
+  </script>
+</div>
+
 </div>
 
 <div class="float-group">

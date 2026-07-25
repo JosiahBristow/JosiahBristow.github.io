@@ -971,6 +971,24 @@ a {
   background: var(--surface);
 }
 
+/* ── Post Comments ── */
+.post-comments {
+  max-width: 820px;
+  margin: 3rem auto 0;
+  padding-top: 2rem;
+  border-top: 1px solid var(--border);
+}
+
+.post-comments-title {
+  font-family: var(--font-mono);
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-heading);
+  margin-bottom: 1.5rem;
+  padding-bottom: 0.4rem;
+  border-bottom: 1px solid var(--border);
+}
+
 /* ── Responsive ── */
 @media (max-width: 820px) {
   .page {

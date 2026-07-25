@@ -27,6 +27,7 @@
     'interest-3': { zh: 'Python / Shell 脚本开发', en: 'Python / Shell scripting' },
     'interest-4': { zh: '树莓派与嵌入式系统', en: 'Raspberry Pi & embedded systems' },
     'interest-5': { zh: '开源软件与社区', en: 'Open-source software & community' },
+    'comments-title': { zh: '评论', en: 'Comments' },
     'about-site': { zh: '关于本站', en: 'About This Site' },
     'site-desc': { zh: '本站是使用纯 HTML + CSS 构建的静态博客，托管于 GitHub Pages。主题配色使用 Catppuccin 风格，支持明暗主题和中英文切换。', en: 'A static blog built with plain HTML + CSS, hosted on GitHub Pages. Catppuccin color scheme with dark/light mode and Chinese/English language toggle.' }
   };
