@@ -89,6 +89,17 @@ a {
   margin-right: auto;
 }
 
+/* ── Terminal cursor blink ── */
+.header-prompt::after {
+  content: '▊';
+  animation: blink 1s step-end infinite;
+  margin-left: 0.15rem;
+}
+
+@keyframes blink {
+  50% { opacity: 0; }
+}
+
 /* ── Nav ── */
 .nav {
   background: var(--header-bg);

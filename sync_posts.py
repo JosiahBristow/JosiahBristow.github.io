@@ -69,12 +69,12 @@ def build_archive(posts):
         years[p['date'][:4]].append(p)
     lines = []
     lines.append('  <div class="page-heading">')
-    lines.append(f'    <h1 data-i18n="archive-title">归档</h1>')
-    lines.append(f'    <p data-i18n="archive-count">共 {len(posts)} 篇随笔</p>')
+    lines.append(f'    <h1>📦 <span data-i18n="archive-title">归档</span></h1>')
+    lines.append(f'    <p>📄 <span data-i18n="archive-count">共 {len(posts)} 篇随笔</span></p>')
     lines.append('  </div>')
     for year in sorted(years, reverse=True):
         lines.append('  <div class="archive-year">')
-        lines.append(f'    <div class="archive-year-header">{year}</div>')
+        lines.append(f'    <div class="archive-year-header">📅 {year}</div>')
         lines.append('    <ul class="archive-list">')
         for p in years[year]:
             lines.append(ARCHIVE_TPL.format(date=p['date'], url=p['url'], title=p['title']))
@@ -82,18 +82,26 @@ def build_archive(posts):
         lines.append('  </div>')
     return '\n'.join(lines)
 
+CAT_EMOJI = {
+    'Arch Linux': '🐧',
+    'Linux': '💻',
+    'Python': '🐍',
+    'Raspberry Pi': '🥧',
+}
+
 def build_categories(posts):
     cats = _categorize(posts)
     lines = []
     lines.append('  <div class="page-heading">')
-    lines.append(f'    <h1 data-i18n="categories-title">分类</h1>')
-    lines.append(f'    <p data-i18n="categories-count">共 {len(cats)} 个分类</p>')
+    lines.append(f'    <h1>🏷️ <span data-i18n="categories-title">分类</span></h1>')
+    lines.append(f'    <p>📂 <span data-i18n="categories-count">共 {len(cats)} 个分类</span></p>')
     lines.append('  </div>')
     for name in sorted(cats):
         plist = cats[name]
+        emoji = CAT_EMOJI.get(name, '📄')
         lines.append('  <div class="category-section">')
         lines.append('    <div class="category-header">')
-        lines.append(f'      {name}')
+        lines.append(f'      {emoji} {name}')
         lines.append(f'      <span class="category-count">{len(plist)} 篇</span>')
         lines.append('    </div>')
         lines.append('    <ul class="category-list">')
@@ -110,7 +118,7 @@ def build_sidebar(posts):
     t_comments = sum(int(p['comments']) for p in posts if p['comments'].isdigit())
     cats = _categorize(posts)
     tag_items = ''.join(
-        f'      <span class="tag">{n} <span class="post-count">{len(cats[n])}</span></span>\n'
+        f'      <span class="tag">{CAT_EMOJI.get(n, "📄")} {n} <span class="post-count">{len(cats[n])}</span></span>\n'
         for n in sorted(cats)
     )
     return f'''\
@@ -119,19 +127,19 @@ def build_sidebar(posts):
     <div class="stat-grid">
       <div>
         <div class="stat-value">{total}</div>
-        <div class="stat-label" data-i18n="stat-posts">随笔</div>
+        <div class="stat-label">📝 <span data-i18n="stat-posts">随笔</span></div>
       </div>
       <div>
         <div class="stat-value">{t_likes}</div>
-        <div class="stat-label" data-i18n="stat-likes">推荐</div>
+        <div class="stat-label">👍 <span data-i18n="stat-likes">推荐</span></div>
       </div>
       <div>
         <div class="stat-value">{_fmt(t_views)}</div>
-        <div class="stat-label" data-i18n="stat-reads">阅读</div>
+        <div class="stat-label">👁️ <span data-i18n="stat-reads">阅读</span></div>
       </div>
       <div>
         <div class="stat-value">{t_comments}</div>
-        <div class="stat-label" data-i18n="stat-comments">评论</div>
+        <div class="stat-label">💬 <span data-i18n="stat-comments">评论</span></div>
       </div>
     </div>
   </div>
