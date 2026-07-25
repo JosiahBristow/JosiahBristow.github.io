@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>在 Archlinux 中安装中文与日语输入法 - JosiahBristow</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+
+<header class="header">
+  <div class="header-title"><a href="../index.html">JosiahBristow</a></div>
+  <div class="header-prompt">Just For Fun!</div>
+  <div class="header-sub">Arch Linux, Linux tools, and developer life</div>
+</header>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="../index.html">🏠 <span data-i18n="nav-home">首页</span></a>
+    <a href="../archive.html">📦 <span data-i18n="nav-archive">归档</span></a>
+    <a href="../categories.html">🏷️ <span data-i18n="nav-categories">分类</span></a>
+    <a href="../about.html">👤 <span data-i18n="nav-about">关于</span></a>
+  </div>
+</nav>
+
+<div class="page-full">
+
+<article class="post-article">
+  <div class="post-article-heading">
+    <h1 class="post-article-title">在 Archlinux 中安装中文与日语输入法</h1>
+    <div class="post-article-meta">
+      <span>🕐 2025-05-18 07:32</span>
+      <span>👁️ 1233</span>
+      <span>💬 0</span>
+      <span>👍 0</span>
+    </div>
+  </div>
+  <div class="post-article-body">
+<h2 id="安装及配置输入法框架">安装及配置输入法框架</h2>
+<h3 id="安装输入法框架">安装输入法框架</h3>
+<p>目前一共有两种选择Fcitx5和Ibus，这里推荐使用更现代，轻量Fcitx5</p>
+<pre><code class="language-bash"># 中文
+# Fcitx5
+sudo pacman -S fcitx5 fcitx5-chinese-addons fcitx5-gtk fcitx5-qt fcitx5-configtool fcitx5-rime
+# Ibus
+sudo pacman -S ibus ibus-rime
+
+# 日语
+# Fcitx5
+sudo pacman -S fcitx5 fcitx5-mozc fcitx5-gtk fcitx5-qt fcitx5-configtool
+# Ibus
+sudo pacman -S ibus ibus-mozc
+</code></pre>
+<h3 id="设置环境变量">设置环境变量</h3>
+<p>编辑 ~/.pam_environment（全局）或 ~/.xprofile（仅X/Wayland）</p>
+<pre><code># Fcitx5
+
+export GTK_IM_MODULE=fcitx5
+export QT_IM_MODULE=fcitx5
+export XMODIFIERS=@im=fcitx5
+
+# IBus
+
+export GTK_IM_MODULE=ibus
+export QT_IM_MODULE=ibus
+export XMODIFIERS=@im=ibus
+</code></pre>
+<h3 id="安装输入法">安装输入法</h3>
+<p>在终端执行</p>
+<pre><code class="language-bash"># Fcitx5
+fcitx5-configtool
+# Ibus
+ibus-setup
+</code></pre>
+<p>进入软件后添加 Rime（中文）和 Mozc（日语）输入法</p>
+<p><img src="images/3586302-20251001154140729-1267371259.png" alt="screenshot-2025-10-01_15-41-21"  loading="lazy"></p>
+<h2 id="安装字体">安装字体</h2>
+<h3 id="中文字体">中文字体</h3>
+<pre><code class="language-bash">sudo pacman -S adobe-source-han-sans-cn-fonts
+</code></pre>
+<p>可选的字体有</p>
+<ul>
+<li>adobe-source-han-sans-cn-fonts</li>
+<li>adobe-source-han-serif-cn-fonts</li>
+<li>noto-fonts-cjk</li>
+<li>wqy-microhei</li>
+<li>wqy-microhei-lite</li>
+<li>wqy-bitmapfont</li>
+<li>wqy-zenhei</li>
+<li>ttf-arphic-ukai</li>
+<li>ttf-arphic-uming</li>
+</ul>
+<h3 id="日语字体">日语字体</h3>
+<pre><code class="language-bash">sudo pacman -S adobe-source-han-sans-jp-fonts
+</code></pre>
+<p>可选的字体有</p>
+<ul>
+<li>adobe-source-han-sans-jp-fonts</li>
+<li>adobe-source-han-serif-jp-fonts</li>
+<li>noto-fonts-cjk</li>
+<li>otf-ipafont</li>
+<li>otf-ipaexfont</li>
+<li>ttf-hanazono</li>
+<li>ttf-jigmo</li>
+<li>ttf-sazanami</li>
+<li>ttf-koruriAUR</li>
+<li>ttf-monapoAUR</li>
+<li>ttf-mplus-gitAUR</li>
+<li>ttf-vlgothic</li>
+<li>ttf-kanjistrokeordersAUR</li>
+</ul>
+<h2 id="安装输入法皮肤">安装输入法皮肤</h2>
+<p>可以在github或archlinux的aur中搜索，找自己喜欢的主题</p>
+<p>例如我要使用macos主题</p>
+<pre><code class="language-bash">yay -S fcitx5-theme-macos12
+</code></pre>
+<p>下载好后在fcitx5的addons中选择UI栏中的 Classic User Interface, 更改theme你下载的主题</p>
+<p><img src="images/3586302-20251001154034241-1458316697.png" alt="screenshot-2025-10-01_15-38-33"  loading="lazy"></p>
+<p><img src="images/3586302-20251001154046928-1168594158.png" alt="screenshot-2025-10-01_15-39-07"  loading="lazy"></p>
+<p><img src="images/3586302-20251001154051345-1168755853.png" alt="screenshot-2025-10-01_15-39-50"  loading="lazy"></p>
+  </div>
+</article>
+
+</div>
+
+<div class="float-group">
+  <button class="float-btn" id="langToggle" aria-label="切换语言">EN</button>
+  <button class="float-btn" id="themeToggle" aria-label="切换主题">🌙</button>
+  <button class="back-to-top" id="backToTop" aria-label="返回顶部">↑</button>
+</div>
+
+<footer class="footer">
+  <p>🐧 &copy; 2024-2026 JosiahBristow. Built with ❤️ for <a href="https://pages.github.com/">GitHub Pages</a>.</p>
+</footer>
+
+<script src="../script.js"></script>
+<script src="../lang.js"></script>
+</body>
+</html>

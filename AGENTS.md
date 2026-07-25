@@ -24,11 +24,19 @@ sync_posts.py     scraper: fetches cnblogs RSS → regenerates HTML pages
 
 ## sync_posts.py
 
-Requires Python 3.8+ stdlib only (zero external deps). Scrapes cnblogs blog listing pages and replaces content inside the marker comments of `index.html`, `archive.html`, `categories.html`. Run:
+Requires Python 3.8+ stdlib only (zero external deps). Scrapes cnblogs blog listing pages and:
+
+1. Generates full post pages under `posts/{id}.html` (linked from listings instead of cnblogs)
+2. Downloads images to `posts/images/`
+3. Injects content into `index.html`, `archive.html`, `categories.html` via marker comments
+
+Run:
 
 ```sh
 python sync_posts.py
 ```
+
+Post pages use template `POST_PAGE_TPL` and share `style.css`, `script.js`, `lang.js` via relative `../` paths. Image `src` attributes in post body are rewritten to local `images/` paths.
 
 No CI workflow is set up yet — this is intended for a scheduled GitHub Actions run.
 

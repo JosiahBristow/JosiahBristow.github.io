@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Linux 下缺少打印机驱动的解决方法 - JosiahBristow</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+
+<header class="header">
+  <div class="header-title"><a href="../index.html">JosiahBristow</a></div>
+  <div class="header-prompt">Just For Fun!</div>
+  <div class="header-sub">Arch Linux, Linux tools, and developer life</div>
+</header>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="../index.html">🏠 <span data-i18n="nav-home">首页</span></a>
+    <a href="../archive.html">📦 <span data-i18n="nav-archive">归档</span></a>
+    <a href="../categories.html">🏷️ <span data-i18n="nav-categories">分类</span></a>
+    <a href="../about.html">👤 <span data-i18n="nav-about">关于</span></a>
+  </div>
+</nav>
+
+<div class="page-full">
+
+<article class="post-article">
+  <div class="post-article-heading">
+    <h1 class="post-article-title">Linux 下缺少打印机驱动的解决方法</h1>
+    <div class="post-article-meta">
+      <span>🕐 2025-10-04 11:29</span>
+      <span>👁️ 98</span>
+      <span>💬 0</span>
+      <span>👍 0</span>
+    </div>
+  </div>
+  <div class="post-article-body">
+<p>Linux 下缺少打印机驱动是常见问题。Linux 在打印方面确实不如 windows 即插即用方便，配置步骤还是颇为复杂的，请各位耐心观看本文。</p>
+<h2 id="安装-cpus">安装 CPUS</h2>
+<p>[不了解什么是cpus的可以看这里]( <a href="https://baike.baidu.com/item/cups/13007261#:~:text=CUPS%EF%BC%88Common%20UNIX%20Printing%20System%EF%BC%8C%E9%80%9A%E7%94%A8Unix%E6%89%93%E5%8D%B0%E7%B3%BB%E7%BB%9F%EF%BC%89%E6%98%AFFedora%20Core3%E4%B8%AD%E6%94%AF%E6%8C%81%E7%9A%84%E5%BC%80%E6%BA%90%E6%89%93%E5%8D%B0%E7%AE%A1%E7%90%86%E7%B3%BB%E7%BB%9F%EF%BC%8C%E5%BA%94%E7%94%A8%E4%BA%8EUnix%2FLinux%E7%B3%BB%E7%BB%9F%EF%BC%8C%E4%B8%BB%E8%A6%81%E4%BD%BF%E7%94%A8IPP%EF%BC%88Internet" target="_blank" rel="noopener nofollow">https://baike.baidu.com/item/cups/13007261#:~:text=CUPS（Common UNIX Printing System，通用Unix打印系统）是Fedora Core3中支持的开源打印管理系统，应用于Unix%2FLinux系统，主要使用IPP（Internet</a> ,Printing%20Protocol%EF%BC%89%E7%AE%A1%E7%90%86%E6%89%93%E5%8D%B0%E5%B7%A5%E4%BD%9C%E5%8F%8A%E9%98%9F%E5%88%97%EF%BC%8C%E5%90%8C%E6%97%B6%E6%94%AF%E6%8C%81%20LPD%20%E3%80%81SMB%E3%80%81AppSocket%E3%80%81JetDirect%E7%AD%89%E9%80%9A%E4%BF%A1%E5%8D%8F%E8%AE%AE%EF%BC%8C%E5%8F%AF%E6%A3%80%E6%B5%8B%E7%BD%91%E7%BB%9C%E6%89%93%E5%8D%B0%E6%9C%BA%E5%B9%B6%E6%8F%90%E4%BE%9BWeb%E6%8E%A5%E5%8F%A3%E8%AE%BE%E7%BD%AE%E5%B7%A5%E5%85%B7%20%5B1%5D%E3%80%82)<br>
+安装 CUPS 服务：</p>
+<pre><code class="language-bash"># Arch Linux / Manjaro / Omarchy
+sudo pacman -Sy cups cups-browsed bluez-cups cups-pdf
+
+# Debian / Ubuntu / Deepin
+sudo apt update
+sudo apt install cups cups-browsed bluez-cups cups-pdf
+
+# OpenSUSE
+sudo zypper install cups cups-browsed bluez-cups cups-pdf
+
+# Fedora
+sudo dnf install cups cups-browsed bluez-cups cups-pdf
+</code></pre>
+<p>启动 CUPS 服务：</p>
+<pre><code class="language-bash"># 启用CUPS基本服务
+sudo systemctl enable --now cups
+sudo systemctl enable --now cups-browsed
+</code></pre>
+<h2 id="安装-system-config-printer">安装 system-config-printer</h2>
+<p>system-config-printer 是的打印机管理工具，由 RedHat 团队开发</p>
+<pre><code class="language-bash"># Arch Linux / Manjaro / Omarchy
+sudo pacman -Sy system-config-printer
+
+# Debian /OmarchyUbuntu / Deepin
+sudo apt update
+sudo apt install system-config-printer
+
+# OpenSUSE
+sudo zypper install system-config-printer
+
+# Fedora
+sudo dnf install system-config-printer
+</code></pre>
+<h2 id="安装-nss-mdns">安装 nss-mdns</h2>
+<p>CUPS 使用 Avahi 来搜索网络打印机，但在有的电脑上，光有 Avahi 还不够。CUPS 能搜索到打印机，但是只能解析打印机的主机名，无法解析主机名对应的 IP 地址。主机名并不是域名，仅靠主机名，没有 IP 地址，也是连不上打印机的<br>
+要解决这个问题，还需要安装 nss-mdns，它为 Avahi 提供解析网络打印机等网络设备 IP 地址的支持</p>
+<pre><code class="language-bash"># Arch Linux / Manjaro / Omarchy
+sudo pacman -Sy nss-mdns
+
+# Debian / Ubuntu / Deepin
+sudo apt update
+sudo apt install libnss-mdns
+
+# OpenSUSE
+sudo zypper install nss-mdns
+
+# Fedora
+sudo dnf install nss-mdns
+</code></pre>
+<h2 id="安装-foomatic-db">安装 Foomatic-db</h2>
+<p>Foomatic-db：收集的有关 XML 文件中打印机、驱动程序和驱动程序选项的知识，foomatic-db-engine 用于生成 PPD 文件。</p>
+<pre><code class="language-bash"># Arch Linux / Manjaro / Omarchy
+sudo pacman -Sy foomatic-db foomatic-db-ppds
+
+# Debian / Ubuntu / Deepin
+sudo apt update
+sudo apt install foomatic-db foomatic-db-compressed-ppds
+sudo apt install foomatic-filters
+
+# Fedora
+sudo dnf install foomatic-db foomatic-db-ppds foomatic-db-filesystem
+</code></pre>
+<h2 id="配置打印机">配置打印机</h2>
+<p>这样就可以连接上打印机，在system-config-printer配置，进行打印了。如果说蓝牙打印机在 system-config-printer中network printer设置即可<br>
+<img src="images/3586302-20251004113620379-1651489779.png" alt="screenshot-2025-10-04_11-30-04"  loading="lazy"><br>
+<img src="images/3586302-20251004113627810-453653264.png" alt="screenshot-2025-10-04_11-31-46"  loading="lazy"><br>
+<img src="images/3586302-20251004113636458-1265332497.png" alt="screenshot-2025-10-04_11-34-11"  loading="lazy"><br>
+<img src="images/3586302-20251004113645033-819182103.png" alt="screenshot-2025-10-04_11-34-30"  loading="lazy"><br>
+<img src="images/3586302-20251004113708336-834476771.png" alt="screenshot-2025-10-04_11-34-37"  loading="lazy"><br>
+<img src="images/3586302-20251004113716040-1514919468.png" alt="screenshot-2025-10-04_11-34-54"  loading="lazy"><br>
+<img src="images/3586302-20251004113723012-1889741724.png" alt="screenshot-2025-10-04_11-35-17"  loading="lazy"><br>
+<img src="images/3586302-20251004113729583-1335427217.png" alt="screenshot-2025-10-04_11-35-46"  loading="lazy"><br>
+最后可以选择打印测试，看看打印机是否可使用</p>
+  </div>
+</article>
+
+</div>
+
+<div class="float-group">
+  <button class="float-btn" id="langToggle" aria-label="切换语言">EN</button>
+  <button class="float-btn" id="themeToggle" aria-label="切换主题">🌙</button>
+  <button class="back-to-top" id="backToTop" aria-label="返回顶部">↑</button>
+</div>
+
+<footer class="footer">
+  <p>🐧 &copy; 2024-2026 JosiahBristow. Built with ❤️ for <a href="https://pages.github.com/">GitHub Pages</a>.</p>
+</footer>
+
+<script src="../script.js"></script>
+<script src="../lang.js"></script>
+</body>
+</html>

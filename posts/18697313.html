@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>[Python] pygame 简单入门 - JosiahBristow</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+
+<header class="header">
+  <div class="header-title"><a href="../index.html">JosiahBristow</a></div>
+  <div class="header-prompt">Just For Fun!</div>
+  <div class="header-sub">Arch Linux, Linux tools, and developer life</div>
+</header>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="../index.html">🏠 <span data-i18n="nav-home">首页</span></a>
+    <a href="../archive.html">📦 <span data-i18n="nav-archive">归档</span></a>
+    <a href="../categories.html">🏷️ <span data-i18n="nav-categories">分类</span></a>
+    <a href="../about.html">👤 <span data-i18n="nav-about">关于</span></a>
+  </div>
+</nav>
+
+<div class="page-full">
+
+<article class="post-article">
+  <div class="post-article-heading">
+    <h1 class="post-article-title">[Python] pygame 简单入门</h1>
+    <div class="post-article-meta">
+      <span>🕐 2025-02-03 07:28</span>
+      <span>👁️ 68</span>
+      <span>💬 0</span>
+      <span>👍 0</span>
+    </div>
+  </div>
+  <div class="post-article-body">
+<h2 id="pygame-的介绍">Pygame 的介绍</h2>
+<p>pygame 是用来写游戏的 python 模块集合。使用 python 可以导入 pygame 来开发有意思的游戏。pygame 小巧并且跨平台。</p>
+<h2 id="安装-pygame">安装 pygame</h2>
+<pre><code class="language-bash"># 如果安装速度慢，可以使用换源安装
+pip install pygame
+# 另一种方法
+python -m pip install --user pygame 
+</code></pre>
+<h2 id="基本开发框架">基本开发框架</h2>
+<pre><code class="language-python">import sys
+
+import pygame # 导入 pygame 包
+
+if __name__ == '__main__':
+    pygame.init() # 各功能模块进行初始化创建及变量设置
+    size = width, height = 800, 600 # 设置窗口大小
+    screen = pygame.display.set_mode(size) # 初始化显示窗口
+    pygame.display.set_caption('MinStruction') # 设置窗口标题
+    screen.fill((255, 255, 255)) # 设置窗口背景色
+    while True: # 游戏循环
+        for event in pygame.event.get(): #从 Pygame 的事件队列中取出事件，并从队列中删除该事件
+            # 获得事件类型，并逐类响应
+            if event.type == pygame.QUIT: 
+                sys.exit() #用于退出结束游戏并退出
+            elif event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_q: # 按 Q 键退出
+                    sys.exit()
+        pygame.display.flip() # 对显示窗口进行更新，默认窗口全部重绘
+</code></pre>
+<p>运行效果应该是这样</p>
+<p><img src="images/3586302-20250203072709923-621938116.png" alt="image"  loading="lazy"></p>
+<p>若想全屏可使用如下代码替换上面的7，8行:</p>
+<pre><code class="language-python">    # 全屏
+    screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
+    # 获取屏幕 size
+    width = screen.get_rect().width
+    height = screen.get_rect().height
+    size = width， height
+</code></pre>
+  </div>
+</article>
+
+</div>
+
+<div class="float-group">
+  <button class="float-btn" id="langToggle" aria-label="切换语言">EN</button>
+  <button class="float-btn" id="themeToggle" aria-label="切换主题">🌙</button>
+  <button class="back-to-top" id="backToTop" aria-label="返回顶部">↑</button>
+</div>
+
+<footer class="footer">
+  <p>🐧 &copy; 2024-2026 JosiahBristow. Built with ❤️ for <a href="https://pages.github.com/">GitHub Pages</a>.</p>
+</footer>
+
+<script src="../script.js"></script>
+<script src="../lang.js"></script>
+</body>
+</html>

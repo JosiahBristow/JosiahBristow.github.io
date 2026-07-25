@@ -8,6 +8,7 @@ Runs as a GitHub Actions scheduled workflow.
 import re
 import os
 import sys
+import shutil
 import urllib.request
 import urllib.error
 from html import unescape
@@ -15,6 +16,8 @@ from collections import defaultdict
 
 CNBLOGS_URL = "https://www.cnblogs.com/JosiahBristow"
 ROOT = os.path.dirname(os.path.abspath(__file__))
+POSTS_DIR = os.path.join(ROOT, "posts")
+IMAGES_DIR = os.path.join(POSTS_DIR, "images")
 
 # ── post templates ──────────────────────────────────────────
 POST_TPL = '''\
@@ -43,6 +46,69 @@ ARCHIVE_TPL = '''\
 CAT_POST_TPL = '''\
       <li class="category-item"><a href="{url}">{title}</a></li>'''
 
+POST_PAGE_TPL = '''\
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{title} - JosiahBristow</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+
+<header class="header">
+  <div class="header-title"><a href="../index.html">JosiahBristow</a></div>
+  <div class="header-prompt">Just For Fun!</div>
+  <div class="header-sub">Arch Linux, Linux tools, and developer life</div>
+</header>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="../index.html">\U0001f3e0 <span data-i18n="nav-home">\u9996\u9875</span></a>
+    <a href="../archive.html">\U0001f4e6 <span data-i18n="nav-archive">\u5f52\u6863</span></a>
+    <a href="../categories.html">\U0001f3f7\ufe0f <span data-i18n="nav-categories">\u5206\u7c7b</span></a>
+    <a href="../about.html">\U0001f464 <span data-i18n="nav-about">\u5173\u4e8e</span></a>
+  </div>
+</nav>
+
+<div class="page-full">
+
+<article class="post-article">
+  <div class="post-article-heading">
+    <h1 class="post-article-title">{title}</h1>
+    <div class="post-article-meta">
+      <span>\U0001f550 {date} {time}</span>
+      <span>\U0001f441\ufe0f {views}</span>
+      <span>\U0001f4ac {comments}</span>
+      <span>\U0001f44d {likes}</span>
+    </div>
+  </div>
+  <div class="post-article-body">
+{body}
+  </div>
+</article>
+
+</div>
+
+<div class="float-group">
+  <button class="float-btn" id="langToggle" aria-label="\u5207\u6362\u8bed\u8a00">EN</button>
+  <button class="float-btn" id="themeToggle" aria-label="\u5207\u6362\u4e3b\u9898">\U0001f319</button>
+  <button class="back-to-top" id="backToTop" aria-label="\u8fd4\u56de\u9876\u90e8">\u2191</button>
+</div>
+
+<footer class="footer">
+  <p>\U0001f427 &copy; 2024-2026 JosiahBristow. Built with \u2764\ufe0f for <a href="https://pages.github.com/">GitHub Pages</a>.</p>
+</footer>
+
+<script src="../script.js"></script>
+<script src="../lang.js"></script>
+</body>
+</html>'''
+
 # ── page builders ───────────────────────────────────────────
 def build_index(posts):
     groups = defaultdict(list)
@@ -54,7 +120,7 @@ def build_index(posts):
         lines.append(f'    <div class="day-title">{date_str}</div>')
         for p in groups[date_str]:
             lines.append(POST_TPL.format(
-                url=p['url'], title=p['title'],
+                url=p['local_url'], title=p['title'],
                 thumb=p['thumb'], alt=_alt(p['title']),
                 excerpt=p['excerpt'],
                 time=p['time'], views=p['views'],
@@ -69,44 +135,44 @@ def build_archive(posts):
         years[p['date'][:4]].append(p)
     lines = []
     lines.append('  <div class="page-heading">')
-    lines.append(f'    <h1>📦 <span data-i18n="archive-title">归档</span></h1>')
-    lines.append(f'    <p>📄 <span data-i18n="archive-count">共 {len(posts)} 篇随笔</span></p>')
+    lines.append(f'    <h1>\U0001f4e6 <span data-i18n="archive-title">\u5f52\u6863</span></h1>')
+    lines.append(f'    <p>\U0001f4c4 <span data-i18n="archive-count">\u5171 {len(posts)} \u7bc7\u968f\u7b14</span></p>')
     lines.append('  </div>')
     for year in sorted(years, reverse=True):
         lines.append('  <div class="archive-year">')
-        lines.append(f'    <div class="archive-year-header">📅 {year}</div>')
+        lines.append(f'    <div class="archive-year-header">\U0001f4c5 {year}</div>')
         lines.append('    <ul class="archive-list">')
         for p in years[year]:
-            lines.append(ARCHIVE_TPL.format(date=p['date'], url=p['url'], title=p['title']))
+            lines.append(ARCHIVE_TPL.format(date=p['date'], url=p['local_url'], title=p['title']))
         lines.append('    </ul>')
         lines.append('  </div>')
     return '\n'.join(lines)
 
 CAT_EMOJI = {
-    'Arch Linux': '🐧',
-    'Linux': '💻',
-    'Python': '🐍',
-    'Raspberry Pi': '🥧',
+    'Arch Linux': '\U0001f427',
+    'Linux': '\U0001f4bb',
+    'Python': '\U0001f40d',
+    'Raspberry Pi': '\U0001f967',
 }
 
 def build_categories(posts):
     cats = _categorize(posts)
     lines = []
     lines.append('  <div class="page-heading">')
-    lines.append(f'    <h1>🏷️ <span data-i18n="categories-title">分类</span></h1>')
-    lines.append(f'    <p>📂 <span data-i18n="categories-count">共 {len(cats)} 个分类</span></p>')
+    lines.append(f'    <h1>\U0001f3f7\ufe0f <span data-i18n="categories-title">\u5206\u7c7b</span></h1>')
+    lines.append(f'    <p>\U0001f4c2 <span data-i18n="categories-count">\u5171 {len(cats)} \u4e2a\u5206\u7c7b</span></p>')
     lines.append('  </div>')
     for name in sorted(cats):
         plist = cats[name]
-        emoji = CAT_EMOJI.get(name, '📄')
+        emoji = CAT_EMOJI.get(name, '\U0001f4c4')
         lines.append('  <div class="category-section">')
         lines.append('    <div class="category-header">')
         lines.append(f'      {emoji} {name}')
-        lines.append(f'      <span class="category-count">{len(plist)} 篇</span>')
+        lines.append(f'      <span class="category-count">{len(plist)} \u7bc7</span>')
         lines.append('    </div>')
         lines.append('    <ul class="category-list">')
         for p in plist:
-            lines.append(CAT_POST_TPL.format(url=p['url'], title=p['title']))
+            lines.append(CAT_POST_TPL.format(url=p['local_url'], title=p['title']))
         lines.append('    </ul>')
         lines.append('  </div>')
     return '\n'.join(lines)
@@ -118,41 +184,41 @@ def build_sidebar(posts):
     t_comments = sum(int(p['comments']) for p in posts if p['comments'].isdigit())
     cats = _categorize(posts)
     tag_items = ''.join(
-        f'      <span class="tag">{CAT_EMOJI.get(n, "📄")} {n} <span class="post-count">{len(cats[n])}</span></span>\n'
+        f'      <span class="tag">{CAT_EMOJI.get(n, "\U0001f4c4")} {n} <span class="post-count">{len(cats[n])}</span></span>\n'
         for n in sorted(cats)
     )
     return f'''\
   <div class="sidebar-card">
-    <h3 data-i18n="sidebar-stats">统计数据</h3>
+    <h3 data-i18n="sidebar-stats">\u7edf\u8ba1\u6570\u636e</h3>
     <div class="stat-grid">
       <div>
         <div class="stat-value">{total}</div>
-        <div class="stat-label">📝 <span data-i18n="stat-posts">随笔</span></div>
+        <div class="stat-label">\U0001f4dd <span data-i18n="stat-posts">\u968f\u7b14</span></div>
       </div>
       <div>
         <div class="stat-value">{t_likes}</div>
-        <div class="stat-label">👍 <span data-i18n="stat-likes">推荐</span></div>
+        <div class="stat-label">\U0001f44d <span data-i18n="stat-likes">\u63a8\u8350</span></div>
       </div>
       <div>
         <div class="stat-value">{_fmt(t_views)}</div>
-        <div class="stat-label">👁️ <span data-i18n="stat-reads">阅读</span></div>
+        <div class="stat-label">\U0001f441\ufe0f <span data-i18n="stat-reads">\u9605\u8bfb</span></div>
       </div>
       <div>
         <div class="stat-value">{t_comments}</div>
-        <div class="stat-label">💬 <span data-i18n="stat-comments">评论</span></div>
+        <div class="stat-label">\U0001f4ac <span data-i18n="stat-comments">\u8bc4\u8bba</span></div>
       </div>
     </div>
   </div>
 
   <div class="sidebar-card">
-    <h3 data-i18n="sidebar-categories">分类</h3>
+    <h3 data-i18n="sidebar-categories">\u5206\u7c7b</h3>
     <div class="tag-list">
 {tag_items}    </div>
   </div>'''
 
 # ── helpers ─────────────────────────────────────────────────
 def _alt(title):
-    s = re.sub(r'[\[\]()（）]', '', title).strip()
+    s = re.sub(r'[\[\]()\uff08\uff09]', '', title).strip()
     return s[:20]
 
 def _fmt(n):
@@ -166,15 +232,24 @@ def _categorize(posts):
     kw = [
         ('Flathub', 'Arch Linux'), ('pacman', 'Arch Linux'),
         ('Waydroid', 'Arch Linux'), ('archlinuxcn', 'Arch Linux'),
-        ('镜像源', 'Arch Linux'), ('输入法', 'Arch Linux'),
-        ('打印机', 'Linux'), ('pip install', 'Linux'),
-        ('pygame', 'Python'), ('树莓派', 'Raspberry Pi'),
+        ('\u955c\u50cf\u6e90', 'Arch Linux'), ('\u8f93\u5165\u6cd5', 'Arch Linux'),
+        ('\u6253\u5370\u673a', 'Linux'), ('pip install', 'Linux'),
+        ('pygame', 'Python'), ('\u6811\u8393\u6d3e', 'Raspberry Pi'),
     ]
     cats = defaultdict(list)
     for p in posts:
         cat = next((c for k, c in kw if k in p['title']), 'Arch Linux')
         cats[cat].append(p)
     return dict(cats)
+
+def _post_id(url):
+    return url.rstrip('/').split('/')[-1]
+
+def _local_url(url):
+    return f'posts/{_post_id(url)}.html'
+
+def _local_path(url):
+    return os.path.join(POSTS_DIR, f'{_post_id(url)}.html')
 
 # ── network ─────────────────────────────────────────────────
 def fetch_page(page=1):
@@ -187,7 +262,6 @@ def fetch_page(page=1):
 
 def parse_posts(html):
     posts = []
-    # split by day blocks
     day_blocks = re.findall(
         r'<div class="day[^"]*"[^>]*>.*?</div>\s*</div>\s*</div>',
         html, re.DOTALL
@@ -218,13 +292,14 @@ def parse_posts(html):
             post_date = time_m.group(1) if time_m else date_str
             post_time = time_m.group(2) if time_m else '00:00'
 
-            views = _extract_count(desc_html, '阅读')
-            comments = _extract_count(desc_html, '评论')
-            likes = _extract_count(desc_html, '推荐')
+            views = _extract_count(desc_html, '\u9605\u8bfb')
+            comments = _extract_count(desc_html, '\u8bc4\u8bba')
+            likes = _extract_count(desc_html, '\u63a8\u8350')
 
             posts.append({
-                'title': title, 'url': url, 'thumb': thumb,
-                'excerpt': excerpt, 'date': post_date, 'time': post_time,
+                'title': title, 'url': url,
+                'thumb': thumb, 'excerpt': excerpt,
+                'date': post_date, 'time': post_time,
                 'views': views, 'comments': comments, 'likes': likes,
             })
     return posts
@@ -232,6 +307,83 @@ def parse_posts(html):
 def _extract_count(text, label):
     m = re.search(rf'{label}\((\d+)\)', text)
     return m.group(1) if m else '0'
+
+# ── article fetching ────────────────────────────────────────
+def fetch_article(post_url):
+    req = urllib.request.Request(post_url, headers={
+        'User-Agent': 'Mozilla/5.0 (compatible; BlogSync/1.0)'
+    })
+    with urllib.request.urlopen(req, timeout=30) as resp:
+        return resp.read().decode('utf-8', errors='replace')
+
+def extract_body(html):
+    m = re.search(
+        r'<div id="cnblogs_post_body"[^>]*>(.*?)</div>\s*<div class="clear"></div>',
+        html, re.DOTALL
+    )
+    if not m:
+        return ''
+    body = m.group(1).strip()
+    # remove CNBlogs injected elements like next/prev anchors
+    body = re.sub(r'<a\s+id="[^"]*next_[^"]*"[^>]*>.*?</a>', '', body)
+    return body
+
+def _download_image(img_url, images_dir):
+    filename = os.path.basename(img_url.split('?')[0])
+    if not filename:
+        return None
+    local_path = os.path.join(images_dir, filename)
+    if os.path.exists(local_path):
+        return f'images/{filename}'
+    try:
+        req = urllib.request.Request(img_url, headers={
+            'User-Agent': 'Mozilla/5.0 (compatible; BlogSync/1.0)'
+        })
+        with urllib.request.urlopen(req, timeout=30) as resp:
+            with open(local_path, 'wb') as f:
+                shutil.copyfileobj(resp, f)
+        print(f'    downloaded image: {filename}')
+        return f'images/{filename}'
+    except Exception as e:
+        print(f'    failed to download {img_url}: {e}')
+        return None
+
+def process_images(body, images_dir):
+    def _replace(m):
+        src = unescape(m.group(1))
+        local = _download_image(src, images_dir)
+        if local:
+            attrs = m.group(2) or ''
+            attrs = re.sub(r'\breferrerpolicy\s*=\s*"[^"]*"', '', attrs)
+            return f'<img src="{local}"{attrs} loading="lazy"'
+        return m.group(0)
+    return re.sub(
+        r'<img\s+([^>]*?)src="([^"]+)"([^>]*)>',
+        lambda m: _replace_img_tag(m),
+        body
+    )
+
+def _replace_img_tag(m):
+    prefix = m.group(1) or ''
+    src = unescape(m.group(2))
+    suffix = m.group(3) or ''
+    local = _download_image(src, IMAGES_DIR)
+    if local:
+        suffix = re.sub(r'\breferrerpolicy\s*=\s*"[^"]*"', '', suffix)
+        suffix = re.sub(r'\bloading\s*=\s*"[^"]*"', '', suffix)
+        return f'<img {prefix}src="{local}"{suffix} loading="lazy">'
+    return m.group(0)
+
+def generate_post_page(post, body):
+    return POST_PAGE_TPL.format(
+        title=post['title'],
+        body=body,
+        date=post['date'],
+        time=post['time'],
+        views=post['views'],
+        comments=post['comments'],
+        likes=post['likes'],
+    )
 
 # ── file injection ──────────────────────────────────────────
 BUILDERS = {
@@ -266,7 +418,7 @@ def main():
             posts.extend(batch)
             print(f'  page {page}: {len(batch)} posts')
         if not posts:
-            print('No posts found — aborting.', file=sys.stderr)
+            print('No posts found \u2014 aborting.', file=sys.stderr)
             return 1
     except Exception as e:
         print(f'Error: {e}', file=sys.stderr)
@@ -275,6 +427,45 @@ def main():
     posts.sort(key=lambda p: p['date'] + p['time'], reverse=True)
     print(f'Found {len(posts)} posts')
 
+    # add local link info
+    for p in posts:
+        p['local_url'] = _local_url(p['url'])
+
+    # ── generate post pages ──────────────────────────────────
+    os.makedirs(POSTS_DIR, exist_ok=True)
+    os.makedirs(IMAGES_DIR, exist_ok=True)
+
+    # remove stale post HTML files (keep images)
+    for fname in os.listdir(POSTS_DIR):
+        if fname.endswith('.html'):
+            os.remove(os.path.join(POSTS_DIR, fname))
+
+    for p in posts:
+        local = _local_path(p['url'])
+        if os.path.exists(local):
+            print(f'  skipping (exists): {_post_id(p["url"])}.html')
+            continue
+        print(f'  fetching article: {p["title"][:40]}...')
+        try:
+            html = fetch_article(p['url'])
+            body = extract_body(html)
+            if not body:
+                print(f'    warning: empty body for {p["url"]}')
+                body = '<p><em>Content could not be fetched.</em></p>'
+            else:
+                body = process_images(body, IMAGES_DIR)
+            page = generate_post_page(p, body)
+            with open(local, 'w', encoding='utf-8') as f:
+                f.write(page)
+            print(f'    wrote {_post_id(p["url"])}.html')
+        except Exception as e:
+            print(f'    failed: {e}')
+            # write a stub so the link doesn't 404
+            page = generate_post_page(p, '<p><em>Failed to fetch content.</em></p>')
+            with open(local, 'w', encoding='utf-8') as f:
+                f.write(page)
+
+    # ── update listing pages ─────────────────────────────────
     for filename, (marker, builder) in BUILDERS.items():
         path = os.path.join(ROOT, filename)
         content = builder(posts)
