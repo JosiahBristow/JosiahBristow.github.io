@@ -48,9 +48,9 @@ I'm currently exploring ideas – expect repos on:
 ---
 
 ## 📫 Let’s connect
-
-- 🐦 [Twitter / X](https://twitter.com/yourhandle) – if you use it
-- 📧 [josiah@example.com](mailto:josiah_bristow@outlook.com) – replace with your actual email
+- 📝 [博客园 (CNBlog)](https://www.cnblogs.com/JosiahBristow) 
+- 🅱️ [Bilibili](https://space.bilibili.com/513194717?spm_id_from=333.1007.0.0)
+- 📧 [josiah_bristow@outlook.com](mailto:josiah_bristow@outlook.com)
 - 💬 I’m always open to chatting about Linux, WMs, Neovim, or low-level programming
 
 ---
