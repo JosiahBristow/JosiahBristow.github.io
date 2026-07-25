@@ -57,6 +57,8 @@ POST_PAGE_TPL = '''\
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../style.css">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🐧</text></svg>">
+<link rel="alternate icon" href="https://avatars.githubusercontent.com/u/123633729?s=32&v=4">
 </head>
 <body>
 
@@ -188,6 +190,16 @@ def build_sidebar(posts):
         for n in sorted(cats)
     )
     return f'''\
+  <div class="sidebar-card profile">
+    <img class="profile-avatar" src="https://avatars.githubusercontent.com/u/123633729?s=96&v=4" alt="avatar" loading="lazy">
+    <div class="profile-name">JosiahBristow</div>
+    <div class="profile-bio">Arch Linux user \u00b7 Linux enthusiast \u00b7 I just want to go out and see if there are another way to live life.</div>
+    <div class="profile-links">
+      <a target="_blank" href="https://github.com/josiahbristow">\U0001f419 GitHub</a>
+      <a target="_blank" href="https://josiahbristow.github.io/">\U0001f310 Blog</a>
+    </div>
+  </div>
+
   <div class="sidebar-card">
     <h3 data-i18n="sidebar-stats">\u7edf\u8ba1\u6570\u636e</h3>
     <div class="stat-grid">
