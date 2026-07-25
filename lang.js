@@ -1,7 +1,6 @@
 (function() {
   var toggle = document.getElementById('langToggle');
   if (!toggle) return;
-  var STORAGE_KEY = 'lang';
 
   var i18n = {
     'nav-home': { zh: '首页', en: 'Home' },
@@ -32,10 +31,9 @@
     'site-desc': { zh: '本站是使用纯 HTML + CSS 构建的静态博客，托管于 GitHub Pages。主题配色使用 Catppuccin 风格，支持明暗主题和中英文切换。', en: 'A static blog built with plain HTML + CSS, hosted on GitHub Pages. Catppuccin color scheme with dark/light mode and Chinese/English language toggle.' }
   };
 
-  function getPreferredLang() {
-    var saved = localStorage.getItem(STORAGE_KEY);
-    if (saved === 'zh' || saved === 'en') return saved;
-    return 'zh';
+  function getLangFromURL() {
+    var m = location.search.match(/[?&]lang=(zh|en)(?:&|$)/);
+    return m ? m[1] : null;
   }
 
   function applyLanguage(lang) {
@@ -49,13 +47,36 @@
         el.textContent = i18n[key][lang];
       }
     }
-    localStorage.setItem(STORAGE_KEY, lang);
+    var links = document.querySelectorAll('.nav-inner a, .header-title a');
+    for (var i = 0; i < links.length; i++) {
+      var href = links[i].getAttribute('href');
+      if (!href || href.indexOf('://') !== -1 || href.indexOf('//') === 0) continue;
+      href = href.replace(/[?&]lang=(zh|en)/g, '');
+      href += (href.indexOf('?') === -1 ? '?' : '&') + 'lang=' + lang;
+      links[i].setAttribute('href', href);
+    }
   }
 
-  applyLanguage(getPreferredLang());
+  function loadLang() {
+    var urlLang = getLangFromURL();
+    if (urlLang) return urlLang;
+    try {
+      var saved = localStorage.getItem('lang');
+      if (saved === 'zh' || saved === 'en') return saved;
+    } catch (e) {}
+    var wm = window.name.match(/^lang=(zh|en)$/);
+    if (wm) return wm[1];
+    return 'zh';
+  }
+
+  var currentLang = loadLang();
+  applyLanguage(currentLang);
 
   toggle.addEventListener('click', function() {
-    var current = document.documentElement.lang || 'zh';
-    applyLanguage(current === 'zh' ? 'en' : 'zh');
+    currentLang = currentLang === 'zh' ? 'en' : 'zh';
+    try { localStorage.setItem('lang', currentLang); } catch (e) {}
+    window.name = 'lang=' + currentLang;
+    history.replaceState(null, '', '?lang=' + currentLang);
+    applyLanguage(currentLang);
   });
 })();
