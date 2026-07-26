@@ -74,8 +74,10 @@
   var PER_PAGE = 7;
   var total = postList.length;
   var pages = Math.ceil(total / PER_PAGE);
+  var currentPage = 1;
 
   function showPage(page) {
+    currentPage = page;
     page = Math.max(1, Math.min(page, pages));
     var first = (page - 1) * PER_PAGE;
     var last = Math.min(page * PER_PAGE, total);
@@ -102,7 +104,11 @@
   }
 
   function render() {
-    pagination.innerHTML = '<button data-dir="prev">\u2039</button>';
+    var prev = document.createElement('button');
+    prev.dataset.dir = 'prev';
+    prev.textContent = '\u2039';
+    prev.addEventListener('click', function() { showPage(currentPage - 1); });
+    pagination.appendChild(prev);
     for (var p = 1; p <= pages; p++) {
       var btn = document.createElement('button');
       btn.textContent = p;
@@ -113,6 +119,7 @@
     var next = document.createElement('button');
     next.dataset.dir = 'next';
     next.textContent = '\u203a';
+    next.addEventListener('click', function() { showPage(currentPage + 1); });
     pagination.appendChild(next);
   }
 
