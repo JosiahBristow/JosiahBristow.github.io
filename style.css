@@ -1018,7 +1018,8 @@ a {
   transform: scale(0.94);
 }
 
-.tux-mascot svg {
+.tux-mascot svg,
+.tux-mascot img {
   display: block;
   width: 64px;
   height: auto;
