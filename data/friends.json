@@ -1,0 +1,51 @@
+[
+  {
+    "id": 1,
+    "name": "Cirry",
+    "url": "https://cirry.cn/",
+    "description": "分享技术与生活",
+    "emoji": "🌐"
+  },
+  {
+    "id": 3,
+    "name": "廖雪峰",
+    "url": "https://liaoxuefeng.com/index.html",
+    "description": "Python / Java / JavaScript 教程",
+    "emoji": "📘"
+  },
+  {
+    "id": 4,
+    "name": "GreyishSong",
+    "url": "https://greyishsong.ink/",
+    "description": "代码与音乐",
+    "emoji": "🎵"
+  },
+  {
+    "id": 5,
+    "name": "haoyep",
+    "url": "https://www.haoyep.com/",
+    "description": "编程 · 思考 · 成长",
+    "emoji": "📡"
+  },
+  {
+    "id": 6,
+    "name": "MartinLwx",
+    "url": "https://martinlwx.github.io/zh-cn/",
+    "description": "技术博客 · 漫步人生",
+    "emoji": "💡"
+  },
+  {
+    "id": 7,
+    "name": "李南",
+    "url": "https://lixuannan.github.io/",
+    "description": "学无止境 · 行以致远",
+    "emoji": "🚀"
+  },
+  {
+    "id": 8,
+    "name": "Myself",
+    "url": "https://josiahbristow.github.io",
+    "description": "",
+    "emoji": "🌐"
+  }
+]

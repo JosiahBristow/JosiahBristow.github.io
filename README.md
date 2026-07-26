@@ -51,45 +51,49 @@ Add new translation keys in [`lang.js`](lang.js).
 Toggle between light (Latte) and dark (Mocha) with the floating moon/sun button.  
 Persisted in `localStorage`.
 
-## How to add content
+## Content management (CLI)
 
-### ✍️ Add a blog post
+[`manage.py`](manage.py) is the unified content manager — add, edit, delete, and sync all content from the command line.
 
-**Option A — via cnblogs (recommended):** Write on [博客园](https://www.cnblogs.com/JosiahBristow), then run `python sync_posts.py` to pull it in.
+```sh
+# First run: import existing content from HTML pages
+python manage.py import
+python manage.py build
 
-**Option B — manually:** Create `posts/<id>.html` (copy an existing post as template), then insert a matching entry into `index.html`, `archive.html`, and `categories.html` between the `<!-- CONTENT_MAIN -->` / `<!-- /CONTENT_MAIN -->` markers.
+# Sync posts from cnblogs
+python manage.py posts sync
 
-### 📚 Add a book
+# Add a custom blog post (markdown)
+python manage.py posts add post.md
 
-1. Save the cover image to `images/books/<filename>.jpg`
-2. Copy a `.book-card` block in `bookshelf.html` (lines 47-57) and fill in title, author, rating, description, and link
-3. Update the sidebar stat count (`.stat-value` for books) if needed
+# List / edit / delete posts
+python manage.py posts list
+python manage.py posts edit <id>
+python manage.py posts delete <id>
 
-```html
-<div class="book-card">
-  <a href="https://book.douban.com/subject/..." target="_blank" class="book-cover-link">
-    <img class="book-cover" src="images/books/<filename>.jpg" alt="书名" loading="lazy">
-  </a>
-  <div class="book-info">
-    <div class="book-title">书名</div>
-    <div class="book-author">作者</div>
-    <div class="book-rating">⭐ 9.0</div>
-    <div class="book-desc">简介文字</div>
-  </div>
-</div>
+# Manage books (interactive prompts)
+python manage.py books add
+python manage.py books list
+python manage.py books edit <id>
+python manage.py books delete <id>
+
+# Add a photo
+python manage.py photos add photo.jpg "Caption"
+python manage.py photos list
+python manage.py photos delete <id>
+
+# Manage friend links (interactive prompts)
+python manage.py friends add
+python manage.py friends list
+python manage.py friends edit <id>
+python manage.py friends delete <id>
 ```
 
-### 📷 Add a photo
+After any change, run `python manage.py build` to regenerate all HTML pages.
+Run `python manage.py serve` to preview locally at `http://localhost:8000`.
 
-1. Save the image file to `images/gallery/`
-2. Copy a `.gallery-item` block in `gallery.html` (lines 43-46) and fill in the path and caption
-
-```html
-<div class="gallery-item">
-  <img class="gallery-img" src="images/gallery/<filename>.jpg" alt="标题" loading="lazy">
-  <div class="gallery-caption">标题</div>
-</div>
-```
+Deduplication: when syncing from cnblogs and adding custom markdown posts,
+if title and content (ignoring image URLs) match, only one is kept.
 
 ## License
 

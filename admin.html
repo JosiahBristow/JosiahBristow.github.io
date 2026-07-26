@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin - Josiah Bristow</title>
+<style>
+:root {
+  --bg: #eff1f5; --surface: #e6e9ef; --overlay: #ccd0da;
+  --text: #4c4f69; --subtext: #6c6f85; --blue: #1e66f5;
+  --green: #40a02b; --red: #d20f39; --yellow: #df8e1d;
+  --mauve: #8839ef; --teal: #179299;
+  --radius: 8px; --shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+[data-theme="dark"] {
+  --bg: #1e1e2e; --surface: #313244; --overlay: #45475a;
+  --text: #cdd6f4; --subtext: #a6adc8; --blue: #89b4fa;
+  --green: #a6e3a1; --red: #f38ba8; --yellow: #f9e2af;
+  --mauve: #cba6f7; --teal: #94e2d5;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'JetBrains Mono', 'Segoe UI', sans-serif;
+  background: var(--bg); color: var(--text); display: flex;
+  min-height: 100vh; font-size: 14px;
+}
+a { color: var(--blue); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+/* Sidebar */
+.sidebar {
+  width: 220px; background: var(--surface); padding: 20px 0;
+  border-right: 1px solid var(--overlay); display: flex;
+  flex-direction: column; flex-shrink: 0;
+}
+.sidebar h1 { font-size: 16px; padding: 0 20px 16px; color: var(--subtext); }
+.nav-tab {
+  display: flex; align-items: center; gap: 8px;
+  padding: 10px 20px; cursor: pointer; color: var(--subtext);
+  border-left: 3px solid transparent; transition: all 0.15s;
+}
+.nav-tab:hover { background: var(--overlay); color: var(--text); }
+.nav-tab.active { background: var(--overlay); color: var(--blue); border-left-color: var(--blue); font-weight: 600; }
+.nav-actions { margin-top: auto; padding: 16px 20px; display: flex; flex-direction: column; gap: 8px; }
+
+/* Main */
+.main { flex: 1; padding: 24px 32px; overflow-y: auto; }
+.tab-content { display: none; }
+.tab-content.active { display: block; }
+
+/* Header */
+.page-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+.page-header h2 { font-size: 20px; }
+.header-actions { display: flex; gap: 8px; }
+
+/* Table */
+table { width: 100%; border-collapse: collapse; }
+th, td { text-align: left; padding: 8px 12px; border-bottom: 1px solid var(--overlay); }
+th { color: var(--subtext); font-weight: 600; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; }
+tr:hover td { background: var(--surface); }
+
+/* Buttons */
+.btn {
+  display: inline-flex; align-items: center; gap: 4px; padding: 6px 14px;
+  border-radius: var(--radius); border: 1px solid var(--overlay);
+  background: var(--surface); color: var(--text); cursor: pointer;
+  font-size: 13px; font-family: inherit; transition: all 0.15s;
+}
+.btn:hover { background: var(--overlay); }
+.btn-primary { background: var(--blue); color: #fff; border-color: var(--blue); }
+.btn-primary:hover { filter: brightness(1.1); }
+.btn-green { background: var(--green); color: #fff; border-color: var(--green); }
+.btn-green:hover { filter: brightness(1.1); }
+.btn-red { background: transparent; color: var(--red); border-color: var(--red); }
+.btn-red:hover { background: var(--red); color: #fff; }
+.btn-sm { padding: 4px 10px; font-size: 12px; }
+.btn-icon { border: none; background: none; cursor: pointer; padding: 4px; color: var(--subtext); }
+.btn-icon:hover { color: var(--text); }
+
+/* Form */
+.modal-overlay {
+  display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.4);
+  z-index: 100; align-items: center; justify-content: center;
+}
+.modal-overlay.visible { display: flex; }
+.modal {
+  background: var(--bg); border-radius: var(--radius); padding: 24px;
+  width: 520px; max-width: 90vw; max-height: 80vh; overflow-y: auto;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+}
+.modal h3 { margin-bottom: 16px; }
+.form-group { margin-bottom: 12px; }
+.form-group label { display: block; font-size: 12px; color: var(--subtext); margin-bottom: 4px; }
+.form-group input, .form-group textarea, .form-group select {
+  width: 100%; padding: 8px 10px; border-radius: var(--radius);
+  border: 1px solid var(--overlay); background: var(--surface);
+  color: var(--text); font-size: 13px; font-family: inherit;
+}
+.form-group textarea { resize: vertical; min-height: 60px; }
+.form-actions { display: flex; gap: 8px; justify-content: flex-end; margin-top: 16px; }
+
+/* Toast */
+.toast {
+  position: fixed; bottom: 24px; right: 24px; padding: 10px 20px;
+  border-radius: var(--radius); color: #fff; font-size: 13px;
+  z-index: 200; animation: fadeIn 0.3s;
+}
+.toast-success { background: var(--green); }
+.toast-error { background: var(--red); }
+.toast-info { background: var(--blue); }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+/* Empty state */
+.empty { color: var(--subtext); text-align: center; padding: 40px 0; }
+
+/* Loading */
+.loading { text-align: center; padding: 40px; color: var(--subtext); }
+
+/* Inline form */
+.inline-form { display: flex; gap: 8px; align-items: center; }
+.inline-form input { flex: 1; }
+
+/* Responsive */
+@media (max-width: 768px) {
+  body { flex-direction: column; }
+  .sidebar { width: 100%; flex-direction: row; padding: 0; overflow-x: auto; border-right: none; border-bottom: 1px solid var(--overlay); }
+  .sidebar h1 { display: none; }
+  .nav-tab { white-space: nowrap; border-left: none; border-bottom: 3px solid transparent; padding: 12px 16px; }
+  .nav-tab.active { border-left: none; border-bottom-color: var(--blue); }
+  .nav-actions { display: none; }
+  .main { padding: 16px; }
+}
+</style>
+</head>
+<body>
+
+<div class="sidebar">
+  <h1>📊 Admin</h1>
+  <div class="nav-tab active" data-tab="posts">📝 Posts</div>
+  <div class="nav-tab" data-tab="books">📚 Books</div>
+  <div class="nav-tab" data-tab="photos">📷 Photos</div>
+  <div class="nav-tab" data-tab="friends">🤝 Friends</div>
+  <div class="nav-actions">
+    <button class="btn btn-green" onclick="apiCall('posts/build','POST').then(r=>toast(r.message||'Build complete','success')).catch(()=>{})">⚡ Build pages</button>
+    <button class="btn btn-primary" onclick="apiCall('posts/sync','POST').then(r=>toast(r.message||'Sync complete','success')).catch(()=>{})">🔄 Sync cnblogs</button>
+    <a class="btn" href="index.html" target="_blank">🌐 View site</a>
+    <button class="btn" id="adminThemeToggle">🌙 Dark</button>
+  </div>
+</div>
+
+<div class="main">
+  <div id="tab-posts" class="tab-content active"></div>
+  <div id="tab-books" class="tab-content"></div>
+  <div id="tab-photos" class="tab-content"></div>
+  <div id="tab-friends" class="tab-content"></div>
+</div>
+
+<div class="modal-overlay" id="modal">
+  <div class="modal" id="modalBody"></div>
+</div>
+
+<script>
+// ── API helpers ──
+async function apiCall(path, method='GET', body=null) {
+  const opts = { method, headers: {} };
+  if (body instanceof FormData) {
+    opts.body = body;
+  } else if (body) {
+    opts.headers['Content-Type'] = 'application/json';
+    opts.body = JSON.stringify(body);
+  }
+  try {
+    const r = await fetch('/api/' + path, opts);
+    const data = await r.json();
+    if (!r.ok) throw new Error(data.error || r.statusText);
+    return data;
+  } catch (e) {
+    toast(e.message, 'error');
+    throw e;
+  }
+}
+
+function toast(msg, type='info') {
+  const el = document.createElement('div');
+  el.className = 'toast toast-' + type;
+  el.textContent = msg;
+  document.body.appendChild(el);
+  setTimeout(() => el.remove(), 3000);
+}
+
+function modal(html) {
+  document.getElementById('modalBody').innerHTML = html;
+  document.getElementById('modal').classList.add('visible');
+}
+
+function closeModal() {
+  document.getElementById('modal').classList.remove('visible');
+}
+document.getElementById('modal').addEventListener('click', e => {
+  if (e.target === e.currentTarget) closeModal();
+});
+
+// ── Tab switching ──
+function showTab(name) {
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('tab-' + name).classList.add('active');
+  document.querySelector(`[data-tab="${name}"]`).classList.add('active');
+  loadTab(name);
+}
+document.querySelectorAll('.nav-tab').forEach(t => {
+  t.addEventListener('click', () => showTab(t.dataset.tab));
+});
+
+// ── Render functions ──
+function loadTab(name) {
+  const el = document.getElementById('tab-' + name);
+  if (el.dataset.loaded) return;
+  el.innerHTML = '<div class="loading">Loading...</div>';
+  if (name === 'posts') renderPosts();
+  else if (name === 'books') renderBooks();
+  else if (name === 'photos') renderPhotos();
+  else if (name === 'friends') renderFriends();
+}
+
+function renderPosts() {
+  apiCall('posts').then(posts => {
+    const el = document.getElementById('tab-posts');
+    el.dataset.loaded = '1';
+    let rows = posts.map(p => `<tr>
+      <td>${p.id}</td>
+      <td>${esc(p.source)}</td>
+      <td>${esc(p.title).slice(0, 40)}</td>
+      <td>${esc(p.date)}</td>
+      <td>
+        <button class="btn-icon" onclick="showPostMeta('${p.id}')" title="Details">📋</button>
+        ${p.source === 'custom' ? `<button class="btn-icon" onclick="deleteItem('posts','${p.id}','${esc(p.title)}')" title="Delete">🗑️</button>` : ''}
+      </td>
+    </tr>`).join('');
+    el.innerHTML = `<div class="page-header"><h2>📝 Posts (${posts.length})</h2>
+      <div class="header-actions">
+        <button class="btn btn-primary" onclick="showAddPostForm()">+ Add custom</button>
+      </div></div>
+      <table><thead><tr><th>ID</th><th>Source</th><th>Title</th><th>Date</th><th></th></tr></thead>
+      <tbody>${rows || '<tr><td colspan="5" class="empty">No posts</td></tr>'}</tbody></table>`;
+  });
+}
+
+function showPostMeta(id) {
+  apiCall('posts').then(posts => {
+    const p = posts.find(x => x.id === id);
+    if (!p) return toast('Not found', 'error');
+    modal(`<h3>📋 ${esc(p.title)}</h3>
+      <div class="form-group"><label>ID</label><input readonly value="${esc(p.id)}"></div>
+      <div class="form-group"><label>Source</label><input readonly value="${esc(p.source)}"></div>
+      <div class="form-group"><label>Date / Time</label><input readonly value="${esc(p.date)} ${esc(p.time)}"></div>
+      <div class="form-group"><label>Category</label><input readonly value="${esc(p.category)}"></div>
+      <div class="form-group"><label>Views / Likes / Comments</label><input readonly value="${esc(p.views)} / ${esc(p.likes)} / ${esc(p.comments)}"></div>
+      <div class="form-group"><label>Excerpt</label><textarea readonly rows="3">${esc(p.excerpt)}</textarea></div>
+      <div class="form-actions"><button class="btn" onclick="closeModal()">Close</button></div>`);
+  });
+}
+
+function showAddPostForm() {
+  modal(`<h3>✍️ Add custom post</h3>
+    <div class="form-group"><label>Title</label><input id="post-title" placeholder="Post title"></div>
+    <div class="form-group"><label>Date</label><input id="post-date" type="date" value="${new Date().toISOString().slice(0,10)}"></div>
+    <div class="form-group"><label>Category</label>
+      <select id="post-category"><option>Arch Linux</option><option>Linux</option><option>Python</option><option>Raspberry Pi</option></select></div>
+    <div class="form-group"><label>Markdown content</label><textarea id="post-body" rows="12" placeholder="# Title\\n\\nContent here..."></textarea></div>
+    <div class="form-group"><label>Or upload .md file</label><input id="post-file" type="file" accept=".md"></div>
+    <div class="form-actions">
+      <button class="btn" onclick="closeModal()">Cancel</button>
+      <button class="btn btn-primary" onclick="submitPost()">Add post</button>
+    </div>`);
+}
+
+async function submitPost() {
+  const fileInput = document.getElementById('post-file');
+  let title = document.getElementById('post-title').value.trim();
+  let body = document.getElementById('post-body').value.trim();
+
+  if (fileInput.files.length > 0) {
+    const text = await fileInput.files[0].text();
+    const lines = text.split('\\n');
+    if (lines[0].startsWith('---')) {
+      const end = lines.indexOf('---', 1);
+      if (end > 0) {
+        for (let i = 1; i < end; i++) {
+          const m = lines[i].match(/^(\\w+):\\s*(.+)$/);
+          if (m) {
+            if (m[1].toLowerCase() === 'title') title = m[2].trim();
+          }
+        }
+        body = lines.slice(end + 1).join('\\n').trim();
+      }
+    } else {
+      body = text;
+    }
+    if (!title) title = fileInput.files[0].name.replace(/\\.md$/i, '');
+  }
+  if (!body) { toast('Content required', 'error'); return; }
+  if (!title) title = 'Untitled';
+
+  const date = document.getElementById('post-date').value;
+  const category = document.getElementById('post-category').value;
+
+  try {
+    await apiCall('posts/add', 'POST', { title, body, date, category });
+    toast('Post added', 'success');
+    closeModal();
+    document.getElementById('tab-posts').dataset.loaded = '';
+    renderPosts();
+  } catch(e) {}
+}
+
+// ── Books ──
+function previewCover() {
+  const url = document.getElementById('bk-cover').value.trim();
+  const img = document.getElementById('bk-cover-preview');
+  if (url) {
+    img.src = url;
+    img.style.display = 'block';
+  } else {
+    img.style.display = 'none';
+  }
+}
+function renderBooks() {
+  apiCall('books').then(books => {
+    const el = document.getElementById('tab-books');
+    el.dataset.loaded = '1';
+    let rows = books.map(b => `<tr>
+      <td>${b.id}</td>
+      <td>${esc(b.title).slice(0, 35)}</td>
+      <td>${esc(b.author).slice(0, 25)}</td>
+      <td>⭐ ${b.rating || ''}</td>
+      <td>
+        <button class="btn-icon" onclick="showEditBookForm(${b.id})" title="Edit">✏️</button>
+        <button class="btn-icon" onclick="deleteItem('books',${b.id},'${esc(b.title)}')" title="Delete">🗑️</button>
+      </td>
+    </tr>`).join('');
+    el.innerHTML = `<div class="page-header"><h2>📚 Books (${books.length})</h2>
+      <div class="header-actions"><button class="btn btn-primary" onclick="showEditBookForm()">+ Add</button></div></div>
+      <table><thead><tr><th>ID</th><th>Title</th><th>Author</th><th>Rating</th><th></th></tr></thead>
+      <tbody>${rows || '<tr><td colspan="5" class="empty">No books</td></tr>'}</tbody></table>`;
+  });
+}
+
+function showEditBookForm(id) {
+  apiCall('books').then(books => {
+    const b = id ? books.find(x => x.id === id) : {};
+    const t = b.title || ''; const a = b.author || ''; const r = b.rating || '';
+    const d = b.description || ''; const u = b.url || ''; const c = b.cover || '';
+    modal(`<h3>${id ? '✏️ Edit' : '➕ Add'} book</h3>
+      <div class="form-group"><label>URL</label>
+        <div style="display:flex;gap:6px"><input id="bk-url" value="${esc(u)}" placeholder="https://book.douban.com/subject/..." style="flex:1"><button class="btn" onclick="fetchBookMeta()" id="bk-fetch-btn">Fetch</button></div></div>
+      <div class="form-group"><label>Title</label><input id="bk-title" value="${esc(t)}"></div>
+      <div class="form-group"><label>Author</label><input id="bk-author" value="${esc(a)}"></div>
+      <div class="form-group"><label>Rating</label><input id="bk-rating" value="${esc(r)}" placeholder="9.3"></div>
+      <div class="form-group"><label>Description</label><textarea id="bk-desc" rows="3">${esc(d)}</textarea></div>
+      <div class="form-group"><label>Cover</label>
+        <div style="display:flex;gap:8px;align-items:start">
+          <input id="bk-cover" value="${esc(c)}" placeholder="Auto-fetched from URL if blank" style="flex:1" oninput="previewCover()">
+          <img id="bk-cover-preview" src="${esc(c)}" style="width:60px;height:80px;object-fit:cover;border-radius:4px;display:${c?'block':'none'};border:1px solid var(--overlay)" onerror="this.style.display='none'">
+        </div></div>
+      <div class="form-actions">
+        <button class="btn" onclick="closeModal()">Cancel</button>
+        <button class="btn btn-primary" onclick="submitBook(${id || ''})">Save</button>
+      </div>`);
+    document.getElementById('bk-url').addEventListener('blur', function() {
+      if (this.value && !id) fetchBookMeta();
+    });
+  });
+}
+
+async function fetchBookMeta() {
+  const url = document.getElementById('bk-url').value.trim();
+  if (!url) return;
+  const btn = document.getElementById('bk-fetch-btn');
+  btn.disabled = true; btn.textContent = 'Fetching...';
+  try {
+    const meta = await apiCall('books/fetch-meta?url=' + encodeURIComponent(url));
+    if (meta.title) document.getElementById('bk-title').value = meta.title;
+    if (meta.author) document.getElementById('bk-author').value = meta.author;
+    if (meta.rating) document.getElementById('bk-rating').value = meta.rating;
+    if (meta.description) document.getElementById('bk-desc').value = meta.description;
+    if (meta.cover) {
+      document.getElementById('bk-cover').value = meta.cover;
+      previewCover();
+    }
+    toast('Metadata fetched', 'success');
+  } catch(e) { toast('Fetch failed', 'error'); }
+  finally { btn.disabled = false; btn.textContent = 'Fetch'; }
+}
+
+async function submitBook(id) {
+  const data = {
+    title: document.getElementById('bk-title').value.trim(),
+    author: document.getElementById('bk-author').value.trim(),
+    rating: document.getElementById('bk-rating').value.trim(),
+    description: document.getElementById('bk-desc').value.trim(),
+    url: document.getElementById('bk-url').value.trim(),
+    cover: document.getElementById('bk-cover').value.trim(),
+  };
+  if (!data.url) { toast('URL is required', 'error'); return; }
+  try {
+    if (id) { await apiCall('books/' + id, 'PUT', data); toast('Book updated', 'success'); }
+    else { await apiCall('books', 'POST', data); toast('Book added', 'success'); }
+    closeModal();
+    document.getElementById('tab-books').dataset.loaded = '';
+    renderBooks();
+  } catch(e) {}
+}
+
+// ── Photos ──
+function renderPhotos() {
+  apiCall('photos').then(photos => {
+    const el = document.getElementById('tab-photos');
+    el.dataset.loaded = '1';
+    let rows = photos.map(p => `<tr>
+      <td>${p.id}</td>
+      <td>${esc(p.caption).slice(0, 30)}</td>
+      <td><code>${esc(p.filename)}</code></td>
+      <td><img src="images/gallery/${esc(p.filename)}" style="height:40px;border-radius:4px" loading="lazy"></td>
+      <td><button class="btn-icon" onclick="deleteItem('photos',${p.id},'${esc(p.caption)}')" title="Delete">🗑️</button></td>
+    </tr>`).join('');
+    el.innerHTML = `<div class="page-header"><h2>📷 Photos (${photos.length})</h2>
+      <div class="header-actions"><button class="btn btn-primary" onclick="showAddPhotoForm()">+ Add</button></div></div>
+      <table><thead><tr><th>ID</th><th>Caption</th><th>File</th><th>Preview</th><th></th></tr></thead>
+      <tbody>${rows || '<tr><td colspan="5" class="empty">No photos</td></tr>'}</tbody></table>`;
+  });
+}
+
+function showAddPhotoForm() {
+  modal(`<h3>📷 Add photo</h3>
+    <div class="form-group"><label>Image file</label><input id="ph-file" type="file" accept="image/*"></div>
+    <div class="form-group"><label>Caption</label><input id="ph-caption" placeholder="Photo caption"></div>
+    <div class="form-actions">
+      <button class="btn" onclick="closeModal()">Cancel</button>
+      <button class="btn btn-primary" onclick="submitPhoto()">Add</button>
+    </div>`);
+}
+
+async function submitPhoto() {
+  const fileInput = document.getElementById('ph-file');
+  const caption = document.getElementById('ph-caption').value.trim() || (fileInput.files[0] ? fileInput.files[0].name.replace(/\\.[^.]+$/, '') : '');
+  if (!fileInput.files.length) { toast('Select an image', 'error'); return; }
+  const fd = new FormData();
+  fd.append('file', fileInput.files[0]);
+  fd.append('caption', caption);
+  try {
+    await apiCall('photos', 'POST', fd);
+    toast('Photo added', 'success');
+    closeModal();
+    document.getElementById('tab-photos').dataset.loaded = '';
+    renderPhotos();
+  } catch(e) {}
+}
+
+// ── Friends ──
+function renderFriends() {
+  apiCall('friends').then(friends => {
+    const el = document.getElementById('tab-friends');
+    el.dataset.loaded = '1';
+    let rows = friends.map(f => `<tr>
+      <td>${f.id}</td>
+      <td>${f.emoji || '🌐'} ${esc(f.name)}</td>
+      <td><a href="${esc(f.url)}" target="_blank">${esc(f.url).slice(0, 35)}</a></td>
+      <td>${esc(f.description).slice(0, 30)}</td>
+      <td>
+        <button class="btn-icon" onclick="showEditFriendForm(${f.id})" title="Edit">✏️</button>
+        <button class="btn-icon" onclick="deleteItem('friends',${f.id},'${esc(f.name)}')" title="Delete">🗑️</button>
+      </td>
+    </tr>`).join('');
+    el.innerHTML = `<div class="page-header"><h2>🤝 Friends (${friends.length})</h2>
+      <div class="header-actions"><button class="btn btn-primary" onclick="showEditFriendForm()">+ Add</button></div></div>
+      <table><thead><tr><th>ID</th><th>Name</th><th>URL</th><th>Description</th><th></th></tr></thead>
+      <tbody>${rows || '<tr><td colspan="5" class="empty">No friends</td></tr>'}</tbody></table>`;
+  });
+}
+
+function showEditFriendForm(id) {
+  apiCall('friends').then(friends => {
+    const f = id ? friends.find(x => x.id === id) : {};
+    const n = f.name || ''; const u = f.url || ''; const d = f.description || ''; const e = f.emoji || '🌐';
+    modal(`<h3>${id ? '✏️ Edit' : '➕ Add'} friend</h3>
+      <div class="form-group"><label>Name</label><input id="fr-name" value="${esc(n)}"></div>
+      <div class="form-group"><label>URL</label><input id="fr-url" value="${esc(u)}" placeholder="https://..."></div>
+      <div class="form-group"><label>Description</label><input id="fr-desc" value="${esc(d)}"></div>
+      <div class="form-group"><label>Emoji</label><input id="fr-emoji" value="${esc(e)}" placeholder="🌐"></div>
+      <div class="form-actions">
+        <button class="btn" onclick="closeModal()">Cancel</button>
+        <button class="btn btn-primary" onclick="submitFriend(${id || ''})">Save</button>
+      </div>`);
+  });
+}
+
+async function submitFriend(id) {
+  const data = {
+    name: document.getElementById('fr-name').value.trim(),
+    url: document.getElementById('fr-url').value.trim(),
+    description: document.getElementById('fr-desc').value.trim(),
+    emoji: document.getElementById('fr-emoji').value.trim() || '🌐',
+  };
+  if (!data.name) { toast('Name required', 'error'); return; }
+  try {
+    if (id) { await apiCall('friends/' + id, 'PUT', data); toast('Friend updated', 'success'); }
+    else { await apiCall('friends', 'POST', data); toast('Friend added', 'success'); }
+    closeModal();
+    document.getElementById('tab-friends').dataset.loaded = '';
+    renderFriends();
+  } catch(e) {}
+}
+
+// ── Delete helper ──
+async function deleteItem(type, id, label) {
+  if (!confirm('Delete "' + label + '"?')) return;
+  try {
+    await apiCall(type + '/' + id, 'DELETE');
+    toast('Deleted', 'success');
+    document.getElementById('tab-' + type).dataset.loaded = '';
+    window['render' + type.charAt(0).toUpperCase() + type.slice(1)]();
+  } catch(e) {}
+}
+
+function esc(s) {
+  if (s == null) return '';
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// ── Theme toggle ──
+(function() {
+  var html = document.documentElement;
+  var btn = document.getElementById('adminThemeToggle');
+  var saved = localStorage.getItem('theme');
+  if (saved === 'dark' || saved === 'light') {
+    html.setAttribute('data-theme', saved);
+  } else {
+    var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    html.setAttribute('data-theme', prefersDark ? 'dark' : 'light');
+  }
+  updateBtn();
+  btn.addEventListener('click', function() {
+    var next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    html.setAttribute('data-theme', next);
+    localStorage.setItem('theme', next);
+    updateBtn();
+  });
+  function updateBtn() {
+    var isDark = html.getAttribute('data-theme') === 'dark';
+    btn.textContent = isDark ? '☀️ Light' : '🌙 Dark';
+  }
+})();
+
+// ── Init ──
+showTab('posts');
+</script>
+</body>
+</html>

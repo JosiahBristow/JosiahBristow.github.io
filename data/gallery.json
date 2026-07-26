@@ -1,0 +1,57 @@
+[
+  {
+    "id": 1,
+    "filename": "archlinux.svg",
+    "caption": "Arch Linux"
+  },
+  {
+    "id": 2,
+    "filename": "ubuntu.svg",
+    "caption": "Ubuntu"
+  },
+  {
+    "id": 3,
+    "filename": "debian.svg",
+    "caption": "Debian"
+  },
+  {
+    "id": 4,
+    "filename": "fedora.svg",
+    "caption": "Fedora"
+  },
+  {
+    "id": 5,
+    "filename": "opensuse.svg",
+    "caption": "openSUSE"
+  },
+  {
+    "id": 6,
+    "filename": "manjaro.svg",
+    "caption": "Manjaro"
+  },
+  {
+    "id": 7,
+    "filename": "linuxmint.svg",
+    "caption": "Linux Mint"
+  },
+  {
+    "id": 8,
+    "filename": "gentoo.svg",
+    "caption": "Gentoo"
+  },
+  {
+    "id": 9,
+    "filename": "slackware.svg",
+    "caption": "Slackware"
+  },
+  {
+    "id": 10,
+    "filename": "alpinelinux.svg",
+    "caption": "Alpine Linux"
+  },
+  {
+    "id": 11,
+    "filename": "tux.png",
+    "caption": "tux"
+  }
+]
