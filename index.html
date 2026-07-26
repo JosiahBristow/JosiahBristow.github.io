@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>JosiahBristow - Blog</title>
+<title>Josiah Bristow - Blog</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
@@ -14,7 +14,7 @@
 <body>
 
 <header class="header">
-  <div class="header-title"><a target="_blank" href="index.html">JosiahBristow</a></div>
+  <div class="header-title"><a target="_blank" href="index.html">Josiah Bristow</a></div>
   <div class="header-prompt">Just For Fun!</div>
   <div class="header-sub">Arch Linux, Linux tools, and developer life</div>
 </header>
@@ -25,6 +25,9 @@
     <a href="archive.html">📦 <span data-i18n="nav-archive">归档</span></a>
     <a href="categories.html">🏷️ <span data-i18n="nav-categories">分类</span></a>
     <a href="about.html">👤 <span data-i18n="nav-about">关于</span></a>
+    <a href="bookshelf.html">📚 <span data-i18n="nav-bookshelf">书架</span></a>
+    <a href="gallery.html">📷 <span data-i18n="nav-gallery">相册</span></a>
+    <a href="friends.html">🤝 <span data-i18n="nav-friends">友链</span></a>
   </div>
   </div>
 </nav>
@@ -32,7 +35,12 @@
 <div class="page">
 
 <main>
+  <div class="view-toggle">
+    <button class="active" data-view="list" aria-label="列表视图">☰</button>
+    <button data-view="grid" aria-label="网格视图">▦</button>
+  </div>
 <!-- CONTENT_MAIN -->
+  <div class="post-grid" data-view="list">
   <div class="day-group">
     <div class="day-title">2026-04-18</div>
     <article class="post">
@@ -271,6 +279,7 @@ Pygame 的介绍 pygame 是用来写游戏的 python 模块集合。使用 pytho
       </div>
     </article>
   </div>
+  </div>
 <!-- /CONTENT_MAIN -->
   <div id="pagination" class="pagination"></div>
 </main>
@@ -279,7 +288,7 @@ Pygame 的介绍 pygame 是用来写游戏的 python 模块集合。使用 pytho
 <!-- SIDEBAR -->
   <div class="sidebar-card profile">
     <img class="profile-avatar" src="https://avatars.githubusercontent.com/u/123633729?s=96&v=4" alt="avatar" loading="lazy">
-    <div class="profile-name">JosiahBristow</div>
+    <div class="profile-name">Josiah Bristow</div>
     <div class="profile-bio">Arch Linux user · Linux enthusiast · I just want to go out and see if there are another way to live life.</div>
     <div class="profile-links">
       <a target="_blank" href="https://github.com/josiahbristow">🐙 GitHub</a>
@@ -329,7 +338,7 @@ Pygame 的介绍 pygame 是用来写游戏的 python 模块集合。使用 pytho
 </div>
 
 <footer class="footer">
-  <p>🐧 &copy; 2024-2026 JosiahBristow. Built with ❤️ for <a target="_blank" href="https://pages.github.com/">GitHub Pages</a>.</p>
+  <p>🐧 &copy; 2024-2026 Josiah Bristow. Built with ❤️ for <a target="_blank" href="https://pages.github.com/">GitHub Pages</a>.</p>
 </footer>
 
 <script src="script.js"></script>

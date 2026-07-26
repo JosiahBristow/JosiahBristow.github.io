@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>分类 - Josiah Bristow</title>
+<title>相册 - Josiah Bristow</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
@@ -23,10 +23,10 @@
   <div class="nav-inner">
     <a href="index.html">🏠 <span data-i18n="nav-home">首页</span></a>
     <a href="archive.html">📦 <span data-i18n="nav-archive">归档</span></a>
-    <a href="categories.html" class="active">🏷️ <span data-i18n="nav-categories">分类</span></a>
+    <a href="categories.html">🏷️ <span data-i18n="nav-categories">分类</span></a>
     <a href="about.html">👤 <span data-i18n="nav-about">关于</span></a>
     <a href="bookshelf.html">📚 <span data-i18n="nav-bookshelf">书架</span></a>
-    <a href="gallery.html">📷 <span data-i18n="nav-gallery">相册</span></a>
+    <a href="gallery.html" class="active">📷 <span data-i18n="nav-gallery">相册</span></a>
     <a href="friends.html">🤝 <span data-i18n="nav-friends">友链</span></a>
   </div>
   </div>
@@ -35,57 +35,52 @@
 <div class="page">
 
 <main>
-<!-- CONTENT_MAIN -->
   <div class="page-heading">
-    <h1>🏷️ <span data-i18n="categories-title">分类</span></h1>
-    <p>📂 <span data-i18n="categories-count">共 4 个分类</span></p>
+    <h1>📷 <span data-i18n="gallery-title">相册</span></h1>
+    <p data-i18n="gallery-desc">一些照片和截图</p>
   </div>
-  <div class="category-section">
-    <div class="category-header">
-      🐧 Arch Linux
-      <span class="category-count">9 篇</span>
+  <div class="gallery-grid">
+    <div class="gallery-item">
+      <img class="gallery-img" src="images/gallery/archlinux.svg" alt="Arch Linux" loading="lazy">
+      <div class="gallery-caption">Arch Linux</div>
     </div>
-    <ul class="category-list">
-      <li class="category-item"><a href="posts/19887651.html">Flathub 是现代的 Linux 应用商店</a></li>
-      <li class="category-item"><a href="posts/19887424.html">Archlinux下pacman的基本使用方法</a></li>
-      <li class="category-item"><a href="posts/19375968.html">使用 Waydroid 在 Archlinux 下无缝使用安卓软件</a></li>
-      <li class="category-item"><a href="posts/19122518.html">在 Archlinux 中添加 archlinuxcn 软件仓库</a></li>
-      <li class="category-item"><a href="posts/19122512.html">Archlinux 更换镜像源</a></li>
-      <li class="category-item"><a href="posts/18881913.html">在 Archlinux 中安装中文与日语输入法</a></li>
-      <li class="category-item"><a href="posts/18695607.html">Cargo 下载太慢？试试更换国内源</a></li>
-      <li class="category-item"><a href="posts/18691470.html">计算机组成原理学习笔记（未完成）</a></li>
-      <li class="category-item"><a href="posts/18646211.html">Git快速入门</a></li>
-    </ul>
-  </div>
-  <div class="category-section">
-    <div class="category-header">
-      💻 Linux
-      <span class="category-count">2 篇</span>
+    <div class="gallery-item">
+      <img class="gallery-img" src="images/gallery/ubuntu.svg" alt="Ubuntu" loading="lazy">
+      <div class="gallery-caption">Ubuntu</div>
     </div>
-    <ul class="category-list">
-      <li class="category-item"><a href="posts/19125412.html">Linux 下缺少打印机驱动的解决方法</a></li>
-      <li class="category-item"><a href="posts/18695807.html">解决Linux下 pip install 出现 externally-managed-environment问题</a></li>
-    </ul>
-  </div>
-  <div class="category-section">
-    <div class="category-header">
-      🐍 Python
-      <span class="category-count">1 篇</span>
+    <div class="gallery-item">
+      <img class="gallery-img" src="images/gallery/debian.svg" alt="Debian" loading="lazy">
+      <div class="gallery-caption">Debian</div>
     </div>
-    <ul class="category-list">
-      <li class="category-item"><a href="posts/18697313.html">[Python] pygame 简单入门</a></li>
-    </ul>
-  </div>
-  <div class="category-section">
-    <div class="category-header">
-      🥧 Raspberry Pi
-      <span class="category-count">1 篇</span>
+    <div class="gallery-item">
+      <img class="gallery-img" src="images/gallery/fedora.svg" alt="Fedora" loading="lazy">
+      <div class="gallery-caption">Fedora</div>
     </div>
-    <ul class="category-list">
-      <li class="category-item"><a href="posts/18696663.html">树莓派更新工具链</a></li>
-    </ul>
+    <div class="gallery-item">
+      <img class="gallery-img" src="images/gallery/opensuse.svg" alt="openSUSE" loading="lazy">
+      <div class="gallery-caption">openSUSE</div>
+    </div>
+    <div class="gallery-item">
+      <img class="gallery-img" src="images/gallery/manjaro.svg" alt="Manjaro" loading="lazy">
+      <div class="gallery-caption">Manjaro</div>
+    </div>
+    <div class="gallery-item">
+      <img class="gallery-img" src="images/gallery/linuxmint.svg" alt="Linux Mint" loading="lazy">
+      <div class="gallery-caption">Linux Mint</div>
+    </div>
+    <div class="gallery-item">
+      <img class="gallery-img" src="images/gallery/gentoo.svg" alt="Gentoo" loading="lazy">
+      <div class="gallery-caption">Gentoo</div>
+    </div>
+    <div class="gallery-item">
+      <img class="gallery-img" src="images/gallery/slackware.svg" alt="Slackware" loading="lazy">
+      <div class="gallery-caption">Slackware</div>
+    </div>
+    <div class="gallery-item">
+      <img class="gallery-img" src="images/gallery/alpinelinux.svg" alt="Alpine Linux" loading="lazy">
+      <div class="gallery-caption">Alpine Linux</div>
+    </div>
   </div>
-<!-- /CONTENT_MAIN -->
 </main>
 
 <aside class="sidebar">
@@ -104,20 +99,12 @@
     <h3 data-i18n="sidebar-stats">统计数据</h3>
     <div class="stat-grid">
       <div>
-        <div class="stat-value">13</div>
-        <div class="stat-label">📝 <span data-i18n="stat-posts">随笔</span></div>
+        <div class="stat-value">10</div>
+        <div class="stat-label">📷 <span data-i18n="stat-photos">照片</span></div>
       </div>
       <div>
         <div class="stat-value">1</div>
-        <div class="stat-label">👍 <span data-i18n="stat-likes">推荐</span></div>
-      </div>
-      <div>
-        <div class="stat-value">13K</div>
-        <div class="stat-label">👁️ <span data-i18n="stat-reads">阅读</span></div>
-      </div>
-      <div>
-        <div class="stat-value">0</div>
-        <div class="stat-label">💬 <span data-i18n="stat-comments">评论</span></div>
+        <div class="stat-label">📁 <span data-i18n="stat-albums">相册</span></div>
       </div>
     </div>
   </div>
@@ -131,7 +118,7 @@
       <span class="tag">🥧 Raspberry Pi <span class="post-count">1</span></span>
     </div>
   </div>
-<!-- /SIDEBAR -->
+</aside>
 
 </div>
 

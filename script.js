@@ -124,6 +124,31 @@
 })();
 
 (function() {
+  var toggles = document.querySelectorAll('.view-toggle');
+  toggles.forEach(function(toggle) {
+    var container = toggle.parentElement.querySelector('.bookshelf-grid[data-view], .post-grid[data-view]');
+    if (!container) return;
+    var btns = toggle.querySelectorAll('button');
+    var key = container.classList.contains('bookshelf-grid') ? 'bookshelf-view' : 'post-view';
+    var saved = localStorage.getItem(key);
+    if (saved === 'grid') {
+      btns.forEach(function(b) { b.classList.toggle('active', b.dataset.view === 'grid'); });
+      container.classList.add('grid-mode');
+      container.dataset.view = 'grid';
+    }
+    btns.forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        var view = this.dataset.view;
+        btns.forEach(function(b) { b.classList.toggle('active', b.dataset.view === view); });
+        container.classList.toggle('grid-mode', view === 'grid');
+        container.dataset.view = view;
+        localStorage.setItem(key, view);
+      });
+    });
+  });
+})();
+
+(function() {
   var quotes = [
     { zh: '空谈无益，放码过来。', en: 'Talk is cheap. Show me the code.' },
     { zh: '智慧就是避免做无用功，同时还能把事做成。', en: 'Intelligence is the ability to avoid doing work, yet getting the work done.' },

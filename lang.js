@@ -7,6 +7,9 @@
     'nav-archive': { zh: '归档', en: 'Archive' },
     'nav-categories': { zh: '分类', en: 'Categories' },
     'nav-about': { zh: '关于', en: 'About' },
+    'nav-bookshelf': { zh: '书架', en: 'Bookshelf' },
+    'nav-gallery': { zh: '相册', en: 'Gallery' },
+    'nav-friends': { zh: '友链', en: 'Friends' },
     'sidebar-stats': { zh: '统计数据', en: 'Stats' },
     'stat-posts': { zh: '随笔', en: 'Posts' },
     'stat-likes': { zh: '推荐', en: 'Likes' },
@@ -29,7 +32,23 @@
     'interest-5': { zh: '开源软件与社区', en: 'Open-source software & community' },
     'comments-title': { zh: '评论', en: 'Comments' },
     'about-site': { zh: '关于本站', en: 'About This Site' },
-    'site-desc': { zh: '本站是使用纯 HTML + CSS 构建的静态博客，托管于 GitHub Pages。主题配色使用 Catppuccin 风格，支持明暗主题和中英文切换。', en: 'A static blog built with plain HTML + CSS, hosted on GitHub Pages. Catppuccin color scheme with dark/light mode and Chinese/English language toggle.' }
+    'site-desc': { zh: '本站是使用纯 HTML + CSS 构建的静态博客，托管于 GitHub Pages。主题配色使用 Catppuccin 风格，支持明暗主题和中英文切换。', en: 'A static blog built with plain HTML + CSS, hosted on GitHub Pages. Catppuccin color scheme with dark/light mode and Chinese/English language toggle.' },
+    'bookshelf-title': { zh: '书架', en: 'Bookshelf' },
+    'bookshelf-desc': { zh: '读过和正在读的书', en: 'Books I have read or am reading' },
+    'bookshelf-placeholder': { zh: '这里将展示你读过的书', en: 'Your books will appear here' },
+    'bookshelf-reading': { zh: '阅读中', en: 'Reading' },
+    'gallery-title': { zh: '相册', en: 'Gallery' },
+    'gallery-desc': { zh: '一些照片和截图', en: 'Photos and screenshots' },
+    'gallery-placeholder': { zh: '照片展示区域', en: 'Photos will appear here' },
+    'friends-title': { zh: '友链', en: 'Friends' },
+    'friends-desc': { zh: '朋友们的小站', en: 'My friends\' sites' },
+    'friends-placeholder-name': { zh: '待添加', en: 'Pending' },
+    'friends-placeholder-desc': { zh: '这里将展示你的朋友们', en: 'Your friends will appear here' },
+    'stat-books': { zh: '书籍', en: 'Books' },
+    'stat-reading': { zh: '在读', en: 'Reading' },
+    'stat-photos': { zh: '照片', en: 'Photos' },
+    'stat-albums': { zh: '相册', en: 'Albums' },
+    'stat-friends': { zh: '友链', en: 'Friends' }
   };
 
   function getLangFromURL() {

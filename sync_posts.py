@@ -52,7 +52,7 @@ POST_PAGE_TPL = '''\
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>{title} - JosiahBristow</title>
+<title>{title} - Josiah Bristow</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
@@ -63,7 +63,7 @@ POST_PAGE_TPL = '''\
 <body>
 
 <header class="header">
-  <div class="header-title"><a href="../index.html">JosiahBristow</a></div>
+  <div class="header-title"><a href="../index.html">Josiah Bristow</a></div>
   <div class="header-prompt">Just For Fun!</div>
   <div class="header-sub">Arch Linux, Linux tools, and developer life</div>
 </header>
@@ -74,6 +74,9 @@ POST_PAGE_TPL = '''\
     <a href="../archive.html">\U0001f4e6 <span data-i18n="nav-archive">\u5f52\u6863</span></a>
     <a href="../categories.html">\U0001f3f7\ufe0f <span data-i18n="nav-categories">\u5206\u7c7b</span></a>
     <a href="../about.html">\U0001f464 <span data-i18n="nav-about">\u5173\u4e8e</span></a>
+    <a href="../bookshelf.html">📚 <span data-i18n="nav-bookshelf">\u4e66\u67b6</span></a>
+    <a href="../gallery.html">📷 <span data-i18n="nav-gallery">\u76f8\u518c</span></a>
+    <a href="../friends.html">🤝 <span data-i18n="nav-friends">\u53cb\u94fe</span></a>
   </div>
 </nav>
 
@@ -137,7 +140,7 @@ POST_PAGE_TPL = '''\
 </div>
 
 <footer class="footer">
-  <p>\U0001f427 &copy; 2024-2026 JosiahBristow. Built with \u2764\ufe0f for <a href="https://pages.github.com/">GitHub Pages</a>.</p>
+  <p>\U0001f427 &copy; 2024-2026 Josiah Bristow. Built with \u2764\ufe0f for <a href="https://pages.github.com/">GitHub Pages</a>.</p>
 </footer>
 
 <script src="../script.js"></script>
@@ -151,6 +154,7 @@ def build_index(posts):
     for p in posts:
         groups[p['date']].append(p)
     lines = []
+    lines.append('  <div class="post-grid" data-view="list">')
     for date_str in sorted(groups, reverse=True):
         lines.append('  <div class="day-group">')
         lines.append(f'    <div class="day-title">{date_str}</div>')
@@ -163,6 +167,7 @@ def build_index(posts):
                 comments=p['comments'], likes=p['likes'],
             ))
         lines.append('  </div>')
+    lines.append('  </div>')
     return '\n'.join(lines)
 
 def build_archive(posts):
@@ -226,7 +231,7 @@ def build_sidebar(posts):
     return f'''\
   <div class="sidebar-card profile">
     <img class="profile-avatar" src="https://avatars.githubusercontent.com/u/123633729?s=96&v=4" alt="avatar" loading="lazy">
-    <div class="profile-name">JosiahBristow</div>
+    <div class="profile-name">Josiah Bristow</div>
     <div class="profile-bio">Arch Linux user \u00b7 Linux enthusiast \u00b7 I just want to go out and see if there are another way to live life.</div>
     <div class="profile-links">
       <a target="_blank" href="https://github.com/josiahbristow">\U0001f419 GitHub</a>
