@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Markdown 简明教程 - Josiah Bristow</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../style.css">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🐧</text></svg>">
+<link rel="alternate icon" href="https://avatars.githubusercontent.com/u/123633729?s=32&v=4">
+</head>
+<body>
+
+<header class="header">
+  <div class="header-title"><a href="../index.html">Josiah Bristow</a></div>
+  <div class="header-prompt">Just For Fun!</div>
+  <div class="header-sub">Arch Linux, Linux tools, and developer life</div>
+</header>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="../index.html">🏠 <span data-i18n="nav-home">首页</span></a>
+    <a href="../archive.html">📦 <span data-i18n="nav-archive">归档</span></a>
+    <a href="../categories.html">🏷️ <span data-i18n="nav-categories">分类</span></a>
+    <a href="../about.html">👤 <span data-i18n="nav-about">关于</span></a>
+    <a href="../bookshelf.html">📚 <span data-i18n="nav-bookshelf">书架</span></a>
+    <a href="../gallery.html">📷 <span data-i18n="nav-gallery">相册</span></a>
+    <a href="../friends.html">🤝 <span data-i18n="nav-friends">友链</span></a>
+    <button class="nav-search-btn" id="searchToggle" aria-label="搜索">🔍</button>
+  </div>
+</nav>
+
+<div class="page-full">
+
+<article class="post-article">
+  <div class="post-article-heading">
+    <h1 class="post-article-title">Markdown 简明教程</h1>
+    <div class="post-article-meta">
+      <span>🕐 2026-07-26 18:06</span>
+      <span>👁️ 0</span>
+      <span>💬 0</span>
+      <span>👍 0</span>
+    </div>
+  </div>
+  <div class="post-article-body">
+<p><img src="images/ODF.--aoD2Flm2KQscCIA5mbpw" alt=""  loading="lazy">Markdown 是一种轻量级标记语言，让你用纯文本格式就能写出结构清晰、排版美观的文档。</p>
+<h2 id="1-标题">1. 标题</h2>
+<p>使用 <code>#</code> 符号，数量表示级别。</p>
+<p><strong>源码：</strong></p>
+<pre><code class="language-markdown"># 一级标题
+## 二级标题
+### 三级标题
+#### 四级标题
+##### 五级标题
+###### 六级标题
+</code></pre>
+<p><strong>预览：</strong></p>
+<h1 id="一级标题">一级标题</h1>
+<h2 id="二级标题">二级标题</h2>
+<h3 id="三级标题">三级标题</h3>
+<h4 id="四级标题">四级标题</h4>
+<h5 id="五级标题">五级标题</h5>
+<h6 id="六级标题">六级标题</h6>
+<hr>
+<h2 id="2-文本样式">2. 文本样式</h2>
+<p><strong>源码：</strong></p>
+<pre><code class="language-markdown">**粗体**  *斜体*  ***粗斜体***  ~~删除线~~  `行内代码`
+</code></pre>
+<p><strong>预览：</strong><br>
+<strong>粗体</strong>  <em>斜体</em>  <em><strong>粗斜体</strong></em>  <s>删除线</s>  <code>行内代码</code></p>
+<hr>
+<h2 id="3-列表">3. 列表</h2>
+<h3 id="无序列表">无序列表</h3>
+<p><strong>源码：</strong></p>
+<pre><code class="language-markdown">- 苹果
+- 香蕉
+  - 子项（缩进）
+- 橙子
+</code></pre>
+<p><strong>预览：</strong></p>
+<ul>
+<li>苹果</li>
+<li>香蕉
+<ul>
+<li>子项（缩进）</li>
+</ul>
+</li>
+<li>橙子</li>
+</ul>
+<h3 id="有序列表">有序列表</h3>
+<p><strong>源码：</strong></p>
+<pre><code class="language-markdown">1. 第一项
+2. 第二项
+   1. 子项1
+   2. 子项2
+3. 第三项
+</code></pre>
+<p><strong>预览：</strong></p>
+<ol>
+<li>第一项</li>
+<li>第二项
+<ol>
+<li>子项1</li>
+<li>子项2</li>
+</ol>
+</li>
+<li>第三项</li>
+</ol>
+<h3 id="任务列表">任务列表</h3>
+<p><strong>源码：</strong></p>
+<pre><code class="language-markdown">- [x] 已完成
+- [ ] 未完成
+</code></pre>
+<p><strong>预览：</strong></p>
+<ul class="contains-task-list">
+<li class="task-list-item"><input class="task-list-item-checkbox" checked="" disabled="" type="checkbox"><label> 已完成</label></li>
+<li class="task-list-item"><input class="task-list-item-checkbox" disabled="" type="checkbox"><label> 未完成</label></li>
+</ul>
+<hr>
+<h2 id="4-链接和图片">4. 链接和图片</h2>
+<p><strong>链接源码：</strong></p>
+<pre><code class="language-markdown">[百度](https://www.baidu.com)
+</code></pre>
+<p><strong>链接预览：</strong><br>
+<a href="https://www.baidu.com" target="_blank" rel="noopener nofollow">百度</a></p>
+<p><strong>图片源码：</strong></p>
+<pre><code class="language-markdown">![占位图](https://via.placeholder.com/150)
+</code></pre>
+<p><strong>图片预览：</strong><br>
+<img src="https://via.placeholder.com/150" alt="占位图" loading="lazy"></p>
+<p><strong>引用式链接源码：</strong></p>
+<pre><code class="language-markdown">[百度][1]
+[1]: https://www.baidu.com
+</code></pre>
+<p>预览效果同普通链接。</p>
+<hr>
+<h2 id="5-引用">5. 引用</h2>
+<p><strong>源码：</strong></p>
+<pre><code class="language-markdown">&gt; 这是一段引用。
+&gt; &gt; 嵌套引用。
+</code></pre>
+<p><strong>预览：</strong></p>
+<blockquote>
+<p>这是一段引用。</p>
+<blockquote>
+<p>嵌套引用。</p>
+</blockquote>
+</blockquote>
+<hr>
+<h2 id="6-代码块">6. 代码块</h2>
+<p><strong>源码：</strong></p>
+<pre><code class="language-markdown">```python
+print("Hello, World!")
+```
+</code></pre>
+<p><strong>预览：</strong></p>
+<pre><code class="language-python">print("Hello, World!")
+</code></pre>
+<p>（缩进 4 个空格或 1 个 Tab 同样有效）</p>
+<hr>
+<h2 id="7-表格">7. 表格</h2>
+<p><strong>源码：</strong></p>
+<pre><code class="language-markdown">| 左对齐 | 居中 | 右对齐 |
+|:-------|:----:|-------:|
+| 内容1  | 内容2| 内容3  |
+| 内容4  | 内容5| 内容6  |
+</code></pre>
+<p><strong>预览：</strong></p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left">左对齐</th>
+<th style="text-align: center">居中</th>
+<th style="text-align: right">右对齐</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left">内容1</td>
+<td style="text-align: center">内容2</td>
+<td style="text-align: right">内容3</td>
+</tr>
+<tr>
+<td style="text-align: left">内容4</td>
+<td style="text-align: center">内容5</td>
+<td style="text-align: right">内容6</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="8-分隔线">8. 分隔线</h2>
+<p><strong>源码：</strong></p>
+<pre><code class="language-markdown">---
+***
+___
+</code></pre>
+<h2 id="预览"><strong>预览：</strong></h2>
+<hr>
+<p>___（实际渲染效果相同，均为一条水平线）</p>
+<hr>
+<h2 id="9-转义字符">9. 转义字符</h2>
+<p>用反斜杠 <code>\</code> 让特殊字符显示为普通字符。</p>
+<p><strong>源码：</strong></p>
+<pre><code class="language-markdown">\# 这不是标题，\*不是斜体\*
+</code></pre>
+<p><strong>预览：</strong><br>
+# 这不是标题，*不是斜体*<br>
+（实际渲染会显示 <code>#</code> 和 <code>*</code> 原样，不会被解析为标记）</p>
+<hr>
+<h2 id="10-段落和换行">10. 段落和换行</h2>
+<ul>
+<li>段落间用<strong>空行</strong>分隔（预览时可见自然间距）。</li>
+<li>换行：行末加<strong>两个空格</strong> 或使用 <code>&lt;br&gt;</code>。</li>
+</ul>
+<p><strong>源码示例：</strong></p>
+<pre><code class="language-markdown">第一段（后面空一行）
+
+第二段
+行末加两个空格  
+这是新行
+</code></pre>
+<p><strong>预览：</strong><br>
+第一段（后面空一行）</p>
+<p>第二段<br>
+行末加两个空格<br>
+这是新行</p>
+<hr>
+<p>非常好！在基础语法之上，许多主流 Markdown 编辑器（如 Typora、Obsidian）和平台（GitHub、GitLab）都支持<strong>扩展语法</strong>。这部分能让你的文档功能更强大，从“记事本”升级为“专业写作工具”。</p>
+<p>以下是最常用、最实用的扩展语法，同样附带 <strong>源码</strong> 与 <strong>预览</strong>。</p>
+<hr>
+<h2 id="11-脚注footnote">11 脚注（Footnote）</h2>
+<p>用于在页面底部添加注释，适合解释术语或标注引用。</p>
+<p><strong>源码：</strong></p>
+<pre><code class="language-markdown">这是一个带脚注的句子[^1]。
+
+[^1]: 这是脚注的具体内容，通常显示在页面底部。
+</code></pre>
+<p><strong>预览：</strong><br>
+这是一个带脚注的句子<sup class="footnote-ref"><a href="#fn1" id="fnref1" rel="noopener nofollow">[1]</a></sup>。</p>
+<hr>
+<h2 id="12-高亮上标与下标">12 高亮、上标与下标</h2>
+<ul>
+<li><strong>高亮</strong>：<code>==文字==</code>（Typora、Obsidian 支持）</li>
+<li><strong>上标</strong>：<code>^上标^</code></li>
+<li><strong>下标</strong>：<code>~下标~</code></li>
+</ul>
+<p><strong>源码：</strong></p>
+<pre><code class="language-markdown">这行文字有 ==高亮标记==。
+
+化学式：H~2~O  
+数学式：E = mc^2^
+</code></pre>
+<p><strong>预览：</strong><br>
+这行文字有 <mark>高亮标记</mark>。</p>
+<p>化学式：H<sub>2</sub>O<br>
+数学式：E = mc<sup>2</sup></p>
+<hr>
+<h2 id="13-折叠块details--summary">13 折叠块（Details / Summary）</h2>
+<p>利用原生 HTML 标签实现可折叠内容，非常适合放答案、附录或长代码。</p>
+<p><strong>源码：</strong></p>
+<pre><code class="language-html">&lt;details&gt;
+  &lt;summary&gt;点击展开查看答案&lt;/summary&gt;
+  这里是隐藏的具体内容，点击上方标题即可展开或收起。
+&lt;/details&gt;
+</code></pre>
+<p><strong>预览：</strong></p>
+<details>
+  <summary>点击展开查看答案</summary>
+  这里是隐藏的具体内容，点击上方标题即可展开或收起。
+</details>
+<hr>
+<h2 id="14-github-警告alerts--admonitions">14 GitHub 警告（Alerts / Admonitions）</h2>
+<p>GitHub 独有的提示框语法，用于突出显示注意、提示、警告等信息。</p>
+<p><strong>源码：</strong></p>
+<pre><code class="language-markdown">&gt; [!NOTE]
+&gt; 这是一个普通的提示信息。
+
+&gt; [!TIP]
+&gt; 这是一个实用的小技巧。
+
+&gt; [!IMPORTANT]
+&gt; 这是至关重要的核心信息。
+
+&gt; [!WARNING]
+&gt; 这是需要警惕的警告内容。
+
+&gt; [!CAUTION]
+&gt; 这是可能造成负面影响的风险提示。
+</code></pre>
+<p><strong>预览（GitHub 风格）：</strong></p>
+<blockquote>
+<p>[!NOTE]<br>
+这是一个普通的提示信息。</p>
+</blockquote>
+<blockquote>
+<p>[!TIP]<br>
+这是一个实用的小技巧。</p>
+</blockquote>
+<blockquote>
+<p>[!IMPORTANT]<br>
+这是至关重要的核心信息。</p>
+</blockquote>
+<blockquote>
+<p>[!WARNING]<br>
+这是需要警惕的警告内容。</p>
+</blockquote>
+<blockquote>
+<p>[!CAUTION]<br>
+这是可能造成负面影响的风险提示。</p>
+</blockquote>
+<hr>
+<h2 id="15-mermaid-图表流程图--时序图">15 Mermaid 图表（流程图 / 时序图）</h2>
+<p>在支持 Mermaid 的编辑器（Typora、Obsidian、GitHub）中，可以直接用代码画图。</p>
+<p><strong>源码（流程图）：</strong></p>
+<pre><code class="language-markdown">```mermaid
+graph TD
+    A[开始] --&gt; B{是否有错误?}
+    B -- 是 --&gt; C[报错退出]
+    B -- 否 --&gt; D[执行成功]
+```
+</code></pre>
+<p><strong>预览（在支持环境下渲染为矢量图）：</strong><br>
+（此处无法动态渲染，但在 Typora/GitHub 中会显示为如下流程图）</p>
+<ul>
+<li>开始 → 是否有错误? →（是）报错退出 /（否）执行成功</li>
+</ul>
+<p><strong>源码（时序图）：</strong></p>
+<pre><code class="language-markdown">```mermaid
+sequenceDiagram
+    用户-&gt;&gt;系统: 点击登录
+    系统--&gt;&gt;用户: 返回验证码
+```
+</code></pre>
+<hr>
+<h3 id="16-数学公式latex">16 数学公式（LaTeX）</h3>
+<p>使用 <code>$</code> 包裹行内公式，<code>$$</code> 包裹块级公式（需编辑器开启 MathJax 支持）。</p>
+<p><strong>源码：</strong></p>
+<pre><code class="language-markdown">行内公式：$E = mc^2$
+
+块级公式：
+$$
+\int_{-\infty}^{\infty} e^{-x^2} dx = \sqrt{\pi}
+$$
+</code></pre>
+<p><strong>预览：</strong><br>
+行内公式：<span class="math inline">\(E = mc^2\)</span></p>
+<p>块级公式：</p>
+<p></p><div class="math display">\[\int_{-\infty}^{\infty} e^{-x^2} dx = \sqrt{\pi}
+\]</div><p></p><hr>
+<h2 id="17-自动-url-链接">17 自动 URL 链接</h2>
+<p>直接写网址或邮箱，自动变成可点击链接（GFM 特性）。</p>
+<p><strong>源码：</strong></p>
+<pre><code class="language-markdown">https://github.com
+user@example.com
+</code></pre>
+<p><strong>预览：</strong><br>
+<a href="https://github.com" target="_blank" rel="noopener nofollow">https://github.com</a><br>
+user@example.com</p>
+<hr>
+<h2 id="18-emoji-表情gfm">18 Emoji 表情（GFM）</h2>
+<p>输入 <code>:emoji名称:</code> 即可显示表情（GitHub、Typora 支持）。</p>
+<p><strong>源码：</strong></p>
+<pre><code class="language-markdown">:smile: :rocket: :heart: :+1:
+</code></pre>
+<p><strong>预览：</strong><br>
+😄 🚀 ❤️ 👍</p>
+<hr>
+<h2 id="19-删除线已在基础部分涵盖此处仅补充">19 删除线（已在基础部分涵盖，此处仅补充）</h2>
+<p><code>~~删除线~~</code> → <s>删除线</s></p>
+<hr>
+<h2 id="20-html-原生标签">20 HTML 原生标签</h2>
+<p>Markdown 兼容大部分 HTML 标签，可实现更精细的排版。</p>
+<p><strong>源码：</strong></p>
+<pre><code class="language-html">&lt;p style="color: red; text-align: center;"&gt;这是一段红色的居中文字&lt;/p&gt;
+&lt;kbd&gt;Ctrl&lt;/kbd&gt; + &lt;kbd&gt;C&lt;/kbd&gt;
+</code></pre>
+<p><strong>预览：</strong></p>
+<p style="color: rgba(255, 0, 0, 1); text-align: center">这是一段红色的居中文字</p>
+<kbd>Ctrl</kbd> + <kbd>C</kbd>
+<hr>
+<h2 id="最后提醒兼容性">最后提醒：兼容性</h2>
+<p>并非所有平台都支持全部扩展语法，建议根据发布平台选择：</p>
+<ul>
+<li><strong>GitHub</strong>：支持 GFM（任务列表、表格、警告、Mermaid、自动链接）。</li>
+<li><strong>Typora / Obsidian</strong>：支持高亮、上下标、数学公式、Mermaid。</li>
+<li><strong>通用兼容</strong>：基础语法 + HTML 标签几乎在所有平台都能用。</li>
+</ul>
+<hr>
+<h2 id="附如何预览-markdown">附：如何预览 Markdown</h2>
+<ul>
+<li><strong>本地编辑器</strong>：Typora、VS Code（安装 Markdown 插件）、Obsidian 等支持实时预览。</li>
+<li><strong>在线工具</strong>：Dillinger、StackEdit 或 GitHub/Gitee 的 README 预览。</li>
+<li><strong>命令行</strong>：使用 <code>pandoc</code>、<code>marked</code> 等转换输出。</li>
+<li><strong>浏览器插件</strong>：使用Markdown Reader、Markdown Viewer等插件在浏览器预览</li>
+</ul>
+<hr class="footnotes-sep">
+<section class="footnotes">
+<ol class="footnotes-list">
+<li id="fn1" class="footnote-item"><p>这是脚注的具体内容，通常显示在页面底部。 <a href="#fnref1" class="footnote-backref" rel="noopener nofollow">↩︎</a></p>
+</li>
+</ol>
+</section>
+  </div>
+</article>
+
+<div class="post-comments">
+  <h2 class="post-comments-title">💬 <span data-i18n="comments-title">评论</span></h2>
+  <div id="giscus-container"></div>
+  <script>
+    (function() {
+      var theme = 'catppuccin_latte';
+      var lang = 'zh-CN';
+      try {
+        var ts = localStorage.getItem('theme');
+        if (ts === 'dark') theme = 'catppuccin_mocha';
+        var ls = localStorage.getItem('lang');
+        if (ls === 'en') lang = 'en';
+      } catch(e) {}
+      var c = document.getElementById('giscus-container');
+      var sc = document.createElement('script');
+      sc.src = 'https://giscus.app/client.js';
+      sc.setAttribute('data-repo', 'JosiahBristow/JosiahBristow.github.io');
+      sc.setAttribute('data-repo-id', 'R_kgDOTi7MtA');
+      sc.setAttribute('data-category', 'Announcements');
+      sc.setAttribute('data-category-id', 'DIC_kwDOTi7MtM4DB-Fn');
+      sc.setAttribute('data-mapping', 'pathname');
+      sc.setAttribute('data-strict', '0');
+      sc.setAttribute('data-reactions-enabled', '1');
+      sc.setAttribute('data-emit-metadata', '0');
+      sc.setAttribute('data-input-position', 'bottom');
+      sc.setAttribute('data-theme', theme);
+      sc.setAttribute('data-lang', lang);
+      sc.setAttribute('crossorigin', 'anonymous');
+      sc.async = true;
+      c.appendChild(sc);
+    })();
+  </script>
+</div>
+
+</div>
+
+<div class="float-group">
+  <button class="float-btn" id="langToggle" aria-label="切换语言">EN</button>
+  <button class="float-btn" id="themeToggle" aria-label="切换主题">🌙</button>
+  <button class="back-to-top" id="backToTop" aria-label="返回顶部">↑</button>
+</div>
+
+<footer class="footer">
+  <p>🐧 &copy; 2024-2026 Josiah Bristow. Built with ❤️ for <a href="https://pages.github.com/">GitHub Pages</a>.</p>
+</footer>
+
+<script src="../script.js"></script>
+<script src="../lang.js"></script>
+</body>
+</html>
