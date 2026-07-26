@@ -307,17 +307,17 @@
 
   var hideTimer = null;
   var autoTimer = null;
-  var paused = false;
+  var paused = true;
 
   function showQuote() {
     bubble.textContent = pickQuote();
     bubble.classList.add('visible');
     clearTimeout(hideTimer);
-    tux.classList.add('tux-jump');
+    tux.classList.add('tux-jump', 'tux-talking');
     hideTimer = setTimeout(function() {
-      bubble.classList.remove('visible');
+      bubble.classList.remove('visible', 'tux-talking');
       tux.classList.remove('tux-jump');
-    }, 6000);
+    }, 5000);
   }
 
   function scheduleNext() {
@@ -326,7 +326,7 @@
     autoTimer = setTimeout(function() {
       showQuote();
       scheduleNext();
-    }, 8000 + Math.random() * 15000);
+    }, 10000);
   }
 
   function togglePause() {
@@ -335,8 +335,9 @@
       clearTimeout(autoTimer);
       clearTimeout(hideTimer);
       bubble.classList.remove('visible');
-      tux.classList.remove('tux-jump');
+      tux.classList.remove('tux-jump', 'tux-talking');
     } else {
+      showQuote();
       scheduleNext();
     }
   }
@@ -352,8 +353,13 @@
     if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); togglePause(e); }
   });
 
-  showQuote();
-  scheduleNext();
+
+  function showHint() {
+    var lang = document.documentElement.lang;
+    bubble.textContent = lang === 'en' ? 'Click me' : '点我';
+    bubble.classList.add('visible');
+  }
+  showHint();
   document.body.appendChild(tux);
 })();
 
@@ -618,7 +624,7 @@
   overlay.innerHTML = '<div class="search-panel">'
     + '<div class="search-input-wrap">'
     + '<span class="search-icon">🔍</span>'
-    + '<input type="text" id="searchInput" placeholder="搜索博客或书籍…" autocomplete="off">'
+    + '<input type="text" id="searchInput" placeholder="' + (document.documentElement.lang === 'en' ? 'Search posts & books…' : '搜索博客或书籍…') + '" autocomplete="off">'
     + '<button class="search-close" id="searchClose">✕</button>'
     + '</div>'
     + '<div class="search-results" id="searchResults"></div>'
@@ -646,7 +652,7 @@
       }
     }
     if (!curResults.length) {
-      results.innerHTML = '<div class="search-empty">未找到相关内容</div>';
+      results.innerHTML = '<div class="search-empty">' + (document.documentElement.lang === 'en' ? 'No results found' : '未找到相关内容') + '</div>';
       return;
     }
     function snippet(text, query) {

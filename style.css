@@ -1413,9 +1413,6 @@ a {
   transition: transform 0.25s ease;
 }
 
-.tux-bounce {
-  animation: tux-bounce 3s ease-in-out infinite;
-}
 .tux-jump {
   animation: tux-jump 0.5s ease-out;
 }
@@ -1423,10 +1420,6 @@ a {
   animation: tux-sway 0.8s ease-in-out infinite;
 }
 
-@keyframes tux-bounce {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-6px); }
-}
 @keyframes tux-jump {
   0%   { transform: translateY(0) scaleY(1); }
   25%  { transform: translateY(-18px) scaleY(0.94); }
@@ -1868,5 +1861,10 @@ a {
   }
   .post-article {
     max-width: 100%;
+  }
+  .nav-inner {
+    justify-content: flex-start;
+    padding-right: 1.5rem;
+    -webkit-overflow-scrolling: touch;
   }
 }

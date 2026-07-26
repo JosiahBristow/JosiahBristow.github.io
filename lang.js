@@ -48,7 +48,10 @@
     'stat-reading': { zh: '在读', en: 'Reading' },
     'stat-photos': { zh: '照片', en: 'Photos' },
     'stat-albums': { zh: '相册', en: 'Albums' },
-    'stat-friends': { zh: '友链', en: 'Friends' }
+    'stat-friends': { zh: '友链', en: 'Friends' },
+    'search-placeholder': { zh: '搜索博客或书籍…', en: 'Search posts & books…' },
+    'search-empty': { zh: '未找到相关内容', en: 'No results found' },
+    'tux-hint': { zh: '点我', en: 'Click me' }
   };
 
   function getLangFromURL() {
@@ -74,6 +77,22 @@
       href = href.replace(/[?&]lang=(zh|en)/g, '');
       href += (href.indexOf('?') === -1 ? '?' : '&') + 'lang=' + lang;
       links[i].setAttribute('href', href);
+    }
+    var searchInput = document.getElementById('searchInput');
+    if (searchInput && i18n['search-placeholder']) {
+      searchInput.placeholder = i18n['search-placeholder'][lang];
+    }
+    var searchEmpty = document.getElementById('searchResults');
+    if (searchEmpty && searchEmpty.querySelector('.search-empty')) {
+      searchEmpty.querySelector('.search-empty').textContent = i18n['search-empty'][lang];
+    }
+    var tuxBubble = document.querySelector('.tux-speech');
+    if (tuxBubble) {
+      var hintZh = i18n['tux-hint'].zh;
+      var hintEn = i18n['tux-hint'].en;
+      if (tuxBubble.textContent === hintZh || tuxBubble.textContent === 'Click me' || tuxBubble.textContent === hintEn || tuxBubble.textContent === '点我') {
+        tuxBubble.textContent = i18n['tux-hint'][lang];
+      }
     }
   }
 
