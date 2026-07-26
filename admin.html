@@ -116,6 +116,29 @@ tr:hover td { background: var(--surface); }
 /* Loading */
 .loading { text-align: center; padding: 40px; color: var(--subtext); }
 
+/* Progress overlay */
+.progress-overlay {
+  position: fixed; inset: 0; z-index: 300;
+  background: rgba(0,0,0,0.5);
+  display: flex; align-items: center; justify-content: center;
+}
+.progress-panel {
+  background: var(--bg); border-radius: var(--radius);
+  padding: 40px 48px; text-align: center;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.25);
+  max-width: 400px;
+}
+.progress-spinner {
+  font-size: 2.5rem; margin-bottom: 16px;
+  animation: spin 1s linear infinite;
+}
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+.progress-text { font-size: 16px; font-weight: 600; margin-bottom: 8px; }
+.progress-hint { font-size: 13px; color: var(--subtext); }
+
 /* Inline form */
 .inline-form { display: flex; gap: 8px; align-items: center; }
 .inline-form input { flex: 1; }
@@ -141,8 +164,8 @@ tr:hover td { background: var(--surface); }
   <div class="nav-tab" data-tab="photos">📷 Photos</div>
   <div class="nav-tab" data-tab="friends">🤝 Friends</div>
   <div class="nav-actions">
-    <button class="btn btn-green" onclick="apiCall('posts/build','POST').then(r=>toast(r.message||'Build complete','success')).catch(()=>{})">⚡ Build pages</button>
-    <button class="btn btn-primary" onclick="apiCall('posts/sync','POST').then(r=>toast(r.message||'Sync complete','success')).catch(()=>{})">🔄 Sync cnblogs</button>
+    <button class="btn btn-green" onclick="buildPages()">⚡ Build pages</button>
+    <button class="btn btn-primary" onclick="syncCnblogs()">🔄 Sync cnblogs</button>
     <a class="btn" href="index.html" target="_blank">🌐 View site</a>
     <button class="btn" id="adminThemeToggle">🌙 Dark</button>
   </div>
@@ -187,6 +210,52 @@ function toast(msg, type='info') {
   document.body.appendChild(el);
   setTimeout(() => el.remove(), 3000);
 }
+
+// ── Progress & leave warning ──
+var inProgress = false;
+
+function showProgress(msg) {
+  inProgress = true;
+  var el = document.createElement('div');
+  el.className = 'progress-overlay';
+  el.id = 'progressOverlay';
+  el.innerHTML = '<div class="progress-panel">'
+    + '<div class="progress-spinner">⏳</div>'
+    + '<div class="progress-text">' + msg + '</div>'
+    + '<div class="progress-hint">Please do not close this page.</div>'
+    + '</div>';
+  document.body.appendChild(el);
+}
+
+function hideProgress() {
+  inProgress = false;
+  var el = document.getElementById('progressOverlay');
+  if (el) el.remove();
+}
+
+function withProgress(msg, promise) {
+  showProgress(msg);
+  return promise.finally(function() { hideProgress(); });
+}
+
+function buildPages() {
+  withProgress('Building pages…', apiCall('posts/build', 'POST'))
+    .then(function(r) { toast(r.message || 'Build complete', 'success'); })
+    .catch(function() {});
+}
+
+function syncCnblogs() {
+  withProgress('Syncing cnblogs…', apiCall('posts/sync', 'POST'))
+    .then(function(r) { toast(r.message || 'Sync complete', 'success'); })
+    .catch(function() {});
+}
+
+window.addEventListener('beforeunload', function(e) {
+  if (inProgress) {
+    e.preventDefault();
+    e.returnValue = '';
+  }
+});
 
 function modal(html) {
   document.getElementById('modalBody').innerHTML = html;
