@@ -1306,7 +1306,7 @@ def _build_search_index(posts, books):
         cat = p.get('category', '')
         emoji = cat_emoji.get(cat, '📄')
         dir_name = p.get('dir', _dir_name(p.get('title', '')))
-        url = f'posts/{dir_name}/' if p.get('source') == 'custom' else f'posts/{p["id"]}.html'
+        url = f'posts/{dir_name}/'
         index.append({
             't': p['title'],
             'u': url,
@@ -1703,8 +1703,8 @@ class AdminHandler(SimpleHTTPRequestHandler):
         if len(segs) < 3 or segs[1] != 'api':
             return _json_error(self, 'Invalid API path')
 
-        entity = segs[2]
-        action = segs[3] if len(segs) > 3 else None
+        entity = unquote(segs[2])
+        action = unquote(segs[3]) if len(segs) > 3 else None
 
         try:
             if method == 'GET':

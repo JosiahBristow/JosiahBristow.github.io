@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>在 archinux 使用虚拟机（KVM ，Vitual Box，VMware） - Josiah Bristow</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../style.css">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🐧</text></svg>">
+<link rel="alternate icon" href="https://avatars.githubusercontent.com/u/123633729?s=32&v=4">
+<script id="post-meta" type="application/json">{"id": "21973603", "thumb": "/posts/在-archinux-使用虚拟机（KVM-，Vitual-Box，VMware）/images/在-archinux-使用虚拟机（KVM-，Vitual-Box，VMware）.png", "excerpt": "摘要：        \n硬件检查 先确认 CPU 是否支持虚拟化： grep -E 'vmx|svm' /proc/cpuinfo 输出中包含 VT-x（Intel）或 AMD-V（AMD）即表示硬件支持。若无输出，通常是因为 BIOS/UEFI 中禁用了虚拟化，需重启进入固件设置开启。 KVM/QEMU 1. 安装软件包", "views": "1", "comments": "0", "likes": "0"}</script>
+</head>
+<body>
+
+<header class="header">
+  <div class="header-title"><a href="../../index.html">Josiah Bristow</a></div>
+  <div class="header-prompt">Just For Fun!</div>
+  <div class="header-sub">Arch Linux, Linux tools, and developer life</div>
+</header>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="../../index.html">🏠 <span data-i18n="nav-home">首页</span></a>
+    <a href="../../archive.html">📦 <span data-i18n="nav-archive">归档</span></a>
+    <a href="../../categories.html">🏷️ <span data-i18n="nav-categories">分类</span></a>
+    <a href="../../about.html">👤 <span data-i18n="nav-about">关于</span></a>
+    <a href="../../bookshelf.html">📚 <span data-i18n="nav-bookshelf">书架</span></a>
+    <a href="../../gallery.html">📷 <span data-i18n="nav-gallery">相册</span></a>
+    <a href="../../friends.html">🤝 <span data-i18n="nav-friends">友链</span></a>
+    <button class="nav-search-btn" id="searchToggle" aria-label="搜索">🔍</button>
+  </div>
+</nav>
+
+<div class="page-full">
+
+<article class="post-article">
+  <div class="post-article-heading">
+    <h1 class="post-article-title">在 archinux 使用虚拟机（KVM ，Vitual Box，VMware）</h1>
+    <div class="post-article-meta">
+      <span>🕐 2026-07-27 21:54</span>
+      <span>👁️ 1</span>
+      <span>💬 0</span>
+      <span>👍 0</span>
+    </div>
+  </div>
+  <div class="post-article-body">
+<h2 id="硬件检查">硬件检查</h2>
+<p>先确认 CPU 是否支持虚拟化：</p>
+<pre><code class="language-bash">grep -E 'vmx|svm' /proc/cpuinfo
+</code></pre>
+<p>输出中包含 <code>VT-x</code>（Intel）或 <code>AMD-V</code>（AMD）即表示硬件支持。若无输出，通常是因为 BIOS/UEFI 中禁用了虚拟化，需重启进入固件设置开启。</p>
+<hr>
+<h2 id="kvmqemu">KVM/QEMU</h2>
+<h3 id="1-安装软件包">1. 安装软件包</h3>
+<pre><code class="language-bash">sudo pacman -S qemu-full virt-manager virt-viewer libvirt dnsmasq edk2-ovmf swtpm iptables-nft
+</code></pre>
+<p>各包作用简述：</p>
+<ul>
+<li><code>qemu-full</code>：硬件模拟器</li>
+<li><code>virt-manager</code>：图形化管理前端</li>
+<li><code>libvirt</code>：虚拟化管理后台服务</li>
+<li><code>edk2-ovmf</code>：UEFI 固件支持（Windows 11 需要）</li>
+<li><code>swtpm</code>：软件 TPM（Windows 11 需要）</li>
+</ul>
+<h3 id="2-启动-libvirtd-服务">2. 启动 libvirtd 服务</h3>
+<pre><code class="language-bash">sudo systemctl enable --now libvirtd
+</code></pre>
+<h3 id="3-将当前用户加入-libvirt-组">3. 将当前用户加入 libvirt 组</h3>
+<p>避免每次操作都需要 sudo：</p>
+<pre><code class="language-bash">sudo usermod -aG libvirt $USER
+</code></pre>
+<p>执行后需注销重新登录（或重启）使组权限生效。</p>
+<h3 id="4-启动默认虚拟网络">4. 启动默认虚拟网络</h3>
+<p>使用 NAT 方式让虚拟机访问外网：</p>
+<pre><code class="language-bash">sudo virsh net-start default
+sudo virsh net-autostart default
+</code></pre>
+<hr>
+<h3 id="5-使用-virt-manager-创建虚拟机">5. 使用 virt-manager 创建虚拟机</h3>
+<p>启动 virt-manager（从应用菜单或终端执行 <code>virt-manager</code>），按以下步骤操作：</p>
+<ol>
+<li>点击“创建新虚拟机”。</li>
+<li>选择“本地安装介质 (ISO镜像或CDROM)”，并指定系统 ISO 文件路径。</li>
+<li>分配资源：
+<ul>
+<li>内存和 CPU：例如 Windows 10/11 建议 4GB 内存、2~4 个 CPU 核心。</li>
+<li>存储：推荐 <strong>qcow2</strong> 格式，支持快照且性能良好。</li>
+</ul>
+</li>
+<li>点击“完成”，虚拟机将从 ISO 引导，后续安装过程与物理机相同。</li>
+</ol>
+<hr>
+<h3 id="6-桥接网络可选">6. 桥接网络（可选）</h3>
+<p>默认 NAT 模式下虚拟机可访问外网，但若需让虚拟机与宿主机处于同一局域网并拥有独立 IP，可配置桥接网络。</p>
+<ul>
+<li><strong>图形化方式</strong>：在 virt-manager 中打开虚拟机设置，添加网卡，网络源选“桥接设备”，并指定物理网卡（如 <code>enp0s3</code>）。</li>
+<li><strong>命令行方式</strong>：使用 <code>virsh</code> 创建桥接网络，详细配置可参考 Arch Wiki。</li>
+</ul>
+<blockquote>
+<p>桥接配置可能影响网络稳定性，非必需时可暂不设置。</p>
+</blockquote>
+<hr>
+<h3 id="7-日常管理">7. 日常管理</h3>
+<ul>
+<li><strong>图形界面</strong>：<code>virt-manager</code> 提供完整的虚拟机状态查看、硬件调整、快照管理等功能。</li>
+<li><strong>命令行（virsh）</strong>：
+<ul>
+<li>列出所有虚拟机：<code>virsh list --all</code></li>
+<li>启动虚拟机：<code>virsh start &lt;虚拟机名称&gt;</code></li>
+<li>正常关机：<code>virsh shutdown &lt;虚拟机名称&gt;</code></li>
+<li>强制断电（慎用）：<code>virsh destroy &lt;虚拟机名称&gt;</code></li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 id="常见问题">常见问题</h3>
+<p><strong>1. 安装 Windows 时找不到硬盘</strong><br>
+Windows 默认不含 VirtIO 驱动。解决方法：创建虚拟机时额外挂载一个 CDROM，加载下载的 <code>virtio-win.iso</code>；在 Windows 安装界面的磁盘选择步骤中，点击“加载驱动程序”，浏览 ISO 内对应系统版本的 <code>viostor</code> 目录（如 Win10 选 <code>amd64/viostor</code>）即可。</p>
+<p><strong>2. 图形性能优化</strong><br>
+若虚拟机图形界面卡顿，可开启 SPICE 或 VNC，并安装相应的客户机驱动。需要高性能图形（如游戏）可研究 GPU 直通（GPU Passthrough），但硬件要求较高且配置复杂。</p>
+<hr>
+<h2 id="vmware">VMware</h2>
+<h3 id="安装">安装</h3>
+<pre><code class="language-bash">yay -S vmware-keymaps vmware-workstation
+</code></pre>
+<p>启动所需服务：</p>
+<pre><code class="language-bash">sudo systemctl enable --now vmware-networks.service
+sudo systemctl enable --now vmware-usbarbitrator.service
+</code></pre>
+<p>完成后重启系统即可使用。</p>
+<h3 id="卸载">卸载</h3>
+<pre><code class="language-bash">sudo systemctl disable --now vmware-networks.service
+sudo systemctl disable --now vmware-usbarbitrator.service
+yay -Rns vmware-workstation vmware-keymaps
+</code></pre>
+<hr>
+<h2 id="virtualbox">VirtualBox</h2>
+<h3 id="1-安装核心包">1. 安装核心包</h3>
+<pre><code class="language-bash">sudo pacman -S virtualbox virtualbox-host-dkms
+</code></pre>
+<p>同时需要安装与当前内核匹配的头文件，以便编译内核模块。常见对应关系：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left">内核</th>
+<th style="text-align: left">头文件包</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left"><code>linux</code>（默认）</td>
+<td style="text-align: left"><code>linux-headers</code></td>
+</tr>
+<tr>
+<td style="text-align: left"><code>linux-lts</code></td>
+<td style="text-align: left"><code>linux-lts-headers</code></td>
+</tr>
+<tr>
+<td style="text-align: left"><code>linux-zen</code></td>
+<td style="text-align: left"><code>linux-zen-headers</code></td>
+</tr>
+<tr>
+<td style="text-align: left"><code>linux-hardened</code></td>
+<td style="text-align: left"><code>linux-hardened-headers</code></td>
+</tr>
+<tr>
+<td style="text-align: left"><code>linux-rt</code></td>
+<td style="text-align: left"><code>linux-rt-headers</code></td>
+</tr>
+</tbody>
+</table>
+<p>例如使用默认内核：</p>
+<pre><code class="language-bash">sudo pacman -S linux-headers
+</code></pre>
+<p><code>virtualbox-host-dkms</code> 依赖 DKMS，后续内核或 VirtualBox 更新时，模块会自动重新编译。</p>
+<h3 id="2-加载内核模块">2. 加载内核模块</h3>
+<p>重启后模块会自动加载，也可手动加载核心模块：</p>
+<pre><code class="language-bash">sudo modprobe vboxdrv
+</code></pre>
+<p>若需桥接或仅主机网络模式，还需加载 <code>vboxnetadp</code> 和 <code>vboxnetflt</code>。</p>
+<h3 id="3-将用户加入-vboxusers-组">3. 将用户加入 vboxusers 组</h3>
+<p>以便在虚拟机中使用 USB 设备：</p>
+<pre><code class="language-bash">sudo usermod -aG vboxusers $USER
+</code></pre>
+<p>执行后需注销重新登录。</p>
+<h3 id="4-可选客户机增强功能-iso">4. （可选）客户机增强功能 ISO</h3>
+<p>安装增强功能 ISO，便于为虚拟机安装驱动：</p>
+<pre><code class="language-bash">sudo pacman -S virtualbox-guest-iso
+</code></pre>
+<p>ISO 文件位于 <code>/usr/lib/virtualbox/additions/VBoxGuestAdditions.iso</code>，在虚拟机中挂载后运行安装程序即可。</p>
+<h3 id="5-可选扩展包extension-pack">5. （可选）扩展包（Extension Pack）</h3>
+<p>扩展包提供 USB 2.0/3.0、RDP 远程桌面等特性（许可证为个人免费使用）。可通过 AUR 安装 <code>virtualbox-ext-oracle</code>，或从官网下载 <code>.vbox-extpack</code> 文件，然后在 VirtualBox 图形界面的“文件” → “工具” → “扩展包管理器”中手动安装。</p>
+  </div>
+</article>
+
+<div class="post-comments">
+  <h2 class="post-comments-title">💬 <span data-i18n="comments-title">评论</span></h2>
+  <div id="giscus-container"></div>
+  <script>
+    (function() {
+      var theme = 'catppuccin_latte';
+      var lang = 'zh-CN';
+      try {
+        var ts = localStorage.getItem('theme');
+        if (ts === 'dark') theme = 'catppuccin_mocha';
+        var ls = localStorage.getItem('lang');
+        if (ls === 'en') lang = 'en';
+      } catch(e) {}
+      var c = document.getElementById('giscus-container');
+      var sc = document.createElement('script');
+      sc.src = 'https://giscus.app/client.js';
+      sc.setAttribute('data-repo', 'JosiahBristow/JosiahBristow.github.io');
+      sc.setAttribute('data-repo-id', 'R_kgDOTi7MtA');
+      sc.setAttribute('data-category', 'Announcements');
+      sc.setAttribute('data-category-id', 'DIC_kwDOTi7MtM4DB-Fn');
+      sc.setAttribute('data-mapping', 'pathname');
+      sc.setAttribute('data-strict', '0');
+      sc.setAttribute('data-reactions-enabled', '1');
+      sc.setAttribute('data-emit-metadata', '0');
+      sc.setAttribute('data-input-position', 'bottom');
+      sc.setAttribute('data-theme', theme);
+      sc.setAttribute('data-lang', lang);
+      sc.setAttribute('crossorigin', 'anonymous');
+      sc.async = true;
+      c.appendChild(sc);
+    })();
+  </script>
+</div>
+
+</div>
+
+<div class="float-group">
+  <button class="float-btn" id="langToggle" aria-label="切换语言">EN</button>
+  <button class="float-btn" id="themeToggle" aria-label="切换主题">🌙</button>
+  <button class="back-to-top" id="backToTop" aria-label="返回顶部">↑</button>
+</div>
+
+<footer class="footer">
+  <p>🐧 &copy; 2024-2026 Josiah Bristow. Built with ❤️ for <a href="https://pages.github.com/">GitHub Pages</a>.</p>
+</footer>
+
+<script src="../../script.js"></script>
+<script src="../../lang.js"></script>
+</body>
+</html>

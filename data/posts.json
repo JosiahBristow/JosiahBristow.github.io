@@ -90,7 +90,7 @@
     "excerpt": "摘要：        \nArchlinuxcn简介 ArchLinuxCN 是由 Arch Linux 中文社区维护的非官方用户存储库。它旨在为 Arch Linux 用户，尤其是华语社区的用户，提供对 Arch Linux 官方存储库中不可用的常用软件、工具、字体和自定义包的访问权限。 它包括中国用户经常使用的软件和工具",
     "thumb": "/posts/在-Archlinux-中添加-archlinuxcn-软件仓库/images/在-Archlinux-中添加-archlinuxcn-软件仓库.png",
     "category": "Arch Linux",
-    "views": "149",
+    "views": "150",
     "comments": "0",
     "likes": "0",
     "content_hash": "5863435e4fb5401e7c0e8b266c075463b5f0df4c7cb2f2849b4bf5594179f8e4"
@@ -170,7 +170,7 @@
     "excerpt": "摘要：        \n问题所在 在 Archlinux、Manjaro、Ubuntu、Fedora等最新的linux发行版中运行 pip install 时，通常会收到一个错误提示：error: externally-managed-environment。 具体内容类似下面： ❯ sudo python -m pip",
     "thumb": "/posts/解决Linux下-pip-install-出现-externally-managed-environment问题/images/解决Linux下-pip-install-出现-externally-managed-environment问题.png",
     "category": "Linux",
-    "views": "9595",
+    "views": "9598",
     "comments": "0",
     "likes": "1",
     "content_hash": "b19ed7c37870938f8b8dca55765be6b8ed0601053a0c2ddc0b8d8b7513aef7a3"
@@ -224,19 +224,19 @@
     "content_hash": "6471ffd5d46964c07819437a2234de282a1b9ee9a9100583ac2d23660fb25c69"
   },
   {
-    "id": "custom-点点滴滴",
-    "source": "custom",
-    "title": "点点滴滴",
-    "slug": "点点滴滴",
-    "dir": "点点滴滴",
+    "id": "21973603",
+    "source": "cnblogs",
+    "title": "在 archinux 使用虚拟机（KVM ，Vitual Box，VMware）",
+    "slug": "在-archinux-使用虚拟机kvm-vitual-boxvmware",
+    "dir": "在-archinux-使用虚拟机（KVM-，Vitual-Box，VMware）",
     "date": "2026-07-27",
-    "time": "21:23",
-    "excerpt": "dddd",
-    "thumb": "",
+    "time": "21:54",
+    "excerpt": "摘要：        \n硬件检查 先确认 CPU 是否支持虚拟化： grep -E 'vmx|svm' /proc/cpuinfo 输出中包含 VT-x（Intel）或 AMD-V（AMD）即表示硬件支持。若无输出，通常是因为 BIOS/UEFI 中禁用了虚拟化，需重启进入固件设置开启。 KVM/QEMU 1. 安装软件包",
+    "thumb": "/posts/在-archinux-使用虚拟机（KVM-，Vitual-Box，VMware）/images/在-archinux-使用虚拟机（KVM-，Vitual-Box，VMware）.png",
     "category": "Arch Linux",
-    "views": "0",
+    "views": "1",
     "comments": "0",
     "likes": "0",
-    "content_hash": "5bf8aa57fc5a6bc547decf1cc6db63f10deb55a3c6c5df497d631fb3d95e1abf"
+    "content_hash": "e7569f61ea517a8df510caed8e5658388dde8c3c701077d6942c732cc76d52d8"
   }
 ]
