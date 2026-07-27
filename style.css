@@ -404,6 +404,14 @@ a {
 .post-thumb:hover {
   border-color: var(--accent);
 }
+.post-thumb-missing {
+  background: var(--surface);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.6rem;
+  color: var(--subtext);
+}
 
 .post-title {
   font-size: 1.15rem;
@@ -951,6 +959,14 @@ a {
   margin-bottom: 2.5rem;
   padding-bottom: 1.5rem;
   border-bottom: 1px solid var(--border);
+}
+
+.post-article-cover {
+  width: 100%;
+  max-height: 400px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
 }
 
 .post-article-title {

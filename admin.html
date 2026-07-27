@@ -299,9 +299,10 @@ function renderPosts() {
     let rows = posts.map(p => `<tr>
       <td>${p.id}</td>
       <td>${esc(p.source)}</td>
-      <td>${esc(p.title).slice(0, 40)}</td>
+      <td>${p.thumb ? `<img src="${esc(p.thumb)}" style="width:32px;height:32px;object-fit:cover;border-radius:4px;vertical-align:middle;margin-right:6px" loading="lazy">` : ''}${esc(p.title).slice(0, 40)}</td>
       <td>${esc(p.date)}</td>
       <td>
+        <button class="btn btn-sm" onclick="showEditCoverForm('${p.id}')" title="Edit cover">🖼️</button>
         <button class="btn-icon" onclick="showPostMeta('${p.id}')" title="Details">📋</button>
         ${p.source === 'custom' ? `<button class="btn-icon" onclick="deleteItem('posts','${p.id}','${esc(p.title)}')" title="Delete">🗑️</button>` : ''}
       </td>
@@ -319,15 +320,57 @@ function showPostMeta(id) {
   apiCall('posts').then(posts => {
     const p = posts.find(x => x.id === id);
     if (!p) return toast('Not found', 'error');
-    modal(`<h3>📋 ${esc(p.title)}</h3>
+    const coverHtml = p.thumb ? `<div style="margin-bottom:12px"><img src="${esc(p.thumb)}" style="width:100%;max-height:200px;object-fit:cover;border-radius:6px" loading="lazy"></div>` : '<div style="margin-bottom:12px;padding:40px;text-align:center;background:var(--surface);border-radius:6px;color:var(--subtext)">No cover</div>';
+    modal(`<h3>📋 ${esc(p.title)}</h3>${coverHtml}
       <div class="form-group"><label>ID</label><input readonly value="${esc(p.id)}"></div>
       <div class="form-group"><label>Source</label><input readonly value="${esc(p.source)}"></div>
       <div class="form-group"><label>Date / Time</label><input readonly value="${esc(p.date)} ${esc(p.time)}"></div>
       <div class="form-group"><label>Category</label><input readonly value="${esc(p.category)}"></div>
+      <div class="form-group"><label>Cover</label>
+        <div style="display:flex;gap:6px"><input id="post-cover-edit" value="${esc(p.thumb)}" placeholder="URL or path" style="flex:1"><button class="btn btn-primary btn-sm" onclick="updatePostCover('${esc(p.id)}')">Update</button></div></div>
       <div class="form-group"><label>Views / Likes / Comments</label><input readonly value="${esc(p.views)} / ${esc(p.likes)} / ${esc(p.comments)}"></div>
       <div class="form-group"><label>Excerpt</label><textarea readonly rows="3">${esc(p.excerpt)}</textarea></div>
       <div class="form-actions"><button class="btn" onclick="closeModal()">Close</button></div>`);
   });
+}
+
+async function updatePostCover(id) {
+  const cover = document.getElementById('post-cover-edit').value.trim();
+  if (!cover) { toast('Enter a cover URL or path', 'error'); return; }
+  try {
+    await apiCall('posts/' + id + '/cover', 'PUT', { cover });
+    toast('Cover updated', 'success');
+    closeModal();
+    document.getElementById('tab-posts').dataset.loaded = '';
+    renderPosts();
+  } catch(e) {}
+}
+
+function showEditCoverForm(id) {
+  apiCall('posts').then(posts => {
+    const p = posts.find(x => x.id === id);
+    const coverUrl = p ? esc(p.thumb) : '';
+    modal(`<h3>🖼️ Edit cover for <code>${esc(id)}</code></h3>
+      ${coverUrl ? `<div style="margin-bottom:12px"><img src="${coverUrl}" style="width:100%;max-height:200px;object-fit:cover;border-radius:6px" id="cover-preview" loading="lazy"></div>` : '<div style="margin-bottom:12px;padding:40px;text-align:center;background:var(--surface);border-radius:6px;color:var(--subtext)">No cover</div>'}
+      <div class="form-group"><label>Cover image URL or local path</label>
+        <input id="cover-edit-input" value="${coverUrl}" placeholder="https://... or images/cover.jpg" oninput="document.getElementById('cover-preview').src=this.value" style="width:100%"></div>
+      <div class="form-actions">
+        <button class="btn" onclick="closeModal()">Cancel</button>
+        <button class="btn btn-primary" onclick="submitCoverEdit('${esc(id)}')">Save</button>
+      </div>`);
+  });
+}
+
+async function submitCoverEdit(id) {
+  const cover = document.getElementById('cover-edit-input').value.trim();
+  if (!cover) { toast('Enter a cover URL or path', 'error'); return; }
+  try {
+    await apiCall('posts/' + id + '/cover', 'PUT', { cover });
+    toast('Cover updated', 'success');
+    closeModal();
+    document.getElementById('tab-posts').dataset.loaded = '';
+    renderPosts();
+  } catch(e) {}
 }
 
 function showAddPostForm() {
@@ -336,6 +379,7 @@ function showAddPostForm() {
     <div class="form-group"><label>Date</label><input id="post-date" type="date" value="${new Date().toISOString().slice(0,10)}"></div>
     <div class="form-group"><label>Category</label>
       <select id="post-category"><option>Arch Linux</option><option>Linux</option><option>Python</option><option>Raspberry Pi</option></select></div>
+    <div class="form-group"><label>Cover image (URL or path)</label><input id="post-cover" placeholder="https://... or images/cover.jpg"></div>
     <div class="form-group"><label>Markdown content</label><textarea id="post-body" rows="12" placeholder="# Title\\n\\nContent here..."></textarea></div>
     <div class="form-group"><label>Or upload .md file</label><input id="post-file" type="file" accept=".md"></div>
     <div class="form-actions">
@@ -373,9 +417,10 @@ async function submitPost() {
 
   const date = document.getElementById('post-date').value;
   const category = document.getElementById('post-category').value;
+  const cover = document.getElementById('post-cover').value.trim();
 
   try {
-    await apiCall('posts/add', 'POST', { title, body, date, category });
+    await apiCall('posts/add', 'POST', { title, body, date, category, cover });
     toast('Post added', 'success');
     closeModal();
     document.getElementById('tab-posts').dataset.loaded = '';

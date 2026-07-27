@@ -4,8 +4,8 @@
 Usage:
     manage.py posts sync                   Sync posts from cnblogs
     manage.py posts list                   List all posts
-    manage.py posts add <file.md>          Add custom markdown post
-    manage.py posts edit <id>              Edit post (opens $EDITOR)
+    manage.py posts add <file.md> [--cover <img>]  Add custom markdown post (optional cover)
+    manage.py posts edit <id> [--cover <img>]  Edit post cover (--cover for any post, else opens $EDITOR for custom)
     manage.py posts delete <id>            Delete post
 
     manage.py books list                   List books
@@ -286,14 +286,13 @@ def cmd_posts_sync(args):
         return r.returncode
     # Import cnblogs posts into data store
     posts = _load_posts()
-    existing_ids = {p['id'] for p in posts if p.get('source') == 'cnblogs'}
+    existing_map = {p['id']: p for p in posts if p.get('source') == 'cnblogs'}
     new_count = 0
+    update_count = 0
     for fname in os.listdir(POSTS_DIR):
         if not fname.endswith('.html') or fname.startswith('custom-'):
             continue
         post_id = fname.replace('.html', '')
-        if post_id in existing_ids:
-            continue
         fpath = os.path.join(POSTS_DIR, fname)
         with open(fpath, encoding='utf-8') as f:
             content = f.read()
@@ -302,19 +301,26 @@ def cmd_posts_sync(args):
         date_m = re.search(r'<span>🕐 (\d{4}-\d{2}-\d{2}) (\d{2}:\d{2})</span>', content)
         date = date_m.group(1) if date_m else '1970-01-01'
         time = date_m.group(2) if date_m else '00:00'
-        excerpt_m = re.search(r'<div class="post-excerpt">(.*?)</div>', content, re.DOTALL)
-        excerpt = unescape(excerpt_m.group(1)) if excerpt_m else ''
-        thumb_m = re.search(r'<img class="post-thumb" src="([^"]+)"', content)
-        thumb = thumb_m.group(1) if thumb_m else ''
-        views_m = re.findall(r'<span>👁️ (\d+)</span>', content)
-        views = views_m[0] if views_m else '0'
-        comments_m = re.findall(r'<span>💬 (\d+)</span>', content)
-        comments = comments_m[0] if comments_m else '0'
-        likes_m = re.findall(r'<span>👍 (\d+)</span>', content)
-        likes = likes_m[0] if likes_m else '0'
+        # Extract metadata from JSON script tag (thumb, excerpt, views, comments, likes)
+        meta_m = re.search(r'<script id="post-meta" type="application/json">(.*?)</script>', content, re.DOTALL)
+        thumb = ''
+        excerpt = ''
+        views = '0'
+        comments = '0'
+        likes = '0'
+        if meta_m:
+            try:
+                meta = json.loads(meta_m.group(1))
+                thumb = meta.get('thumb', '')
+                excerpt = meta.get('excerpt', '')
+                views = meta.get('views', '0')
+                comments = meta.get('comments', '0')
+                likes = meta.get('likes', '0')
+            except json.JSONDecodeError:
+                pass
         body_m = re.search(r'<div class="post-article-body">(.*?)</div>', content, re.DOTALL)
         body = body_m.group(1).strip() if body_m else ''
-        posts.append({
+        entry = {
             'id': post_id,
             'source': 'cnblogs',
             'title': title,
@@ -328,10 +334,21 @@ def cmd_posts_sync(args):
             'comments': comments,
             'likes': likes,
             'content_hash': _content_hash(body),
-        })
-        new_count += 1
+        }
+        if post_id in existing_map:
+            existing = existing_map[post_id]
+            changed = False
+            for k in ('title', 'date', 'time', 'excerpt', 'thumb', 'views', 'comments', 'likes'):
+                if existing.get(k) != entry[k]:
+                    existing[k] = entry[k]
+                    changed = True
+            if changed:
+                update_count += 1
+        else:
+            posts.append(entry)
+            new_count += 1
     _save_posts(posts)
-    print(f"Imported {new_count} new cnblogs posts.")
+    print(f"Imported {new_count} new, updated {update_count} existing cnblogs posts.")
     cmd_build(args)
 
 def cmd_posts_add(args):
@@ -373,8 +390,15 @@ def cmd_posts_add(args):
             return f'<img src="images/{fname}" alt="{alt}" loading="lazy">'
         return m.group(0)
     html_body = re.sub(r'<img src="([^"]+)" alt="([^"]*)"[^>]*>', _handle_img, html_body)
+    # Handle cover image
+    cover = args.cover or fm.get('cover', '')
+    thumb = ''
+    if cover:
+        cover_dest = _handle_post_cover(cover, post_id)
+        if cover_dest:
+            thumb = cover_dest
     # Generate post page
-    post_page = _custom_post_page(title, date, time, html_body)
+    post_page = _custom_post_page(title, date, time, html_body, thumb)
     fpath = os.path.join(POSTS_DIR, f'{post_id}.html')
     with open(fpath, 'w', encoding='utf-8') as f:
         f.write(post_page)
@@ -387,7 +411,7 @@ def cmd_posts_add(args):
         'date': date,
         'time': time,
         'excerpt': excerpt,
-        'thumb': '',
+        'thumb': thumb,
         'category': category,
         'views': '0',
         'comments': '0',
@@ -404,8 +428,19 @@ def cmd_posts_edit(args):
     if not post:
         print(f"Post not found: {args.id}")
         return 1
+    if args.cover:
+        thumb = _handle_post_cover(args.cover, args.id)
+        if thumb:
+            post['thumb'] = thumb
+            print(f"Cover updated: {thumb}")
+        else:
+            print("Failed to update cover.")
+            return 1
+        _save_posts(posts)
+        cmd_build(args)
+        return 0
     if post['source'] != 'custom':
-        print("Can only edit custom posts.")
+        print("Can only edit title/body of custom posts. Use --cover to change the cover.")
         return 1
     fpath = os.path.join(POSTS_DIR, f'{args.id}.html')
     if not os.path.exists(fpath):
@@ -678,6 +713,32 @@ def _download_image(url, dest_dir):
     _download_file(url, dest)
     return f'images/{fname}' if os.path.exists(dest) else None
 
+def _handle_post_cover(cover, post_id):
+    if not cover:
+        return ''
+    fname = os.path.basename(cover.split('?')[0])
+    dest = os.path.join(IMAGES_DIR, fname)
+    if cover.startswith(('http://', 'https://')):
+        if os.path.exists(dest):
+            return f'posts/images/{fname}'
+        try:
+            req = urllib.request.Request(cover, headers={
+                'User-Agent': 'Mozilla/5.0 (compatible; ManageBot/1.0)'
+            })
+            with urllib.request.urlopen(req, timeout=30) as resp:
+                with open(dest, 'wb') as f:
+                    shutil.copyfileobj(resp, f)
+            print(f'  downloaded cover: {fname}')
+            return f'posts/images/{fname}'
+        except Exception as e:
+            print(f'  failed to download cover {cover}: {e}')
+            return cover
+    if os.path.exists(cover):
+        if os.path.abspath(cover) != os.path.abspath(dest):
+            shutil.copy2(cover, dest)
+        return f'posts/images/{fname}'
+    return cover
+
 # ═══════════════════════════════════════════════════════════
 #  Photo management
 # ═══════════════════════════════════════════════════════════
@@ -800,7 +861,7 @@ def cmd_friends_delete(args):
 POST_TPL = '''\
     <article class="post">
       <div class="post-header">
-        <img class="post-thumb" src="{thumb}" alt="{alt}" loading="lazy" referrerpolicy="no-referrer">
+        {thumb_html}
         <div>
           <h2 class="post-title"><a href="{url}">{title}</a></h2>
           <div class="post-excerpt">{excerpt}</div>
@@ -862,6 +923,7 @@ CUSTOM_POST_PAGE_TPL = '''\
 
 <article class="post-article">
   <div class="post-article-heading">
+    {cover_html}
     <h1 class="post-article-title">{title}</h1>
     <div class="post-article-meta">
       <span>\U0001f550 {date} {time}</span>
@@ -889,14 +951,20 @@ CUSTOM_POST_PAGE_TPL = '''\
 </body>
 </html>'''
 
-def _custom_post_page(title, date, time, body):
+def _custom_post_page(title, date, time, body, thumb=''):
+    cover_html = f'<img class="post-article-cover" src="{thumb}" alt="{_alt(title)}" loading="lazy">' if thumb else ''
     return CUSTOM_POST_PAGE_TPL.format(
-        title=title, date=date, time=time, body=body,
+        title=title, date=date, time=time, body=body, cover_html=cover_html,
     )
 
 def _alt(title):
     s = re.sub(r'[\[\]()（）]', '', title).strip()
     return s[:20]
+
+def _thumb_tag(thumb, title):
+    if thumb:
+        return f'<img class="post-thumb" src="{thumb}" alt="{_alt(title)}" loading="lazy" referrerpolicy="no-referrer">'
+    return '<div class="post-thumb post-thumb-missing"></div>'
 
 def _build_index(posts):
     groups = defaultdict(list)
@@ -909,10 +977,10 @@ def _build_index(posts):
         lines.append(f'    <div class="day-title">{date_str}</div>')
         for p in groups[date_str]:
             url = f'posts/{p["id"]}.html'
+            thumb_html = _thumb_tag(p.get('thumb', ''), p['title'])
             lines.append(POST_TPL.format(
                 url=url, title=p['title'],
-                thumb=p.get('thumb', ''),
-                alt=_alt(p['title']),
+                thumb_html=thumb_html,
                 excerpt=p.get('excerpt', ''),
                 time=p.get('time', ''),
                 views=p.get('views', '0'),
@@ -1534,15 +1602,17 @@ class AdminHandler(SimpleHTTPRequestHandler):
             body = data.get('body', '')
             date = data.get('date', datetime.now().strftime('%Y-%m-%d'))
             category = data.get('category', _category_for(title))
+            cover = data.get('cover', '')
             # Write temp markdown file
-            md_content = body
-            if title:
-                md_content = f'---\ntitle: {title}\ndate: {date}\ncategory: {category}\n---\n\n{body}'
+            fm_lines = [f'title: {title}', f'date: {date}', f'category: {category}']
+            if cover:
+                fm_lines.append(f'cover: {cover}')
+            md_content = '---\n' + '\n'.join(fm_lines) + '\n---\n\n' + body
             tmp = os.path.join(ROOT, '.tmp_post.md')
             with open(tmp, 'w', encoding='utf-8') as f:
                 f.write(md_content)
             try:
-                args = argparse.Namespace(file=tmp)
+                args = argparse.Namespace(file=tmp, cover=cover)
                 cmd_posts_add(args)
             finally:
                 if os.path.exists(tmp):
@@ -1624,7 +1694,30 @@ class AdminHandler(SimpleHTTPRequestHandler):
             _json_error(self, 'Not found', 404)
 
     def _api_put(self, entity, action, data):
-        if entity == 'books' and action:
+        if entity == 'posts' and action:
+            segs = self.path.rstrip('/').split('/')
+            # PUT /api/posts/<id>/cover
+            if len(segs) >= 5 and segs[4] == 'cover':
+                post_id = action
+                posts = _load_posts()
+                post = next((p for p in posts if p['id'] == post_id), None)
+                if not post:
+                    return _json_error(self, 'Not found', 404)
+                cover = data.get('cover', '')
+                if cover:
+                    thumb = _handle_post_cover(cover, post_id)
+                    if thumb:
+                        post['thumb'] = thumb
+                        _save_posts(posts)
+                        cmd_build(None)
+                        _json_response(self, {'ok': True, 'thumb': thumb})
+                    else:
+                        _json_error(self, 'Failed to process cover', 400)
+                else:
+                    _json_error(self, 'Missing cover', 400)
+            else:
+                _json_error(self, 'Not found', 404)
+        elif entity == 'books' and action:
             books = _load_json(BOOKS_JSON)
             bid = int(action)
             book = next((b for b in books if b['id'] == bid), None)
@@ -1732,9 +1825,11 @@ def main():
     ps.add_parser('sync').set_defaults(func=cmd_posts_sync)
     pa = ps.add_parser('add')
     pa.add_argument('file', help='Markdown file')
+    pa.add_argument('--cover', help='Cover image URL or local path')
     pa.set_defaults(func=cmd_posts_add)
     pe = ps.add_parser('edit')
     pe.add_argument('id', help='Post ID')
+    pe.add_argument('--cover', help='New cover image URL or local path')
     pe.set_defaults(func=cmd_posts_edit)
     pd = ps.add_parser('delete')
     pd.add_argument('id', help='Post ID')

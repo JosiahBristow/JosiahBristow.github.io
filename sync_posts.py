@@ -8,6 +8,7 @@ Runs as a GitHub Actions scheduled workflow.
 import re
 import os
 import sys
+import json
 import shutil
 import urllib.request
 import urllib.error
@@ -23,7 +24,7 @@ IMAGES_DIR = os.path.join(POSTS_DIR, "images")
 POST_TPL = '''\
     <article class="post">
       <div class="post-header">
-        <img class="post-thumb" src="{thumb}" alt="{alt}" loading="lazy" referrerpolicy="no-referrer">
+        {thumb_html}
         <div>
           <h2 class="post-title"><a href="{url}">{title}</a></h2>
           <div class="post-excerpt">{excerpt}</div>
@@ -59,6 +60,7 @@ POST_PAGE_TPL = '''\
 <link rel="stylesheet" href="../style.css">
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🐧</text></svg>">
 <link rel="alternate icon" href="https://avatars.githubusercontent.com/u/123633729?s=32&v=4">
+{post_meta}
 </head>
 <body>
 
@@ -160,9 +162,10 @@ def build_index(posts):
         lines.append('  <div class="day-group">')
         lines.append(f'    <div class="day-title">{date_str}</div>')
         for p in groups[date_str]:
+            thumb_html = _thumb_tag(p['thumb'], p['title'])
             lines.append(POST_TPL.format(
                 url=p['local_url'], title=p['title'],
-                thumb=p['thumb'], alt=_alt(p['title']),
+                thumb_html=thumb_html,
                 excerpt=p['excerpt'],
                 time=p['time'], views=p['views'],
                 comments=p['comments'], likes=p['likes'],
@@ -170,6 +173,11 @@ def build_index(posts):
         lines.append('  </div>')
     lines.append('  </div>')
     return '\n'.join(lines)
+
+def _thumb_tag(thumb, title):
+    if thumb:
+        return f'<img class="post-thumb" src="{thumb}" alt="{_alt(title)}" loading="lazy" referrerpolicy="no-referrer">'
+    return '<div class="post-thumb post-thumb-missing"></div>'
 
 def build_archive(posts):
     years = defaultdict(list)
@@ -380,6 +388,36 @@ def extract_body(html):
     body = re.sub(r'<a\s+id="[^"]*next_[^"]*"[^>]*>.*?</a>', '', body)
     return body
 
+def _safe_filename(title, thumb_url):
+    ext = os.path.splitext(thumb_url.split('?')[0])[1]
+    if not ext:
+        ext = '.jpg'
+    safe = re.sub(r'[\\/:*?"<>|]', '', title)
+    safe = re.sub(r'\s+', '-', safe.strip())
+    if len(safe) > 80:
+        safe = safe[:80].rstrip('-')
+    return safe + ext
+
+def _download_cover(thumb_url, title, images_dir):
+    if not thumb_url:
+        return None
+    filename = _safe_filename(title, thumb_url)
+    local_path = os.path.join(images_dir, filename)
+    if os.path.exists(local_path):
+        return f'posts/images/{filename}'
+    try:
+        req = urllib.request.Request(thumb_url, headers={
+            'User-Agent': 'Mozilla/5.0 (compatible; BlogSync/1.0)'
+        })
+        with urllib.request.urlopen(req, timeout=30) as resp:
+            with open(local_path, 'wb') as f:
+                shutil.copyfileobj(resp, f)
+        print(f'    downloaded cover: {filename}')
+        return f'posts/images/{filename}'
+    except Exception as e:
+        print(f'    failed to download cover {thumb_url}: {e}')
+        return None
+
 def _download_image(img_url, images_dir):
     filename = os.path.basename(img_url.split('?')[0])
     if not filename:
@@ -427,6 +465,13 @@ def _replace_img_tag(m):
     return m.group(0)
 
 def generate_post_page(post, body):
+    post_meta = f'''<script id="post-meta" type="application/json">{json.dumps({
+        'thumb': post.get('thumb', ''),
+        'excerpt': post.get('excerpt', ''),
+        'views': post['views'],
+        'comments': post['comments'],
+        'likes': post['likes'],
+    }, ensure_ascii=False)}</script>'''
     return POST_PAGE_TPL.format(
         title=post['title'],
         body=body,
@@ -435,6 +480,7 @@ def generate_post_page(post, body):
         views=post['views'],
         comments=post['comments'],
         likes=post['likes'],
+        post_meta=post_meta,
     )
 
 # ── file injection ──────────────────────────────────────────
@@ -493,6 +539,11 @@ def main():
             os.remove(os.path.join(POSTS_DIR, fname))
 
     for p in posts:
+        if p['thumb']:
+            local_thumb = _download_cover(p['thumb'], p['title'], IMAGES_DIR)
+            if local_thumb:
+                p['thumb'] = local_thumb
+
         local = _local_path(p['url'])
         if os.path.exists(local):
             print(f'  skipping (exists): {_post_id(p["url"])}.html')
