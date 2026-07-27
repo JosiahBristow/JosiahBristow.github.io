@@ -1,0 +1,54 @@
+<h2 id="安装-wadroid">安装 Wadroid</h2>
+<h3 id="桌面问题">桌面问题</h3>
+<p>Waydroid 只运行在 Wayland 中，确保你在使用它</p>
+<h3 id="内核问题">内核问题</h3>
+<p>Waydroid 需要 binder 模块，一般默认就有，如果是自己编译的内核，请确保编译选项勾选该模块，或使用 DKMS 安装</p>
+<h3 id="性能优化">性能优化</h3>
+<p>推荐在 AMD CPU上安装 libndk，Intel CPU上安装 libhoudini</p>
+<h3 id="安装-waydroid">安装 Waydroid</h3>
+<pre><code class="language-bash">yay -S waydroid
+</code></pre>
+<p>其他发行版参考官方教程：<a href="https://docs.waydro.id/usage/install-on-desktops" target="_blank" rel="noopener nofollow">https://docs.waydro.id/usage/install-on-desktops</a></p>
+<h2 id="初始化-waydroid">初始化 Waydroid</h2>
+<pre><code class="language-bash"># 普通初始化
+sudo waydroid init
+# 初始化支持 GApps 的 Waydroid
+waydroid init -s GAPPS
+# 启动并启用服务
+systemctl enable --now waydroid-container
+</code></pre>
+<p>如果由于网络问题 <code>sudo waydroid init</code> 下载速度太慢，<br>
+可以自己在 <a href="https://sourceforge.net/projects/waydroid/" target="_blank" rel="noopener nofollow">sourceforge</a> 上单独下载镜像</p>
+<p><img src="images/3586302-20251220144404496-1752562309.png" alt="screenshot-2025-12-20_14-42-02"  loading="lazy"><br>
+<img src="images/3586302-20251220144422563-27469020.png" alt="screenshot-2025-12-20_14-42-26"  loading="lazy"><br>
+<img src="images/3586302-20251220144352885-1099561265.png" alt="screenshot-2025-12-20_14-42-49"  loading="lazy"></p>
+<p><strong>⚠注意</strong> 要同时下载system镜像和vendor镜像，放在/var/lib/waydroid/images下，并命名为system.img和vendor.img</p>
+<h2 id="使用-waydroid">使用 Waydroid</h2>
+<pre><code class="language-bash"># 启动会话
+waydroid session start
+# 启动 GUI
+waydroid show-full-ui
+# 启动 Shell
+sudo waydroid shell
+# 安装应用
+waydroid app install $path_to_apk
+# 运行应用
+waydroid app launch $package-name
+# 获取应用列表
+waydroid app list
+# 开启应用独立窗口
+# 在会话启动后运行
+waydroid prop set persist.waydroid.multi_windows true
+# 然后重启会话
+waydroid session stop
+waydroid session start
+</code></pre>
+<h2 id="扩展脚本">扩展脚本</h2>
+<p>这个项目：<a href="https://github.com/casualsnek/waydroid_script" target="_blank" rel="noopener nofollow">https://github.com/casualsnek/waydroid_script</a><br>
+可以用它安装谷歌全家桶以及安装Magisk获取root权限等</p>
+<pre><code class="language-bash">git clone https://github.com/casualsnek/waydroid_script
+cd waydroid_script
+python3 -m venv venv
+venv/bin/pip install -r requirements.txt
+sudo venv/bin/python3 main.py
+</code></pre>

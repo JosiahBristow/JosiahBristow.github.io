@@ -79,8 +79,15 @@ def _next_id(data):
 
 def _slug(text):
     s = re.sub(r'[^\w\s-]', '', text.lower())
-    s = re.sub(r'[-\s]+', '-', s).strip('-')
+    s = re.sub(r'[-\s]+', '-', s.strip('-'))
     return s or 'untitled'
+
+def _dir_name(title):
+    safe = re.sub(r'[\\/:*?"<>|]', '', title)
+    safe = re.sub(r'\s+', '-', safe.strip())
+    if len(safe) > 80:
+        safe = safe[:80].rstrip('-')
+    return safe or 'untitled'
 
 def _fmt_count(n):
     n = int(n)
@@ -290,27 +297,25 @@ def cmd_posts_sync(args):
     new_count = 0
     update_count = 0
     for fname in os.listdir(POSTS_DIR):
-        if not fname.endswith('.html') or fname.startswith('custom-'):
-            continue
-        post_id = fname.replace('.html', '')
         fpath = os.path.join(POSTS_DIR, fname)
-        with open(fpath, encoding='utf-8') as f:
+        if not os.path.isdir(fpath) or fname.startswith('custom-') or fname == 'images':
+            continue
+        index_path = os.path.join(fpath, 'index.html')
+        if not os.path.exists(index_path):
+            continue
+        with open(index_path, encoding='utf-8') as f:
             content = f.read()
-        title_m = re.search(r'<h1 class="post-article-title">(.*?)</h1>', content)
-        title = unescape(title_m.group(1)) if title_m else post_id
-        date_m = re.search(r'<span>🕐 (\d{4}-\d{2}-\d{2}) (\d{2}:\d{2})</span>', content)
-        date = date_m.group(1) if date_m else '1970-01-01'
-        time = date_m.group(2) if date_m else '00:00'
-        # Extract metadata from JSON script tag (thumb, excerpt, views, comments, likes)
         meta_m = re.search(r'<script id="post-meta" type="application/json">(.*?)</script>', content, re.DOTALL)
         thumb = ''
         excerpt = ''
         views = '0'
         comments = '0'
         likes = '0'
+        post_id = fname
         if meta_m:
             try:
                 meta = json.loads(meta_m.group(1))
+                post_id = meta.get('id', fname)
                 thumb = meta.get('thumb', '')
                 excerpt = meta.get('excerpt', '')
                 views = meta.get('views', '0')
@@ -318,6 +323,11 @@ def cmd_posts_sync(args):
                 likes = meta.get('likes', '0')
             except json.JSONDecodeError:
                 pass
+        title_m = re.search(r'<h1 class="post-article-title">(.*?)</h1>', content)
+        title = unescape(title_m.group(1)) if title_m else post_id
+        date_m = re.search(r'<span>🕐 (\d{4}-\d{2}-\d{2}) (\d{2}:\d{2})</span>', content)
+        date = date_m.group(1) if date_m else '1970-01-01'
+        time = date_m.group(2) if date_m else '00:00'
         body_m = re.search(r'<div class="post-article-body">(.*?)</div>', content, re.DOTALL)
         body = body_m.group(1).strip() if body_m else ''
         entry = {
@@ -325,6 +335,7 @@ def cmd_posts_sync(args):
             'source': 'cnblogs',
             'title': title,
             'slug': _slug(title),
+            'dir': fname,
             'date': date,
             'time': time,
             'excerpt': excerpt[:200],
@@ -338,7 +349,7 @@ def cmd_posts_sync(args):
         if post_id in existing_map:
             existing = existing_map[post_id]
             changed = False
-            for k in ('title', 'date', 'time', 'excerpt', 'thumb', 'views', 'comments', 'likes'):
+            for k in ('title', 'date', 'time', 'excerpt', 'thumb', 'views', 'comments', 'likes', 'dir'):
                 if existing.get(k) != entry[k]:
                     existing[k] = entry[k]
                     changed = True
@@ -374,40 +385,54 @@ def cmd_posts_add(args):
     if dup:
         print(f"Duplicate found: '{dup['title']}' (id: {dup['id']}). Skipping.")
         return 0
-    # Handle images: download remote, copy local
-    def _handle_img(m):
+    # Generate post page
+    dir_name = _dir_name(title)
+    post_dir = os.path.join(POSTS_DIR, dir_name)
+    post_imgs_dir = os.path.join(post_dir, 'images')
+    os.makedirs(post_imgs_dir, exist_ok=True)
+
+    # Re-handle image paths to be relative to the post dir
+    def _post_img_src(m):
         src = m.group(1)
         alt = m.group(2)
         if src.startswith(('http://', 'https://')):
-            local = _download_image(src, IMAGES_DIR)
+            local = _download_image(src, post_imgs_dir)
             if local:
                 return f'<img src="{local}" alt="{alt}" loading="lazy">'
         elif src.startswith(('images/', './')) or not src.startswith('/'):
             fname = os.path.basename(src)
-            dest = os.path.join(IMAGES_DIR, fname)
+            dest = os.path.join(post_imgs_dir, fname)
             if os.path.exists(src) and src != dest:
                 shutil.copy2(src, dest)
             return f'<img src="images/{fname}" alt="{alt}" loading="lazy">'
         return m.group(0)
-    html_body = re.sub(r'<img src="([^"]+)" alt="([^"]*)"[^>]*>', _handle_img, html_body)
+    html_body = re.sub(r'<img src="([^"]+)" alt="([^"]*)"[^>]*>', _post_img_src, html_body)
     # Handle cover image
     cover = args.cover or fm.get('cover', '')
     thumb = ''
     if cover:
-        cover_dest = _handle_post_cover(cover, post_id)
-        if cover_dest:
-            thumb = cover_dest
-    # Generate post page
+        cover_path = os.path.join(post_imgs_dir, os.path.basename(cover.split('?')[0]))
+        if cover.startswith(('http://', 'https://')):
+            if not os.path.exists(cover_path):
+                _download_file(cover, cover_path)
+            thumb = f'/posts/{dir_name}/images/{os.path.basename(cover_path)}'
+        elif os.path.exists(cover):
+            if os.path.abspath(cover) != os.path.abspath(cover_path):
+                shutil.copy2(cover, cover_path)
+            thumb = f'/posts/{dir_name}/images/{os.path.basename(cover_path)}'
     post_page = _custom_post_page(title, date, time, html_body, thumb)
-    fpath = os.path.join(POSTS_DIR, f'{post_id}.html')
+    fpath = os.path.join(post_dir, 'index.html')
     with open(fpath, 'w', encoding='utf-8') as f:
         f.write(post_page)
+    with open(os.path.join(post_dir, 'post.md'), 'w', encoding='utf-8') as f:
+        f.write(text)
     # Add to data store
     posts.append({
         'id': post_id,
         'source': 'custom',
         'title': title,
         'slug': slug,
+        'dir': dir_name,
         'date': date,
         'time': time,
         'excerpt': excerpt,
@@ -464,9 +489,12 @@ def cmd_posts_delete(args):
     if not post:
         print(f"Post not found: {args.id}")
         return 1
-    fpath = os.path.join(POSTS_DIR, f'{args.id}.html')
-    if os.path.exists(fpath):
-        os.remove(fpath)
+    dir_name = post.get('dir', _dir_name(post.get('title', '')))
+    fpath = os.path.join(POSTS_DIR, dir_name)
+    if os.path.isdir(fpath):
+        shutil.rmtree(fpath)
+    elif os.path.isfile(fpath + '.html'):
+        os.remove(fpath + '.html')
     posts = [p for p in posts if p['id'] != args.id]
     _save_posts(posts)
     print(f"Deleted: {args.id}")
@@ -718,9 +746,10 @@ def _handle_post_cover(cover, post_id):
         return ''
     fname = os.path.basename(cover.split('?')[0])
     dest = os.path.join(IMAGES_DIR, fname)
+    prefix = f'/posts/images/'
     if cover.startswith(('http://', 'https://')):
         if os.path.exists(dest):
-            return f'posts/images/{fname}'
+            return f'{prefix}{fname}'
         try:
             req = urllib.request.Request(cover, headers={
                 'User-Agent': 'Mozilla/5.0 (compatible; ManageBot/1.0)'
@@ -729,14 +758,14 @@ def _handle_post_cover(cover, post_id):
                 with open(dest, 'wb') as f:
                     shutil.copyfileobj(resp, f)
             print(f'  downloaded cover: {fname}')
-            return f'posts/images/{fname}'
+            return f'{prefix}{fname}'
         except Exception as e:
             print(f'  failed to download cover {cover}: {e}')
             return cover
     if os.path.exists(cover):
         if os.path.abspath(cover) != os.path.abspath(dest):
             shutil.copy2(cover, dest)
-        return f'posts/images/{fname}'
+        return f'{prefix}{fname}'
     return cover
 
 # ═══════════════════════════════════════════════════════════
@@ -894,27 +923,27 @@ CUSTOM_POST_PAGE_TPL = '''\
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../style.css">
+<link rel="stylesheet" href="../../style.css">
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🐧</text></svg>">
 <link rel="alternate icon" href="https://avatars.githubusercontent.com/u/123633729?s=32&v=4">
 </head>
 <body>
 
 <header class="header">
-  <div class="header-title"><a href="../index.html">Josiah Bristow</a></div>
+  <div class="header-title"><a href="../../index.html">Josiah Bristow</a></div>
   <div class="header-prompt">Just For Fun!</div>
   <div class="header-sub">Arch Linux, Linux tools, and developer life</div>
 </header>
 
 <nav class="nav">
   <div class="nav-inner">
-    <a href="../index.html">\U0001f3e0 <span data-i18n="nav-home">\u9996\u9875</span></a>
-    <a href="../archive.html">\U0001f4e6 <span data-i18n="nav-archive">\u5f52\u6863</span></a>
-    <a href="../categories.html">\U0001f3f7\ufe0f <span data-i18n="nav-categories">\u5206\u7c7b</span></a>
-    <a href="../about.html">\U0001f464 <span data-i18n="nav-about">\u5173\u4e8e</span></a>
-    <a href="../bookshelf.html">📚 <span data-i18n="nav-bookshelf">\u4e66\u67b6</span></a>
-    <a href="../gallery.html">📷 <span data-i18n="nav-gallery">\u76f8\u518c</span></a>
-    <a href="../friends.html">🤝 <span data-i18n="nav-friends">\u53cb\u94fe</span></a>
+    <a href="../../index.html">\U0001f3e0 <span data-i18n="nav-home">\u9996\u9875</span></a>
+    <a href="../../archive.html">\U0001f4e6 <span data-i18n="nav-archive">\u5f52\u6863</span></a>
+    <a href="../../categories.html">\U0001f3f7\ufe0f <span data-i18n="nav-categories">\u5206\u7c7b</span></a>
+    <a href="../../about.html">\U0001f464 <span data-i18n="nav-about">\u5173\u4e8e</span></a>
+    <a href="../../bookshelf.html">📚 <span data-i18n="nav-bookshelf">\u4e66\u67b6</span></a>
+    <a href="../../gallery.html">📷 <span data-i18n="nav-gallery">\u76f8\u518c</span></a>
+    <a href="../../friends.html">🤝 <span data-i18n="nav-friends">\u53cb\u94fe</span></a>
     <button class="nav-search-btn" id="searchToggle" aria-label="\u641c\u7d22">🔍</button>
   </div>
 </nav>
@@ -946,8 +975,8 @@ CUSTOM_POST_PAGE_TPL = '''\
   <p>\U0001f427 &copy; 2024-2026 Josiah Bristow. Built with \u2764\ufe0f for <a href="https://pages.github.com/">GitHub Pages</a>.</p>
 </footer>
 
-<script src="../script.js"></script>
-<script src="../lang.js"></script>
+<script src="../../script.js"></script>
+<script src="../../lang.js"></script>
 </body>
 </html>'''
 
@@ -976,7 +1005,7 @@ def _build_index(posts):
         lines.append('  <div class="day-group">')
         lines.append(f'    <div class="day-title">{date_str}</div>')
         for p in groups[date_str]:
-            url = f'posts/{p["id"]}.html'
+            url = f'posts/{p.get("dir", _dir_name(p.get("title", "")))}/'
             thumb_html = _thumb_tag(p.get('thumb', ''), p['title'])
             lines.append(POST_TPL.format(
                 url=url, title=p['title'],
@@ -1005,7 +1034,7 @@ def _build_archive(posts):
         lines.append(f'    <div class="archive-year-header">\U0001f4c5 {year}</div>')
         lines.append('    <ul class="archive-list">')
         for p in years[year]:
-            url = f'posts/{p["id"]}.html'
+            url = f'posts/{p.get("dir", _dir_name(p.get("title", "")))}/'
             lines.append(ARCHIVE_TPL.format(date=p['date'], url=url, title=p['title']))
         lines.append('    </ul>')
         lines.append('  </div>')
@@ -1030,7 +1059,7 @@ def _build_categories(posts):
         lines.append('    </div>')
         lines.append('    <ul class="category-list">')
         for p in plist:
-            url = f'posts/{p["id"]}.html'
+            url = f'posts/{p.get("dir", _dir_name(p.get("title", "")))}/'
             lines.append(CAT_POST_TPL.format(url=url, title=p['title']))
         lines.append('    </ul>')
         lines.append('  </div>')

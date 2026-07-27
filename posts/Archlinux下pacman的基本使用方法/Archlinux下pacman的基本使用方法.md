@@ -1,0 +1,163 @@
+<h2 id="pacman-简介">Pacman 简介</h2>
+<p>以下是 Arch Wiki 的介绍：</p>
+<blockquote>
+<p>pacman 包管理器是 Arch Linux 的主要特色之一。它将简单的二进制包格式与易于使用的 Arch 构建系统相结合。pacman 的目标是能够轻松管理软件包，无论是来自 官方仓库还是用户自己的构建。</p>
+</blockquote>
+<blockquote>
+<p>pacman 通过与主服务器同步软件包列表来保持系统更新。这种服务器/客户端模型还允许用户通过一个简单的命令下载/安装软件包，并包含所有必需的依赖项。</p>
+</blockquote>
+<blockquote>
+<p>pacman 是用 C 语言编写的，并使用 bsdtar tar 格式进行打包。</p>
+</blockquote>
+<hr>
+<h2 id="2-基础用法每天都要用">2. 基础用法（每天都要用）</h2>
+<h3 id="21-安装软件包">2.1 安装软件包</h3>
+<pre><code class="language-bash"># 从仓库安装（支持正则，例如 pacman -S '^kde-'）
+sudo pacman -S 包名
+
+# 安装本地包（.pkg.tar.zst）
+sudo pacman -U 本地包文件.pkg.tar.zst
+</code></pre>
+<p><strong>批量选择技巧</strong>：<br>
+当安装软件包组时，会弹出选择提示：</p>
+<pre><code>Enter a selection (default=all): 1-5 8
+</code></pre>
+<ul>
+<li><code>1-5 8</code> → 安装第1到第5个以及第8个</li>
+<li><code>^2-4</code> → 除了第2到第4个，其他都装</li>
+</ul>
+<h3 id="22-删除软件包">2.2 删除软件包</h3>
+<pre><code class="language-bash">sudo pacman -R 包名          # 删包，保留依赖（不推荐）
+sudo pacman -Rs 包名         # 删包+无用依赖（常用）
+sudo pacman -Rns 包名        # 删包+依赖+配置文件（彻底清除）
+</code></pre>
+<h3 id="23-升级整个系统">2.3 升级整个系统</h3>
+<pre><code class="language-bash">sudo pacman -Syu
+</code></pre>
+<h3 id="24-搜索">2.4 搜索</h3>
+<pre><code class="language-bash">pacman -Ss 关键词     # 远程仓库搜索
+pacman -Qs 关键词     # 已安装包搜索
+</code></pre>
+<h3 id="25-清理缓存">2.5 清理缓存</h3>
+<p>缓存目录：<code>/var/cache/pacman/pkg/</code></p>
+<pre><code class="language-bash">sudo pacman -Sc      # 删除未安装的包（安全）
+sudo pacman -Scc     # 删除所有缓存包（⚠️ 将无法降级，慎用）
+</code></pre>
+<hr>
+<h2 id="3-进阶维护技巧">3. 进阶维护技巧</h2>
+<h3 id="31-软件降级使用-downgrade">3.1 软件降级（使用 downgrade）</h3>
+<pre><code class="language-bash">sudo pacman -S downgrade          # 从 AUR 或 community 安装
+sudo downgrade 包名               # 从列表中选择旧版本号安装
+</code></pre>
+<h3 id="32-解除数据库锁">3.2 解除数据库锁</h3>
+<p>报错 <code>could not lock database</code> 时：</p>
+<pre><code class="language-bash">sudo rm /var/lib/pacman/db.lck
+sudo pacman -Syu
+</code></pre>
+<h3 id="33-转换并安装-deb-包以-debtap-为例">3.3 转换并安装 .deb 包（以 debtap 为例）</h3>
+<pre><code class="language-bash"># 安装 debtap（需要 AUR 助手，见第4节）
+yay -S debtap
+
+sudo debtap -u                     # 更新转换数据库
+debtap 你的软件.deb                # 生成 .pkg.tar.zst
+sudo pacman -U 生成的包.pkg.tar.zst
+</code></pre>
+<blockquote>
+<p>注意：转换后的包可能缺少依赖，建议用 <code>pacman -Qi 包名</code> 检查。</p>
+</blockquote>
+<hr>
+<h2 id="4-更近一步aur-助手">4. 更近一步：AUR 助手</h2>
+<p>pacman 无法直接安装 AUR 中的软件，需要助手。主流的有 <strong>yay</strong>和 <strong>paru</strong>。<br>
+他们但使用方法和 pacman 几乎完全一样。</p>
+<table>
+<thead>
+<tr>
+<th>特性</th>
+<th>yay</th>
+<th>paru</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>开发语言</td>
+<td>Go</td>
+<td>Rust</td>
+</tr>
+<tr>
+<td>特点</td>
+<td>成熟稳定，功能完整</td>
+<td>现代、速度快、彩色输出</td>
+</tr>
+<tr>
+<td>搜索</td>
+<td>按相关性排序</td>
+<td>支持正则，分仓库显示</td>
+</tr>
+<tr>
+<td>安全性</td>
+<td>稳健</td>
+<td>需注意 <code>-Sy</code> 等操作（有争议）</td>
+</tr>
+<tr>
+<td>安装方式</td>
+<td>通过 AUR 克隆构建</td>
+<td>通过 AUR 克隆构建</td>
+</tr>
+</tbody>
+</table>
+<p><strong>安装方法</strong>：</p>
+<ol>
+<li>使用 pacman 安装</li>
+</ol>
+<pre><code class="language-bash">sudo pacman -S yay paru
+</code></pre>
+<ol start="2">
+<li>手动编译安装</li>
+</ol>
+<pre><code class="language-bash"># 先安装 base-devel 和 git
+sudo pacman -S --needed base-devel git
+
+# 安装 yay
+git clone https://aur.archlinux.org/yay.git
+cd yay
+makepkg -si
+
+# 安装 paru
+git clone https://aur.archlinux.org/paru.git
+cd paru
+makepkg -si
+</code></pre>
+<hr>
+<h2 id="5-常见问题速查">5. 常见问题速查</h2>
+<table>
+<thead>
+<tr>
+<th>问题</th>
+<th>解决方案</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>提示 “failed to commit transaction (conflicting files)”</td>
+<td>用 <code>pacman -Qo 文件路径</code> 查看冲突文件属于哪个包，手动处理</td>
+</tr>
+<tr>
+<td>升级时卡住很久</td>
+<td>检查网络和镜像源：<code>sudo pacman -Syy</code> 强制刷新</td>
+</tr>
+<tr>
+<td>想查看某个包被哪个依赖引入</td>
+<td><code>pactree -r 包名</code></td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="6-总结">6. 总结</h2>
+<ul>
+<li>日常使用：<code>-Syu</code>、<code>-S</code>、<code>-Rs</code>、<code>-Sc</code> 四者足够。</li>
+<li>遇到锁或依赖问题：先删 <code>db.lck</code>，或用 <code>downgrade</code>。</li>
+<li>AUR 助手推荐 yay（新手友好）或 paru（性能控）。</li>
+<li>转换 deb 是最后手段，优先找 AUR 或 Flatpak。</li>
+</ul>
+<hr>
+<p><em>本文内容基于 Arch Linux 2026.04 环境，如有变动以官方 wiki 为准。</em></p>

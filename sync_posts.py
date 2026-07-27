@@ -18,7 +18,6 @@ from collections import defaultdict
 CNBLOGS_URL = "https://www.cnblogs.com/JosiahBristow"
 ROOT = os.path.dirname(os.path.abspath(__file__))
 POSTS_DIR = os.path.join(ROOT, "posts")
-IMAGES_DIR = os.path.join(POSTS_DIR, "images")
 
 # ── post templates ──────────────────────────────────────────
 POST_TPL = '''\
@@ -57,7 +56,7 @@ POST_PAGE_TPL = '''\
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../style.css">
+<link rel="stylesheet" href="../../style.css">
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🐧</text></svg>">
 <link rel="alternate icon" href="https://avatars.githubusercontent.com/u/123633729?s=32&v=4">
 {post_meta}
@@ -65,20 +64,20 @@ POST_PAGE_TPL = '''\
 <body>
 
 <header class="header">
-  <div class="header-title"><a href="../index.html">Josiah Bristow</a></div>
+  <div class="header-title"><a href="../../index.html">Josiah Bristow</a></div>
   <div class="header-prompt">Just For Fun!</div>
   <div class="header-sub">Arch Linux, Linux tools, and developer life</div>
 </header>
 
 <nav class="nav">
   <div class="nav-inner">
-    <a href="../index.html">\U0001f3e0 <span data-i18n="nav-home">\u9996\u9875</span></a>
-    <a href="../archive.html">\U0001f4e6 <span data-i18n="nav-archive">\u5f52\u6863</span></a>
-    <a href="../categories.html">\U0001f3f7\ufe0f <span data-i18n="nav-categories">\u5206\u7c7b</span></a>
-    <a href="../about.html">\U0001f464 <span data-i18n="nav-about">\u5173\u4e8e</span></a>
-    <a href="../bookshelf.html">📚 <span data-i18n="nav-bookshelf">\u4e66\u67b6</span></a>
-    <a href="../gallery.html">📷 <span data-i18n="nav-gallery">\u76f8\u518c</span></a>
-    <a href="../friends.html">🤝 <span data-i18n="nav-friends">\u53cb\u94fe</span></a>
+    <a href="../../index.html">\U0001f3e0 <span data-i18n="nav-home">\u9996\u9875</span></a>
+    <a href="../../archive.html">\U0001f4e6 <span data-i18n="nav-archive">\u5f52\u6863</span></a>
+    <a href="../../categories.html">\U0001f3f7\ufe0f <span data-i18n="nav-categories">\u5206\u7c7b</span></a>
+    <a href="../../about.html">\U0001f464 <span data-i18n="nav-about">\u5173\u4e8e</span></a>
+    <a href="../../bookshelf.html">📚 <span data-i18n="nav-bookshelf">\u4e66\u67b6</span></a>
+    <a href="../../gallery.html">📷 <span data-i18n="nav-gallery">\u76f8\u518c</span></a>
+    <a href="../../friends.html">🤝 <span data-i18n="nav-friends">\u53cb\u94fe</span></a>
     <button class="nav-search-btn" id="searchToggle" aria-label="\u641c\u7d22">🔍</button>
   </div>
 </nav>
@@ -146,8 +145,8 @@ POST_PAGE_TPL = '''\
   <p>\U0001f427 &copy; 2024-2026 Josiah Bristow. Built with \u2764\ufe0f for <a href="https://pages.github.com/">GitHub Pages</a>.</p>
 </footer>
 
-<script src="../script.js"></script>
-<script src="../lang.js"></script>
+<script src="../../script.js"></script>
+<script src="../../lang.js"></script>
 </body>
 </html>'''
 
@@ -305,11 +304,21 @@ def _categorize(posts):
 def _post_id(url):
     return url.rstrip('/').split('/')[-1]
 
-def _local_url(url):
-    return f'posts/{_post_id(url)}.html'
+def _dir_name(title):
+    safe = re.sub(r'[\\/:*?"<>|]', '', title)
+    safe = re.sub(r'\s+', '-', safe.strip())
+    if len(safe) > 80:
+        safe = safe[:80].rstrip('-')
+    return safe or 'untitled'
 
-def _local_path(url):
-    return os.path.join(POSTS_DIR, f'{_post_id(url)}.html')
+def _local_url(url, title):
+    return f'posts/{_dir_name(title)}/'
+
+def _local_path(url, title):
+    return os.path.join(POSTS_DIR, _dir_name(title), 'index.html')
+
+def _post_images_dir(title):
+    return os.path.join(POSTS_DIR, _dir_name(title), 'images')
 
 # ── network ─────────────────────────────────────────────────
 def fetch_page(page=1):
@@ -398,13 +407,13 @@ def _safe_filename(title, thumb_url):
         safe = safe[:80].rstrip('-')
     return safe + ext
 
-def _download_cover(thumb_url, title, images_dir):
+def _download_cover(thumb_url, title, dir_name, images_dir):
     if not thumb_url:
         return None
     filename = _safe_filename(title, thumb_url)
     local_path = os.path.join(images_dir, filename)
     if os.path.exists(local_path):
-        return f'posts/images/{filename}'
+        return f'/posts/{dir_name}/images/{filename}'
     try:
         req = urllib.request.Request(thumb_url, headers={
             'User-Agent': 'Mozilla/5.0 (compatible; BlogSync/1.0)'
@@ -413,7 +422,7 @@ def _download_cover(thumb_url, title, images_dir):
             with open(local_path, 'wb') as f:
                 shutil.copyfileobj(resp, f)
         print(f'    downloaded cover: {filename}')
-        return f'posts/images/{filename}'
+        return f'/posts/{dir_name}/images/{filename}'
     except Exception as e:
         print(f'    failed to download cover {thumb_url}: {e}')
         return None
@@ -449,23 +458,24 @@ def process_images(body, images_dir):
         return m.group(0)
     return re.sub(
         r'<img\s+([^>]*?)src="([^"]+)"([^>]*)>',
-        lambda m: _replace_img_tag(m),
+        lambda m: _replace_img_tag(m, images_dir),
         body
     )
 
-def _replace_img_tag(m):
+def _replace_img_tag(m, images_dir):
     prefix = m.group(1) or ''
     src = unescape(m.group(2))
     suffix = m.group(3) or ''
-    local = _download_image(src, IMAGES_DIR)
+    local = _download_image(src, images_dir)
     if local:
         suffix = re.sub(r'\breferrerpolicy\s*=\s*"[^"]*"', '', suffix)
         suffix = re.sub(r'\bloading\s*=\s*"[^"]*"', '', suffix)
         return f'<img {prefix}src="{local}"{suffix} loading="lazy">'
     return m.group(0)
 
-def generate_post_page(post, body):
+def generate_post_page(post, body, post_id):
     post_meta = f'''<script id="post-meta" type="application/json">{json.dumps({
+        'id': post_id,
         'thumb': post.get('thumb', ''),
         'excerpt': post.get('excerpt', ''),
         'views': post['views'],
@@ -527,26 +537,34 @@ def main():
 
     # add local link info
     for p in posts:
-        p['local_url'] = _local_url(p['url'])
+        p['local_url'] = _local_url(p['url'], p['title'])
 
     # ── generate post pages ──────────────────────────────────
     os.makedirs(POSTS_DIR, exist_ok=True)
-    os.makedirs(IMAGES_DIR, exist_ok=True)
 
-    # remove stale post HTML files (keep images)
+    # remove stale post directories (keep images)
     for fname in os.listdir(POSTS_DIR):
+        fpath = os.path.join(POSTS_DIR, fname)
         if fname.endswith('.html'):
-            os.remove(os.path.join(POSTS_DIR, fname))
+            os.remove(fpath)
+        elif os.path.isdir(fpath) and fname != 'images':
+            shutil.rmtree(fpath)
 
     for p in posts:
+        post_id = _post_id(p['url'])
+        dir_name = _dir_name(p['title'])
+        post_dir = os.path.join(POSTS_DIR, dir_name)
+        post_imgs_dir = _post_images_dir(p['title'])
+        os.makedirs(post_imgs_dir, exist_ok=True)
+
         if p['thumb']:
-            local_thumb = _download_cover(p['thumb'], p['title'], IMAGES_DIR)
+            local_thumb = _download_cover(p['thumb'], p['title'], dir_name, post_imgs_dir)
             if local_thumb:
                 p['thumb'] = local_thumb
 
-        local = _local_path(p['url'])
+        local = os.path.join(post_dir, 'index.html')
         if os.path.exists(local):
-            print(f'  skipping (exists): {_post_id(p["url"])}.html')
+            print(f'  skipping (exists): {dir_name}')
             continue
         print(f'  fetching article: {p["title"][:40]}...')
         try:
@@ -556,17 +574,24 @@ def main():
                 print(f'    warning: empty body for {p["url"]}')
                 body = '<p><em>Content could not be fetched.</em></p>'
             else:
-                body = process_images(body, IMAGES_DIR)
-            page = generate_post_page(p, body)
+                body = process_images(body, post_imgs_dir)
+            page = generate_post_page(p, body, post_id)
             with open(local, 'w', encoding='utf-8') as f:
                 f.write(page)
-            print(f'    wrote {_post_id(p["url"])}.html')
+            md_path = os.path.join(post_dir, f'{dir_name}.md')
+            with open(md_path, 'w', encoding='utf-8') as f:
+                f.write(body)
+            print(f'    wrote {dir_name}')
         except Exception as e:
             print(f'    failed: {e}')
             # write a stub so the link doesn't 404
-            page = generate_post_page(p, '<p><em>Failed to fetch content.</em></p>')
+            body = '<p><em>Failed to fetch content.</em></p>'
+            page = generate_post_page(p, body, post_id)
             with open(local, 'w', encoding='utf-8') as f:
                 f.write(page)
+            md_path = os.path.join(post_dir, f'{dir_name}.md')
+            with open(md_path, 'w', encoding='utf-8') as f:
+                f.write(body)
 
     # ── update listing pages ─────────────────────────────────
     for filename, (marker, builder) in BUILDERS.items():
