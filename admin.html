@@ -304,6 +304,7 @@ function renderPosts() {
       <td>
         <button class="btn btn-sm" onclick="showEditCoverForm('${p.id}')" title="Edit cover">🖼️</button>
         <button class="btn-icon" onclick="showPostMeta('${p.id}')" title="Details">📋</button>
+        <button class="btn-icon" onclick="showEditPostForm('${p.id}')" title="Edit">✏️</button>
         ${p.source === 'custom' ? `<button class="btn-icon" onclick="deleteItem('posts','${p.id}','${esc(p.title)}')" title="Delete">🗑️</button>` : ''}
       </td>
     </tr>`).join('');
@@ -346,6 +347,58 @@ async function updatePostCover(id) {
   } catch(e) {}
 }
 
+function pickFile(accept, cb) {
+  const inp = document.createElement('input');
+  inp.type = 'file';
+  inp.accept = accept;
+  inp.onchange = () => { const f = inp.files[0]; if (f) cb(f); };
+  inp.click();
+}
+
+async function uploadAndFill(fieldId) {
+  pickFile('image/*', async (file) => {
+    const fd = new FormData();
+    fd.append('file', file);
+    const res = await apiCall('upload', 'POST', fd);
+    document.getElementById(fieldId).value = res.url;
+  });
+}
+
+async function loadMdForEdit() {
+  pickFile('.md,.markdown', async (file) => {
+    const text = await file.text();
+    const lines = text.split('\n');
+    let title = '', date = '', time = '', category = '', cover = '', body = '';
+    if (lines[0].startsWith('---')) {
+      const end = lines.indexOf('---', 1);
+      if (end > 0) {
+        for (let i = 1; i < end; i++) {
+          const m = lines[i].match(/^(\w+):\s*(.+)$/);
+          if (m) {
+            const k = m[1].toLowerCase();
+            if (k === 'title') title = m[2].trim();
+            else if (k === 'date') date = m[2].trim();
+            else if (k === 'time') time = m[2].trim();
+            else if (k === 'category') category = m[2].trim();
+            else if (k === 'cover') cover = m[2].trim();
+          }
+        }
+        body = lines.slice(end + 1).join('\n').trim();
+      }
+    } else { body = text; }
+    if (!title) title = file.name.replace(/\.md$/i, '');
+    document.getElementById('edit-title').value = title;
+    document.getElementById('edit-slug').value = file.name.replace(/\.md$/i, '');
+    if (date) document.getElementById('edit-date').value = date;
+    if (time) document.getElementById('edit-time').value = time;
+    if (cover) document.getElementById('edit-cover').value = cover;
+    if (category) {
+      const sel = document.getElementById('edit-category');
+      for (const opt of sel.options) { if (opt.value === category) opt.selected = true; }
+    }
+  });
+}
+
 function showEditCoverForm(id) {
   apiCall('posts').then(posts => {
     const p = posts.find(x => x.id === id);
@@ -373,19 +426,125 @@ async function submitCoverEdit(id) {
   } catch(e) {}
 }
 
-function showAddPostForm() {
+let _categories = null;
+
+async function loadCategories() {
+  if (!_categories) _categories = await apiCall('categories');
+  return _categories;
+}
+
+function catSelect(id, selected, cats) {
+  const names = Object.keys(cats || {});
+  selected = selected && names.includes(selected) ? selected : (names[0] || '');
+  return `<div style="display:flex;gap:6px">
+    <select id="${id}" onchange="catToggleCustom('${id}')" style="flex:1">
+      ${names.map(c => `<option${c === selected ? ' selected' : ''}>${c}</option>`).join('')}
+      <option value="__new__">➕ New category...</option></select>
+    <button class="btn btn-sm" type="button" onclick="catDelete('${id}')" title="Delete selected category">🗑️</button></div>
+    <div id="${id}-custom-group" style="display:none;margin-top:4px">
+      <div style="display:flex;gap:6px">
+        <input id="${id}-custom" placeholder="New category name" style="flex:1">
+        <input id="${id}-emoji" placeholder="📄" style="width:48px;text-align:center" title="Emoji" maxlength="4">
+      </div>
+    </div>`;
+}
+
+function catToggleCustom(id) {
+  const sel = document.getElementById(id);
+  const grp = document.getElementById(id + '-custom-group');
+  grp.style.display = sel.value === '__new__' ? 'block' : 'none';
+  if (sel.value === '__new__') document.getElementById(id + '-custom').focus();
+}
+
+function catValue(id) {
+  const sel = document.getElementById(id);
+  if (sel.value === '__new__') {
+    const name = document.getElementById(id + '-custom').value.trim() || 'Uncategorized';
+    const emoji = document.getElementById(id + '-emoji').value.trim() || '📄';
+    return { name, emoji };
+  }
+  return { name: sel.value, emoji: '' };
+}
+
+async function catDelete(id) {
+  const sel = document.getElementById(id);
+  const name = sel.value;
+  if (!name || name === '__new__') return;
+  if (!confirm(`Delete category "${name}"?`)) return;
+  try {
+    await fetch('/api/categories/' + encodeURIComponent(name), { method: 'DELETE' });
+    _categories = null;
+    toast('Category deleted', 'success');
+    // Reload current modal — close and reopen
+    document.querySelector('.modal-close')?.click();
+  } catch(e) {}
+}
+
+async function showAddPostForm() {
+  const cats = await loadCategories();
   modal(`<h3>✍️ Add custom post</h3>
     <div class="form-group"><label>Title</label><input id="post-title" placeholder="Post title"></div>
-    <div class="form-group"><label>Date</label><input id="post-date" type="date" value="${new Date().toISOString().slice(0,10)}"></div>
-    <div class="form-group"><label>Category</label>
-      <select id="post-category"><option>Arch Linux</option><option>Linux</option><option>Python</option><option>Raspberry Pi</option></select></div>
-    <div class="form-group"><label>Cover image (URL or path)</label><input id="post-cover" placeholder="https://... or images/cover.jpg"></div>
+    <div class="form-group"><label>Date / Time</label>
+      <div style="display:flex;gap:6px"><input id="post-date" type="date" value="${new Date().toISOString().slice(0,10)}" style="flex:1">
+      <input id="post-time" type="time" value="${new Date().toTimeString().slice(0,5)}" style="width:120px"></div></div>
+    <div class="form-group"><label>Category</label>${catSelect('post-category', 'Arch Linux', cats)}</div>
+    <div class="form-group"><label>Cover image (URL or path)</label>
+      <div style="display:flex;gap:6px"><input id="post-cover" placeholder="https://... or images/cover.jpg" style="flex:1">
+      <button class="btn btn-sm" type="button" onclick="uploadAndFill('post-cover')" title="Upload image">📁</button></div></div>
     <div class="form-group"><label>Markdown content</label><textarea id="post-body" rows="12" placeholder="# Title\\n\\nContent here..."></textarea></div>
     <div class="form-group"><label>Or upload .md file</label><input id="post-file" type="file" accept=".md"></div>
     <div class="form-actions">
       <button class="btn" onclick="closeModal()">Cancel</button>
       <button class="btn btn-primary" onclick="submitPost()">Add post</button>
     </div>`);
+}
+
+async function showEditPostForm(id) {
+  const [posts, cats] = await Promise.all([apiCall('posts'), loadCategories()]);
+  const p = posts.find(x => x.id === id);
+  if (!p) { toast('Not found', 'error'); return; }
+  const isCustom = p.source === 'custom';
+  modal(`<h3>✏️ Edit post</h3>
+      ${isCustom ? `
+      <div class="form-group"><label>Title</label><input id="edit-title" value="${esc(p.title)}"></div>
+      <div class="form-group"><label>Slug (URL path, e.g. <code>my-post</code>)</label>
+        <div style="display:flex;gap:6px"><input id="edit-slug" value="${esc(p.dir || p.id)}" style="flex:1">
+        <button class="btn btn-sm" type="button" onclick="loadMdForEdit()" title="Load .md file to set slug & fields">📂</button></div></div>
+      <div class="form-group"><label>Date / Time</label>
+        <div style="display:flex;gap:6px"><input id="edit-date" type="date" value="${esc(p.date)}" style="flex:1">
+        <input id="edit-time" type="time" value="${esc(p.time || '00:00')}" style="width:120px"></div></div>` : `
+      <div class="form-group"><label>Title</label><input id="edit-title" value="${esc(p.title)}" disabled></div>
+      <div class="form-group"><label>Date</label><input id="edit-date" type="date" value="${esc(p.date)}" disabled></div>`}
+      <div class="form-group"><label>Category</label>${catSelect('edit-category', p.category, cats)}</div>
+      <div class="form-group"><label>Cover image (URL or path)</label>
+        <div style="display:flex;gap:6px"><input id="edit-cover" value="${esc(p.thumb || '')}" placeholder="https://... or images/cover.jpg" style="flex:1">
+        <button class="btn btn-sm" type="button" onclick="uploadAndFill('edit-cover')" title="Upload image">📁</button></div></div>
+      <div class="form-actions">
+        <button class="btn" onclick="closeModal()">Cancel</button>
+        <button class="btn btn-primary" onclick="submitPostEdit('${esc(id)}')">Save</button>
+      </div>`);
+}
+
+async function submitPostEdit(id) {
+  const title = (document.getElementById('edit-title') || {}).value || '';
+  const slug = (document.getElementById('edit-slug') || {}).value || '';
+  const date = (document.getElementById('edit-date') || {}).value || '';
+  const time = (document.getElementById('edit-time') || {}).value || '00:00';
+  const cv = catValue('edit-category');
+  const category = cv.name;
+  const cover = document.getElementById('edit-cover').value.trim();
+  if (!title) { toast('Title required', 'error'); return; }
+  try {
+    const body = { category, cover };
+    if (slug) { body.slug = slug; body.title = title; body.date = date; body.time = time; }
+    if (cv.emoji) body.emoji = cv.emoji;
+    await apiCall('posts/' + id, 'PUT', body);
+    _categories = null;
+    toast('Post updated', 'success');
+    closeModal();
+    document.getElementById('tab-posts').dataset.loaded = '';
+    renderPosts();
+  } catch(e) {}
 }
 
 async function submitPost() {
@@ -416,11 +575,16 @@ async function submitPost() {
   if (!title) title = 'Untitled';
 
   const date = document.getElementById('post-date').value;
-  const category = document.getElementById('post-category').value;
+  const time = document.getElementById('post-time').value || '00:00';
+  const cv = catValue('post-category');
+  const category = cv.name;
   const cover = document.getElementById('post-cover').value.trim();
 
   try {
-    await apiCall('posts/add', 'POST', { title, body, date, category, cover });
+    const body = { title, body, date, time, category, cover };
+    if (cv.emoji) body.emoji = cv.emoji;
+    await apiCall('posts/add', 'POST', body);
+    _categories = null;
     toast('Post added', 'success');
     closeModal();
     document.getElementById('tab-posts').dataset.loaded = '';

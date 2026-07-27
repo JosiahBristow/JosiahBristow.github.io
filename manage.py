@@ -54,6 +54,18 @@ CAT_EMOJI = {
     'Arch Linux': '🐧', 'Linux': '💻', 'Python': '🐍', 'Raspberry Pi': '🥧',
 }
 
+CATEGORIES_JSON = os.path.join(DATA_DIR, "categories.json")
+
+def _load_categories():
+    cats = _load_json(CATEGORIES_JSON)
+    if not cats:
+        cats = dict(CAT_EMOJI)
+        _save_json(CATEGORIES_JSON, cats)
+    return cats
+
+def _save_categories(cats):
+    _save_json(CATEGORIES_JSON, cats)
+
 INJECT_PAGES = ['index.html', 'archive.html', 'categories.html',
                 'bookshelf.html', 'gallery.html', 'friends.html']
 
@@ -391,22 +403,27 @@ def cmd_posts_add(args):
     post_imgs_dir = os.path.join(post_dir, 'images')
     os.makedirs(post_imgs_dir, exist_ok=True)
 
-    # Re-handle image paths to be relative to the post dir
+    # Handle images: download remote, copy local
     def _post_img_src(m):
-        src = m.group(1)
-        alt = m.group(2)
+        attrs = m.group(1)
+        src_m = re.search(r'src\s*=\s*"([^"]+)"', attrs)
+        alt_m = re.search(r'alt\s*=\s*"([^"]*)"', attrs)
+        src = unescape(src_m.group(1)) if src_m else ''
+        alt = alt_m.group(1) if alt_m else ''
+        if not src:
+            return m.group(0)
         if src.startswith(('http://', 'https://')):
             local = _download_image(src, post_imgs_dir)
             if local:
-                return f'<img src="{local}" alt="{alt}" loading="lazy">'
+                return f'<img {attrs}src="{local}" alt="{alt}" loading="lazy">'
         elif src.startswith(('images/', './')) or not src.startswith('/'):
             fname = os.path.basename(src)
             dest = os.path.join(post_imgs_dir, fname)
             if os.path.exists(src) and src != dest:
                 shutil.copy2(src, dest)
-            return f'<img src="images/{fname}" alt="{alt}" loading="lazy">'
+            return f'<img {attrs}src="images/{fname}" alt="{alt}" loading="lazy">'
         return m.group(0)
-    html_body = re.sub(r'<img src="([^"]+)" alt="([^"]*)"[^>]*>', _post_img_src, html_body)
+    html_body = re.sub(r'<img\s+([^>]*?)>', _post_img_src, html_body)
     # Handle cover image
     cover = args.cover or fm.get('cover', '')
     thumb = ''
@@ -420,11 +437,11 @@ def cmd_posts_add(args):
             if os.path.abspath(cover) != os.path.abspath(cover_path):
                 shutil.copy2(cover, cover_path)
             thumb = f'/posts/{dir_name}/images/{os.path.basename(cover_path)}'
-    post_page = _custom_post_page(title, date, time, html_body, thumb)
+    post_page = _custom_post_page(title, date, time, html_body, thumb, excerpt)
     fpath = os.path.join(post_dir, 'index.html')
     with open(fpath, 'w', encoding='utf-8') as f:
         f.write(post_page)
-    with open(os.path.join(post_dir, 'post.md'), 'w', encoding='utf-8') as f:
+    with open(os.path.join(post_dir, f'{dir_name}.md'), 'w', encoding='utf-8') as f:
         f.write(text)
     # Add to data store
     posts.append({
@@ -467,19 +484,56 @@ def cmd_posts_edit(args):
     if post['source'] != 'custom':
         print("Can only edit title/body of custom posts. Use --cover to change the cover.")
         return 1
-    fpath = os.path.join(POSTS_DIR, f'{args.id}.html')
+    fpath = os.path.join(POSTS_DIR, post['dir'], f'{post["dir"]}.md')
     if not os.path.exists(fpath):
         print(f"File not found: {fpath}")
         return 1
     editor = os.environ.get('EDITOR', 'vim')
     subprocess.call([editor, fpath])
-    # Re-read and update hash
+    # Re-read and regenerate
     with open(fpath, encoding='utf-8') as f:
-        content = f.read()
-    body_m = re.search(r'<div class="post-article-body">(.*?)</div>', content, re.DOTALL)
-    if body_m:
-        post['content_hash'] = _content_hash(body_m.group(1))
-        _save_posts(posts)
+        text = f.read()
+    fm, body = _parse_front_matter(text)
+    title = fm.get('title', post['title'])
+    date = fm.get('date', post['date'])
+    time = fm.get('time', post.get('time', '00:00'))
+    category = fm.get('category', _category_for(title))
+    html_body = md_to_html(body)
+    excerpt = re.sub(r'<[^>]+>', '', html_body)[:200].strip()
+    # Re-process images
+    def _post_img_src(m):
+        attrs = m.group(1)
+        src_m = re.search(r'src\s*=\s*"([^"]+)"', attrs)
+        alt_m = re.search(r'alt\s*=\s*"([^"]*)"', attrs)
+        src = unescape(src_m.group(1)) if src_m else ''
+        alt = alt_m.group(1) if alt_m else ''
+        if not src:
+            return m.group(0)
+        if src.startswith(('http://', 'https://')):
+            local = _download_image(src, os.path.join(POSTS_DIR, post['dir'], 'images'))
+            if local:
+                return f'<img {attrs}src="{local}" alt="{alt}" loading="lazy">'
+        return m.group(0)
+    html_body = re.sub(r'<img\s+([^>]*?)>', _post_img_src, html_body)
+    thumb = post.get('thumb', '')
+    if fm.get('cover'):
+        cover_path = os.path.join(POSTS_DIR, post['dir'], 'images', os.path.basename(fm['cover'].split('?')[0]))
+        if fm['cover'].startswith(('http://', 'https://')):
+            if not os.path.exists(cover_path):
+                _download_file(fm['cover'], cover_path)
+            thumb = f'/posts/{post["dir"]}/images/{os.path.basename(cover_path)}'
+    post_page = _custom_post_page(title, date, time, html_body, thumb, excerpt)
+    index_path = os.path.join(POSTS_DIR, post['dir'], 'index.html')
+    with open(index_path, 'w', encoding='utf-8') as f:
+        f.write(post_page)
+    post['title'] = title
+    post['date'] = date
+    post['time'] = time
+    post['category'] = category
+    post['thumb'] = thumb
+    post['excerpt'] = excerpt
+    post['content_hash'] = _content_hash(html_body)
+    _save_posts(posts)
     cmd_build(args)
     print(f"Edited: {args.id}")
 
@@ -926,6 +980,7 @@ CUSTOM_POST_PAGE_TPL = '''\
 <link rel="stylesheet" href="../../style.css">
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🐧</text></svg>">
 <link rel="alternate icon" href="https://avatars.githubusercontent.com/u/123633729?s=32&v=4">
+{post_meta}
 </head>
 <body>
 
@@ -963,6 +1018,40 @@ CUSTOM_POST_PAGE_TPL = '''\
   </div>
 </article>
 
+<div class="post-comments">
+  <h2 class="post-comments-title">\U0001f4ac <span data-i18n="comments-title">\u8bc4\u8bba</span></h2>
+  <div id="giscus-container"></div>
+  <script>
+    (function() {{
+      var theme = 'catppuccin_latte';
+      var lang = 'zh-CN';
+      try {{
+        var ts = localStorage.getItem('theme');
+        if (ts === 'dark') theme = 'catppuccin_mocha';
+        var ls = localStorage.getItem('lang');
+        if (ls === 'en') lang = 'en';
+      }} catch(e) {{}}
+      var c = document.getElementById('giscus-container');
+      var sc = document.createElement('script');
+      sc.src = 'https://giscus.app/client.js';
+      sc.setAttribute('data-repo', 'JosiahBristow/JosiahBristow.github.io');
+      sc.setAttribute('data-repo-id', 'R_kgDOTi7MtA');
+      sc.setAttribute('data-category', 'Announcements');
+      sc.setAttribute('data-category-id', 'DIC_kwDOTi7MtM4DB-Fn');
+      sc.setAttribute('data-mapping', 'pathname');
+      sc.setAttribute('data-strict', '0');
+      sc.setAttribute('data-reactions-enabled', '1');
+      sc.setAttribute('data-emit-metadata', '0');
+      sc.setAttribute('data-input-position', 'bottom');
+      sc.setAttribute('data-theme', theme);
+      sc.setAttribute('data-lang', lang);
+      sc.setAttribute('crossorigin', 'anonymous');
+      sc.async = true;
+      c.appendChild(sc);
+    }})();
+  </script>
+</div>
+
 </div>
 
 <div class="float-group">
@@ -980,10 +1069,17 @@ CUSTOM_POST_PAGE_TPL = '''\
 </body>
 </html>'''
 
-def _custom_post_page(title, date, time, body, thumb=''):
+def _custom_post_page(title, date, time, body, thumb='', excerpt=''):
+    import json as _json
+    post_meta = _json.dumps({
+        'thumb': thumb, 'excerpt': excerpt,
+        'views': '0', 'comments': '0', 'likes': '0',
+    }, ensure_ascii=False)
+    post_meta_html = f'<script id="post-meta" type="application/json">{post_meta}</script>'
     cover_html = f'<img class="post-article-cover" src="{thumb}" alt="{_alt(title)}" loading="lazy">' if thumb else ''
     return CUSTOM_POST_PAGE_TPL.format(
-        title=title, date=date, time=time, body=body, cover_html=cover_html,
+        title=title, date=date, time=time, body=body,
+        cover_html=cover_html, post_meta=post_meta_html,
     )
 
 def _alt(title):
@@ -1040,22 +1136,24 @@ def _build_archive(posts):
         lines.append('  </div>')
     return '\n'.join(lines)
 
-def _build_categories(posts):
+def _build_categories(posts, cat_emoji=None):
     cats = defaultdict(list)
     for p in posts:
         cats[p.get('category', 'Arch Linux')].append(p)
+    if cat_emoji is None:
+        cat_emoji = _load_categories()
     lines = []
     lines.append('  <div class="page-heading">')
     lines.append('    <h1>\U0001f3f7\ufe0f <span data-i18n="categories-title">\u5206\u7c7b</span></h1>')
-    lines.append(f'    <p>\U0001f4c2 <span data-i18n="categories-count">\u5171 {len(cats)} \u4e2a\u5206\u7c7b</span></p>')
     lines.append('  </div>')
     for name in sorted(cats):
         plist = cats[name]
-        emoji = CAT_EMOJI.get(name, '\U0001f4c4')
+        emoji = cat_emoji.get(name, '📄')
         lines.append('  <div class="category-section">')
         lines.append('    <div class="category-header">')
         lines.append(f'      {emoji} {name}')
         lines.append(f'      <span class="category-count">{len(plist)} \u7bc7</span>')
+        lines.append('      <span class="fold-icon">▼</span>')
         lines.append('    </div>')
         lines.append('    <ul class="category-list">')
         for p in plist:
@@ -1148,7 +1246,7 @@ def _build_friends(friends):
     lines.append('  </div>')
     return '\n'.join(lines)
 
-def _build_sidebar(posts, books=None, photos=None, friends_count=0):
+def _build_sidebar(posts, books=None, photos=None, friends_count=0, cat_emoji=None):
     total = len(posts)
     t_views = sum(int(p['views']) for p in posts if p.get('views', '0').isdigit())
     t_likes = sum(int(p['likes']) for p in posts if p.get('likes', '0').isdigit())
@@ -1156,8 +1254,10 @@ def _build_sidebar(posts, books=None, photos=None, friends_count=0):
     cats = defaultdict(list)
     for p in posts:
         cats[p.get('category', 'Arch Linux')].append(p)
+    if cat_emoji is None:
+        cat_emoji = _load_categories()
     tag_items = ''.join(
-        f'      <span class="tag">{CAT_EMOJI.get(n, "\U0001f4c4")} {n} <span class="post-count">{len(cats[n])}</span></span>\n'
+        f'      <span class="tag">{cat_emoji.get(n, "\U0001f4c4")} {n} <span class="post-count">{len(cats[n])}</span></span>\n'
         for n in sorted(cats)
     )
     stats = [
@@ -1221,6 +1321,8 @@ def cmd_build(args=None):
 
     posts.sort(key=lambda p: p['date'] + p.get('time', '00:00'), reverse=True)
 
+    cat_emoji = _load_categories()
+
     # Index
     content = _build_index(posts)
     _inject(os.path.join(ROOT, 'index.html'), 'CONTENT_MAIN', content)
@@ -1232,7 +1334,7 @@ def cmd_build(args=None):
     print("  archive.html")
 
     # Categories
-    content = _build_categories(posts)
+    content = _build_categories(posts, cat_emoji)
     _inject(os.path.join(ROOT, 'categories.html'), 'CONTENT_MAIN', content)
     print("  categories.html")
 
@@ -1266,7 +1368,7 @@ def cmd_build(args=None):
     print("  friends.html")
 
     # Sidebar for all pages
-    sidebar = _build_sidebar(posts, books, photos, len(friends))
+    sidebar = _build_sidebar(posts, books, photos, len(friends), cat_emoji)
     for page in ['index.html', 'archive.html', 'categories.html',
                  'bookshelf.html', 'gallery.html', 'friends.html']:
         _inject_sidebar(os.path.join(ROOT, page), sidebar)
@@ -1466,7 +1568,7 @@ def cmd_import(args):
 
 import json as json_lib
 from http.server import HTTPServer, SimpleHTTPRequestHandler
-from urllib.parse import urlparse, parse_qs
+from urllib.parse import urlparse, parse_qs, unquote
 
 ADMIN_HTML = os.path.join(ROOT, 'admin.html')
 
@@ -1619,6 +1721,8 @@ class AdminHandler(SimpleHTTPRequestHandler):
             _json_response(self, _load_json(GALLERY_JSON))
         elif entity == 'friends' and not action:
             _json_response(self, _load_json(FRIENDS_JSON))
+        elif entity == 'categories' and not action:
+            _json_response(self, _load_categories())
         else:
             _json_error(self, 'Not found', 404)
 
@@ -1630,10 +1734,11 @@ class AdminHandler(SimpleHTTPRequestHandler):
             title = data.get('title', 'Untitled')
             body = data.get('body', '')
             date = data.get('date', datetime.now().strftime('%Y-%m-%d'))
+            time = data.get('time', datetime.now().strftime('%H:%M'))
             category = data.get('category', _category_for(title))
             cover = data.get('cover', '')
             # Write temp markdown file
-            fm_lines = [f'title: {title}', f'date: {date}', f'category: {category}']
+            fm_lines = [f'title: {title}', f'date: {date}', f'time: {time}', f'category: {category}']
             if cover:
                 fm_lines.append(f'cover: {cover}')
             md_content = '---\n' + '\n'.join(fm_lines) + '\n---\n\n' + body
@@ -1646,6 +1751,13 @@ class AdminHandler(SimpleHTTPRequestHandler):
             finally:
                 if os.path.exists(tmp):
                     os.remove(tmp)
+            # Register category emoji if provided
+            if data.get('emoji'):
+                cat_name = category
+                cats = _load_categories()
+                if cat_name not in cats:
+                    cats[cat_name] = data['emoji']
+                    _save_categories(cats)
             _json_response(self, {'ok': True, 'message': f'Post added: {title}'})
         elif entity == 'build' and not action:
             cmd_build(None)
@@ -1719,19 +1831,46 @@ class AdminHandler(SimpleHTTPRequestHandler):
             _save_json(FRIENDS_JSON, friends)
             cmd_build(None)
             _json_response(self, {'ok': True})
+        elif entity == 'categories' and not action:
+            cats = _load_categories()
+            name = data.get('name', '')
+            emoji = data.get('emoji', '📄')
+            if name:
+                cats[name] = emoji
+                _save_categories(cats)
+                cmd_build(None)
+                _json_response(self, {'ok': True})
+            else:
+                _json_error(self, 'Missing name', 400)
+        elif entity == 'upload' and not action:
+            if isinstance(data.get('file'), dict) and 'data' in data['file']:
+                f_info = data['file']
+                ext = os.path.splitext(f_info['filename'])[1].lower() or '.bin'
+                fname = _slug(os.path.splitext(f_info['filename'])[0]) + ext
+                dest = os.path.join(IMAGES_DIR, fname)
+                for i in range(1, 100):
+                    if not os.path.exists(dest):
+                        break
+                    fname = _slug(os.path.splitext(f_info['filename'])[0]) + f'_{i}' + ext
+                    dest = os.path.join(IMAGES_DIR, fname)
+                with open(dest, 'wb') as f:
+                    f.write(f_info['data'])
+                _json_response(self, {'ok': True, 'url': f'/posts/images/{fname}'})
+            else:
+                _json_error(self, 'No file provided')
         else:
             _json_error(self, 'Not found', 404)
 
     def _api_put(self, entity, action, data):
         if entity == 'posts' and action:
             segs = self.path.rstrip('/').split('/')
+            post_id = action
+            posts = _load_posts()
+            post = next((p for p in posts if p['id'] == post_id), None)
+            if not post:
+                return _json_error(self, 'Not found', 404)
             # PUT /api/posts/<id>/cover
             if len(segs) >= 5 and segs[4] == 'cover':
-                post_id = action
-                posts = _load_posts()
-                post = next((p for p in posts if p['id'] == post_id), None)
-                if not post:
-                    return _json_error(self, 'Not found', 404)
                 cover = data.get('cover', '')
                 if cover:
                     thumb = _handle_post_cover(cover, post_id)
@@ -1744,8 +1883,58 @@ class AdminHandler(SimpleHTTPRequestHandler):
                         _json_error(self, 'Failed to process cover', 400)
                 else:
                     _json_error(self, 'Missing cover', 400)
-            else:
-                _json_error(self, 'Not found', 404)
+            # PUT /api/posts/<id> — edit post properties
+            elif len(segs) == 4:
+                category = data.get('category', post.get('category', 'Arch Linux'))
+                emoji = data.get('emoji', '')
+                post['category'] = category
+                # Register new category emoji if provided
+                if emoji:
+                    cats = _load_categories()
+                    cats[category] = emoji
+                    _save_categories(cats)
+                # Handle cover
+                cover = data.get('cover', '')
+                if cover:
+                    thumb = _handle_post_cover(cover, post['id'])
+                    if thumb:
+                        post['thumb'] = thumb
+                elif 'thumb' in post and not cover:
+                    del post['thumb']
+                # For custom posts, also allow title/slug/date/time
+                if post.get('source') == 'custom':
+                    title = data.get('title', post['title'])
+                    slug = data.get('slug', post['dir'])
+                    date = data.get('date', post['date'])
+                    time = data.get('time', post.get('time', '00:00'))
+                    old_dir = post.get('dir', _dir_name(post['id']))
+                    new_dir = slug
+                    # Rename directory if slug changed
+                    if new_dir != old_dir:
+                        old_path = os.path.join(POSTS_DIR, old_dir)
+                        new_path = os.path.join(POSTS_DIR, new_dir)
+                        if os.path.exists(old_path):
+                            shutil.move(old_path, new_path)
+                        elif os.path.exists(old_path + '.html'):
+                            os.makedirs(new_path, exist_ok=True)
+                            shutil.move(old_path + '.html', os.path.join(new_path, 'index.html'))
+                        post['dir'] = new_dir
+                    # Rewrite markdown front matter
+                    md_path = os.path.join(POSTS_DIR, new_dir, f'{new_dir}.md')
+                    if not os.path.exists(md_path):
+                        md_path = os.path.join(POSTS_DIR, new_dir, f'{old_dir}.md')
+                    if os.path.exists(md_path):
+                        raw = open(md_path, encoding='utf-8').read()
+                        _, body = _parse_front_matter(raw)
+                        fm_lines = [f'title: {title}', f'date: {date}', f'time: {time}', f'category: {category}']
+                        with open(md_path, 'w', encoding='utf-8') as f:
+                            f.write('---\n' + '\n'.join(fm_lines) + '\n---\n\n' + body)
+                    post['title'] = title
+                    post['date'] = date
+                    post['time'] = time
+                _save_posts(posts)
+                cmd_build(None)
+                _json_response(self, {'ok': True, 'message': f'Post updated: {post["title"]}'})
         elif entity == 'books' and action:
             books = _load_json(BOOKS_JSON)
             bid = int(action)
@@ -1822,6 +2011,16 @@ class AdminHandler(SimpleHTTPRequestHandler):
             _save_json(FRIENDS_JSON, friends)
             cmd_build(None)
             _json_response(self, {'ok': True})
+        elif entity == 'categories' and action:
+            cats = _load_categories()
+            name = unquote(action)
+            if name in cats:
+                del cats[name]
+                _save_categories(cats)
+                cmd_build(None)
+                _json_response(self, {'ok': True})
+            else:
+                _json_error(self, 'Not found', 404)
         else:
             _json_error(self, 'Not found', 404)
 

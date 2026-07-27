@@ -204,6 +204,15 @@ CAT_EMOJI = {
     'Raspberry Pi': '\U0001f967',
 }
 
+# Merge with persisted categories if available
+_cat_json = os.path.join(os.path.dirname(__file__), 'data', 'categories.json')
+if os.path.exists(_cat_json):
+    try:
+        import json
+        persisted = json.load(open(_cat_json, encoding='utf-8'))
+        CAT_EMOJI.update(persisted)
+    except: pass
+
 def build_categories(posts):
     cats = _categorize(posts)
     lines = []

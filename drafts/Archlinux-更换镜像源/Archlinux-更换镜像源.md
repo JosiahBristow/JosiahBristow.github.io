@@ -1,0 +1,34 @@
+<h2 id="备份原来的-etcpacmandmirrorlist">备份原来的 /etc/pacman.d/mirrorlist</h2>
+<pre><code class="language-bash">sudo mv /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.bak
+</code></pre>
+<h2 id="添加镜像源到-etcpacmandmirrorlist">添加镜像源到 /etc/pacman.d/mirrorlist</h2>
+<h3 id="自动换源">自动换源</h3>
+<p>reflector 是一个 archlinux 官方提供的 python 脚本，它可以从 archlinux 镜像状态页面检索最新的镜像列表，过滤最新的镜像，按速度对它们进行排序并覆盖文件 /etc/pacman.d/mirrorlist。</p>
+<pre><code class="language-bash"># 安装 reflector
+sudo pacman -S reflector
+# 获取国内最快的10个镜像源
+sudo reflector --country 'China' --latest 10 --sort rate --save /etc/pacman.d/mirrorlist
+</code></pre>
+<p>这样就大功告成了!</p>
+<h3 id="手动换源">手动换源</h3>
+<p>如果喜欢折腾可是试试手动换源。<br>
+首先找一个合适的镜像源。<br>
+可以访问 archlinux 的官网镜像地址库：<a href="https://archlinux.org/mirrors/" target="_blank" rel="noopener nofollow">Mirror Overview</a>，查看好用的镜像源。</p>
+<p><img src="images/3586302-20251001160417981-1263937264.png" alt="screenshot-2025-10-01_16-03-56"  loading="lazy"></p>
+<p>然后编辑 /etc/pacman.d/mirrorlist</p>
+<pre><code class="language-bash">sudo vim /etc/pacman.d/mirrorlist
+</code></pre>
+<p>将镜像源添加到里面保存退出即可。<br>
+下面是我的配置</p>
+<p><img src="images/3586302-20251001160233888-1506043385.png" alt="screenshot-2025-10-01_16-02-06"  loading="lazy"></p>
+<pre><code>Server = https://mirrors.tuna.tsinghua.edu.cn/archlinux/$repo/os/$arch
+Server = https://mirrors.ustc.edu.cn/archlinux/$repo/os/$arch
+Server = https://mirror.omarchy.org/$repo/os/$arch
+Server = https://mirror.rackspace.com/archlinux/$repo/os/$arch
+Server = https://geo.mirror.pkgbuild.com/$repo/os/$arch
+</code></pre>
+<h2 id="更新包缓存">更新包缓存</h2>
+<p>无论是用 reflector 还是手动编辑 /etc/pacman.d/mirrorlist，<br>
+完成后都要更新包缓存，不然是无法使用新镜像源的。</p>
+<pre><code class="language-bash">sudo pacman -Syyu
+</code></pre>
