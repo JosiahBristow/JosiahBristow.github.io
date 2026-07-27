@@ -45,7 +45,7 @@
       <a target="_blank" href="https://josiahbristow.github.io/">🌐 Blog</a>
       <a target="_blank" href="https://www.cnblogs.com/JosiahBristow">📝 博客园</a>
       <a target="_blank" href="https://space.bilibili.com/513194717?spm_id_from=333.1007.0.0">📺 Bilibili</a>
-      <a target="_blank" href="josiah_bristow@outlook.com">✉️ Email</a>
+      <a href="mailto:josiah_bristow@outlook.com" onclick="copyEmail('josiah_bristow@outlook.com')">✉️ Email</a>
     </div>
   </div>
 
@@ -118,6 +118,41 @@
 </aside>
 <!-- /SIDEBAR -->
 
+</div>
+
+<div class="post-comments" style="max-width:var(--max-width);margin:2rem auto 0;padding:0 1.5rem">
+  <h2 class="post-comments-title">💬 留言</h2>
+  <div id="giscus-container"></div>
+  <script>
+    (function() {
+      var theme = 'catppuccin_latte';
+      var lang = 'zh-CN';
+      try {
+        var ts = localStorage.getItem('theme');
+        if (ts === 'dark') theme = 'catppuccin_mocha';
+        var ls = localStorage.getItem('lang');
+        if (ls === 'en') lang = 'en';
+      } catch(e) {}
+      var c = document.getElementById('giscus-container');
+      var sc = document.createElement('script');
+      sc.src = 'https://giscus.app/client.js';
+      sc.setAttribute('data-repo', 'JosiahBristow/JosiahBristow.github.io');
+      sc.setAttribute('data-repo-id', 'R_kgDOTi7MtA');
+      sc.setAttribute('data-category', 'Announcements');
+      sc.setAttribute('data-category-id', 'DIC_kwDOTi7MtM4DB-Fn');
+      sc.setAttribute('data-mapping', 'pathname');
+      sc.setAttribute('data-strict', '0');
+      sc.setAttribute('data-reactions-enabled', '1');
+      sc.setAttribute('data-emit-metadata', '0');
+      sc.setAttribute('data-input-position', 'bottom');
+      sc.setAttribute('data-theme', theme);
+      sc.setAttribute('data-lang', lang);
+      sc.setAttribute('crossorigin', 'anonymous');
+      sc.async = true;
+      c.innerHTML = '';
+      c.appendChild(sc);
+    })();
+  </script>
 </div>
 
 <div class="float-group">

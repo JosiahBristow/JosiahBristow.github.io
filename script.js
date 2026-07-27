@@ -762,3 +762,17 @@
   });
 })();
 
+function copyEmail(email) {
+  var el = document.createElement('textarea');
+  el.value = email.replace('mailto:', '');
+  document.body.appendChild(el);
+  el.select();
+  try { document.execCommand('copy'); } catch(e) {}
+  document.body.removeChild(el);
+  var t = document.createElement('div');
+  t.className = 'toast toast-success';
+  t.textContent = 'Email copied';
+  document.body.appendChild(t);
+  setTimeout(function() { t.remove(); }, 2000);
+}
+
