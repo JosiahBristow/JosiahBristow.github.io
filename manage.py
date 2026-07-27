@@ -1123,7 +1123,6 @@ def _build_archive(posts):
     lines = []
     lines.append('  <div class="page-heading">')
     lines.append('    <h1>\U0001f4e6 <span data-i18n="archive-title">\u5f52\u6863</span></h1>')
-    lines.append(f'    <p>\U0001f4c4 <span data-i18n="archive-count">\u5171 {len(posts)} \u7bc7\u968f\u7b14</span></p>')
     lines.append('  </div>')
     for year in sorted(years, reverse=True):
         lines.append('  <div class="archive-year">')
@@ -1299,6 +1298,36 @@ def _build_sidebar(posts, books=None, photos=None, friends_count=0, cat_emoji=No
   </div>'''
     return sidebar
 
+def _build_search_index(posts, books):
+    import json as _json
+    cat_emoji = _load_categories()
+    index = []
+    for p in posts:
+        cat = p.get('category', '')
+        emoji = cat_emoji.get(cat, '📄')
+        dir_name = p.get('dir', _dir_name(p.get('title', '')))
+        url = f'posts/{dir_name}/' if p.get('source') == 'custom' else f'posts/{p["id"]}.html'
+        index.append({
+            't': p['title'],
+            'u': url,
+            'd': p.get('excerpt', ''),
+            'm': f'{emoji} {cat}' if cat else '',
+        })
+    for b in books:
+        author = b.get('author', '')
+        rating = b.get('rating', '')
+        desc_parts = [author, f'⭐ {rating}'] if rating else [author]
+        index.append({
+            't': b['title'],
+            'u': b.get('url', ''),
+            'd': ' · '.join(filter(None, desc_parts)),
+            'm': '📚 书籍',
+        })
+    dest = os.path.join(DATA_DIR, 'search-index.json')
+    with open(dest, 'w', encoding='utf-8') as f:
+        _json.dump(index, f, ensure_ascii=False)
+    print("  search-index.json")
+
 def _inject(filepath, marker, new_content):
     with open(filepath, 'r', encoding='utf-8') as f:
         text = f.read()
@@ -1375,6 +1404,9 @@ def cmd_build(args=None):
     print("  sidebar updated for all pages")
 
     print("Build complete.")
+
+    # ── Search index ──
+    _build_search_index(posts, books)
 
 # ═══════════════════════════════════════════════════════════
 #  Import existing content from HTML pages

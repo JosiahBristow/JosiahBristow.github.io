@@ -185,7 +185,6 @@ def build_archive(posts):
     lines = []
     lines.append('  <div class="page-heading">')
     lines.append(f'    <h1>\U0001f4e6 <span data-i18n="archive-title">\u5f52\u6863</span></h1>')
-    lines.append(f'    <p>\U0001f4c4 <span data-i18n="archive-count">\u5171 {len(posts)} \u7bc7\u968f\u7b14</span></p>')
     lines.append('  </div>')
     for year in sorted(years, reverse=True):
         lines.append('  <div class="archive-year">')
