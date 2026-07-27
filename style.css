@@ -642,6 +642,19 @@ a {
   margin-bottom: 0.75rem;
   padding-bottom: 0.5rem;
   border-bottom: 2px solid var(--accent);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  user-select: none;
+}
+
+.archive-year-header .fold-icon {
+  margin-left: auto;
+}
+
+.archive-year-header.collapsed .fold-icon {
+  transform: rotate(-90deg);
 }
 
 .archive-list {

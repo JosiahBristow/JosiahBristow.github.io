@@ -544,7 +544,9 @@ async function submitPostEdit(id) {
     closeModal();
     document.getElementById('tab-posts').dataset.loaded = '';
     renderPosts();
-  } catch(e) {}
+  } catch(e) {
+    toast(e.message || 'Save failed', 'error');
+  }
 }
 
 async function submitPost() {
@@ -581,15 +583,17 @@ async function submitPost() {
   const cover = document.getElementById('post-cover').value.trim();
 
   try {
-    const body = { title, body, date, time, category, cover };
-    if (cv.emoji) body.emoji = cv.emoji;
-    await apiCall('posts/add', 'POST', body);
+    const payload = { title, body, date, time, category, cover };
+    if (cv.emoji) payload.emoji = cv.emoji;
+    await apiCall('posts/add', 'POST', payload);
     _categories = null;
     toast('Post added', 'success');
     closeModal();
     document.getElementById('tab-posts').dataset.loaded = '';
     renderPosts();
-  } catch(e) {}
+  } catch(e) {
+    toast(e.message || 'Add failed', 'error');
+  }
 }
 
 // ── Books ──

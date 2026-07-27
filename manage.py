@@ -1127,7 +1127,7 @@ def _build_archive(posts):
     lines.append('  </div>')
     for year in sorted(years, reverse=True):
         lines.append('  <div class="archive-year">')
-        lines.append(f'    <div class="archive-year-header">\U0001f4c5 {year}</div>')
+        lines.append(f'    <div class="archive-year-header">\U0001f4c5 {year} <span class="fold-icon">▼</span></div>')
         lines.append('    <ul class="archive-list">')
         for p in years[year]:
             url = f'posts/{p.get("dir", _dir_name(p.get("title", "")))}/'

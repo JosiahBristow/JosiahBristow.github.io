@@ -750,13 +750,13 @@
   });
 })();
 
-// ── Category fold ──
+// ── Category / Archive fold ──
 (function() {
   document.addEventListener('click', function(e) {
-    var header = e.target.closest('.category-header');
+    var header = e.target.closest('.category-header, .archive-year-header');
     if (!header) return;
     var list = header.nextElementSibling;
-    if (!list || !list.classList.contains('category-list')) return;
+    if (!list) return;
     header.classList.toggle('collapsed');
     list.classList.toggle('hidden');
   });
