@@ -597,10 +597,13 @@
 
   var index = [];
   var indexLoaded = false;
-  fetch('/data/search-index.json').then(function(r) { return r.json(); }).then(function(data) {
-    index = data;
-    indexLoaded = true;
-  }).catch(function() { indexLoaded = true; });
+  var _fetchIndex = function() {
+    fetch('/data/search-index.json?t=' + Date.now()).then(function(r) { return r.json(); }).then(function(data) {
+      index = data;
+      indexLoaded = true;
+    }).catch(function() { indexLoaded = true; });
+  };
+  _fetchIndex();
 
   var overlay = document.createElement('div');
   overlay.className = 'search-overlay';
@@ -698,6 +701,7 @@
   }
 
   function open() {
+    _fetchIndex();
     overlay.classList.add('open');
     setTimeout(function() { input.focus(); }, 100);
   }

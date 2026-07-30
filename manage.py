@@ -676,17 +676,37 @@ def _rename_cover_to_title(book):
     book['cover'] = f'images/books/{new_fname}'
     return book['cover']
 
+class _NoRedirect(urllib.request.HTTPRedirectHandler):
+    def redirect_request(self, req, fp, code, msg, headers, newurl):
+        if 'sec.douban.com' in newurl:
+            return None
+        return super().redirect_request(req, fp, code, msg, headers, newurl)
+
 def _fetch_book_meta(book_url):
     """Scrape book metadata (title, author, rating, description, cover) from a URL."""
     meta = {'title': '', 'author': '', 'rating': '', 'description': '', 'cover': ''}
     if not book_url or not book_url.startswith(('http://', 'https://')):
         return meta
     try:
+        opener = urllib.request.build_opener(_NoRedirect)
         req = urllib.request.Request(book_url, headers={
-            'User-Agent': 'Mozilla/5.0 (Linux; Android 14) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36'
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36',
+            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+            'Accept-Language': 'zh-CN,zh;q=0.9,en;q=0.8',
+            'Referer': 'https://book.douban.com/',
         })
-        with urllib.request.urlopen(req, timeout=15) as resp:
-            html = resp.read().decode('utf-8', errors='replace')
+        resp = opener.open(req, timeout=15)
+        actual_url = resp.geturl()
+        if 'sec.douban.com' in actual_url:
+            print("  Blocked by Douban security page — try a different URL or add book manually")
+            return meta
+        html = resp.read().decode('utf-8', errors='replace')
+    except urllib.error.HTTPError as e:
+        if e.code in (302, 301, 303, 307, 308):
+            print("  Blocked by Douban security redirect — try a different URL or add book manually")
+        else:
+            print(f"  Failed to fetch page: {e}")
+        return meta
     except Exception as e:
         print(f"  Failed to fetch page: {e}")
         return meta
