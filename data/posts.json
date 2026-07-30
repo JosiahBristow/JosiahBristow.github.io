@@ -42,7 +42,7 @@
     "excerpt": "摘要：        \nPacman 简介 以下是 Arch Wiki 的介绍： pacman 包管理器是 Arch Linux 的主要特色之一。它将简单的二进制包格式与易于使用的 Arch 构建系统相结合。pacman 的目标是能够轻松管理软件包，无论是来自 官方仓库还是用户自己的构建。 pacman 通过与主服务器同步",
     "thumb": "/posts/Archlinux下pacman的基本使用方法/images/Archlinux下pacman的基本使用方法.png",
     "category": "Arch Linux",
-    "views": "72",
+    "views": "73",
     "comments": "0",
     "likes": "0",
     "content_hash": "4d88631e642da55f03368729765b1722a846e5cc810a644a1c3a3e8298eea561"
@@ -58,7 +58,7 @@
     "excerpt": "摘要：        \n安装 Wadroid 桌面问题 Waydroid 只运行在 Wayland 中，确保你在使用它 内核问题 Waydroid 需要 binder 模块，一般默认就有，如果是自己编译的内核，请确保编译选项勾选该模块，或使用 DKMS 安装 性能优化 推荐在 AMD CPU上安装 libndk，Intel",
     "thumb": "/posts/使用-Waydroid-在-Archlinux-下无缝使用安卓软件/images/使用-Waydroid-在-Archlinux-下无缝使用安卓软件.png",
     "category": "Arch Linux",
-    "views": "1007",
+    "views": "1008",
     "comments": "0",
     "likes": "0",
     "content_hash": "80983fd7c19f842f744fddb4f2e6df1b28722eb627974058a994607762ea0753"
@@ -170,7 +170,7 @@
     "excerpt": "摘要：        \n问题所在 在 Archlinux、Manjaro、Ubuntu、Fedora等最新的linux发行版中运行 pip install 时，通常会收到一个错误提示：error: externally-managed-environment。 具体内容类似下面： ❯ sudo python -m pip",
     "thumb": "/posts/解决Linux下-pip-install-出现-externally-managed-environment问题/images/解决Linux下-pip-install-出现-externally-managed-environment问题.png",
     "category": "Linux",
-    "views": "9644",
+    "views": "9649",
     "comments": "0",
     "likes": "1",
     "content_hash": "b19ed7c37870938f8b8dca55765be6b8ed0601053a0c2ddc0b8d8b7513aef7a3"
@@ -183,7 +183,7 @@
     "dir": "Cargo-下载太慢？试试更换国内源",
     "date": "2025-01-31",
     "time": "06:55",
-    "excerpt": "摘要：        \n问题所在 Rust 官方默认的 Cargo 源服务器和 crate 管理仓库为 crates.io，并放置在 github 上。 Cargo 的“注册表源”与 crates.io 本身相同，即 Cargo 也有一个在 github 存储库中提供的索引。该存储库匹配 crates.io index 的",
+    "excerpt": "摘要：        \ncargo 下载缓慢的原因 Rust 官方默认的 Cargo 源服务器和 crate 管理仓库为 crates.io，并放置在 github 上。 Cargo 的“注册表源”与 crates.io 本身相同，即 Cargo 也有一个在 github 存储库中提供的索引。该存储库匹配 crates.i",
     "thumb": "/posts/Cargo-下载太慢？试试更换国内源/images/Cargo-下载太慢？试试更换国内源.png",
     "category": "Rust",
     "views": "479",
@@ -250,7 +250,7 @@
     "excerpt": "摘要：        \nLinux 版 WPS 简介 下面是 Arch Wiki 的描述 WPS Office for Linux 是金山公司推出的、运行于 Linux 平台上的全功能办公软件。与 Microsoft Office 高度兼容，且更加尊重 Linux 用户特定的使用习惯，并自带方正字体集。 安装 WPS WP",
     "thumb": "/posts/在-Archlinux-下使用-WPS-流畅办公/images/在-Archlinux-下使用-WPS-流畅办公.png",
     "category": "Arch Linux",
-    "views": "0",
+    "views": "1",
     "comments": "0",
     "likes": "0",
     "content_hash": "84a6f4b1f58e72ddd26352b57b3ad197668d96f6bf4ac72763cb3e231d131f43"
