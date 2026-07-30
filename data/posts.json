@@ -10,7 +10,7 @@
     "excerpt": "摘要：        \nMarkdown 是一种轻量级标记语言，让你用纯文本格式就能写出结构清晰、排版美观的文档。 1. 标题 使用 # 符号，数量表示级别。 源码： # 一级标题 ## 二级标题 ### 三级标题 #### 四级标题 ##### 五级标题 ###### 六级标题 预览： 一级标题 二级标题 三级标题 四级",
     "thumb": "/posts/Markdown-简明教程/images/Markdown-简明教程.png",
     "category": "Tools",
-    "views": "2",
+    "views": "5",
     "comments": "0",
     "likes": "0",
     "content_hash": "c8213df105ef7d69f85f8a8285e32077bd3f0b0fb1a9851aaa644dae28931b60"
@@ -26,7 +26,7 @@
     "excerpt": "摘要：        \n为什要使用 Flatpak 🤔 在 Linux 下装软件，除了系统包管理器（apt/pacman/dnf）和 Snap，还有越来越流行的 Flatpak。它解决了依赖冲突和发行版碎片化的问题 🎉 优点 解释 跨发行版兼容 🌍 同一个 Flatpak 应用可以在不同的 Linux 发行版上运行",
     "thumb": "/posts/Flathub-是现代的-Linux-应用商店/images/Flathub-是现代的-Linux-应用商店.png",
     "category": "Linux",
-    "views": "123",
+    "views": "124",
     "comments": "0",
     "likes": "0",
     "content_hash": "59adf70690e2cf32cb2e64fa1cc7274a17757509eb154561b06ded3e5d802c5c"
@@ -42,7 +42,7 @@
     "excerpt": "摘要：        \nPacman 简介 以下是 Arch Wiki 的介绍： pacman 包管理器是 Arch Linux 的主要特色之一。它将简单的二进制包格式与易于使用的 Arch 构建系统相结合。pacman 的目标是能够轻松管理软件包，无论是来自 官方仓库还是用户自己的构建。 pacman 通过与主服务器同步",
     "thumb": "/posts/Archlinux下pacman的基本使用方法/images/Archlinux下pacman的基本使用方法.png",
     "category": "Arch Linux",
-    "views": "71",
+    "views": "72",
     "comments": "0",
     "likes": "0",
     "content_hash": "4d88631e642da55f03368729765b1722a846e5cc810a644a1c3a3e8298eea561"
@@ -58,7 +58,7 @@
     "excerpt": "摘要：        \n安装 Wadroid 桌面问题 Waydroid 只运行在 Wayland 中，确保你在使用它 内核问题 Waydroid 需要 binder 模块，一般默认就有，如果是自己编译的内核，请确保编译选项勾选该模块，或使用 DKMS 安装 性能优化 推荐在 AMD CPU上安装 libndk，Intel",
     "thumb": "/posts/使用-Waydroid-在-Archlinux-下无缝使用安卓软件/images/使用-Waydroid-在-Archlinux-下无缝使用安卓软件.png",
     "category": "Arch Linux",
-    "views": "1005",
+    "views": "1007",
     "comments": "0",
     "likes": "0",
     "content_hash": "80983fd7c19f842f744fddb4f2e6df1b28722eb627974058a994607762ea0753"
@@ -74,7 +74,7 @@
     "excerpt": "摘要：        \nLinux 下缺少打印机驱动是常见问题。Linux 在打印方面确实不如 windows 即插即用方便，配置步骤还是颇为复杂的，请各位耐心观看本文。 安装 CPUS 不了解什么是cpus的可以看这里 安装 CUPS 服务： # Arch Linux / Manjaro / Omarchy sudo p",
     "thumb": "/posts/Linux-下缺少打印机驱动的解决方法/images/Linux-下缺少打印机驱动的解决方法.png",
     "category": "Linux",
-    "views": "98",
+    "views": "99",
     "comments": "0",
     "likes": "0",
     "content_hash": "4122d93a5e2ebca75486eb291623592a13464037b96fe4f798999c64ae449154"
@@ -90,7 +90,7 @@
     "excerpt": "摘要：        \nArchlinuxcn简介 ArchLinuxCN 是由 Arch Linux 中文社区维护的非官方用户存储库。它旨在为 Arch Linux 用户，尤其是华语社区的用户，提供对 Arch Linux 官方存储库中不可用的常用软件、工具、字体和自定义包的访问权限。 它包括中国用户经常使用的软件和工具",
     "thumb": "/posts/在-Archlinux-中添加-archlinuxcn-软件仓库/images/在-Archlinux-中添加-archlinuxcn-软件仓库.png",
     "category": "Arch Linux",
-    "views": "150",
+    "views": "151",
     "comments": "0",
     "likes": "0",
     "content_hash": "5863435e4fb5401e7c0e8b266c075463b5f0df4c7cb2f2849b4bf5594179f8e4"
@@ -106,7 +106,7 @@
     "excerpt": "摘要：        \n备份原来的 /etc/pacman.d/mirrorlist sudo mv /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.bak 添加镜像源到 /etc/pacman.d/mirrorlist 自动换源 reflector 是一个 archli",
     "thumb": "/posts/Archlinux-更换镜像源/images/Archlinux-更换镜像源.png",
     "category": "Arch Linux",
-    "views": "192",
+    "views": "193",
     "comments": "0",
     "likes": "0",
     "content_hash": "8afba0772004672a37807a28f536ccab178ed76d5f2fb5206a1357fd5f04dfd9"
@@ -122,7 +122,7 @@
     "excerpt": "摘要：        \n安装及配置输入法框架 安装输入法框架 目前一共有两种选择Fcitx5和Ibus，这里推荐使用更现代，轻量Fcitx5 # 中文 # Fcitx5 sudo pacman -S fcitx5 fcitx5-chinese-addons fcitx5-gtk fcitx5-qt fcitx5-confi",
     "thumb": "/posts/在-Archlinux-中安装中文与日语输入法/images/在-Archlinux-中安装中文与日语输入法.png",
     "category": "Arch Linux",
-    "views": "1234",
+    "views": "1235",
     "comments": "0",
     "likes": "0",
     "content_hash": "60658dccff5424e789ae967a6b3dc6ceb62f030833e4173a7817bdd71d4de3b5"
@@ -138,7 +138,7 @@
     "excerpt": "摘要：        \nPygame 的介绍 pygame 是用来写游戏的 python 模块集合。使用 python 可以导入 pygame 来开发有意思的游戏。pygame 小巧并且跨平台。 安装 pygame # 如果安装速度慢，可以使用换源安装 pip install pygame # 另一种方法 python -",
     "thumb": "/posts/[Python]-pygame-简单入门/images/[Python]-pygame-简单入门.png",
     "category": "Python",
-    "views": "68",
+    "views": "69",
     "comments": "0",
     "likes": "0",
     "content_hash": "e7147160a15709408b8aa92da7405ce8b838d69e99055a20c5532a72e002c16c"
@@ -154,7 +154,7 @@
     "excerpt": "摘要：        \n问题所在 今天本想在我的树梅派上安装个 neovim 0.10 版本，结果通过运行后出现下面错误： ❯ nvim nvim: /lib/aarch64-linux-gnu/libm.so.6: version `GLIBC_2.38' not found (required by nvim) nvi",
     "thumb": "/posts/树莓派更新工具链/images/树莓派更新工具链.png",
     "category": "Raspberry Pi",
-    "views": "91",
+    "views": "92",
     "comments": "0",
     "likes": "0",
     "content_hash": "e5107c14807c763a9b9c31e9ccbbb4eb4935df7b735ddc6d9e23c8f4fce6af3d"
@@ -170,7 +170,7 @@
     "excerpt": "摘要：        \n问题所在 在 Archlinux、Manjaro、Ubuntu、Fedora等最新的linux发行版中运行 pip install 时，通常会收到一个错误提示：error: externally-managed-environment。 具体内容类似下面： ❯ sudo python -m pip",
     "thumb": "/posts/解决Linux下-pip-install-出现-externally-managed-environment问题/images/解决Linux下-pip-install-出现-externally-managed-environment问题.png",
     "category": "Linux",
-    "views": "9598",
+    "views": "9644",
     "comments": "0",
     "likes": "1",
     "content_hash": "b19ed7c37870938f8b8dca55765be6b8ed0601053a0c2ddc0b8d8b7513aef7a3"
@@ -186,7 +186,7 @@
     "excerpt": "摘要：        \n问题所在 Rust 官方默认的 Cargo 源服务器和 crate 管理仓库为 crates.io，并放置在 github 上。 Cargo 的“注册表源”与 crates.io 本身相同，即 Cargo 也有一个在 github 存储库中提供的索引。该存储库匹配 crates.io index 的",
     "thumb": "/posts/Cargo-下载太慢？试试更换国内源/images/Cargo-下载太慢？试试更换国内源.png",
     "category": "Rust",
-    "views": "476",
+    "views": "479",
     "comments": "0",
     "likes": "0",
     "content_hash": "156cb56edc8f1757f7fc519ad5f09945cbb38b1fe57f92406a61eeba5c784f8d"
@@ -202,7 +202,7 @@
     "excerpt": "摘要：        \n这篇blog用来记录我学习《计算机组成原理 第三版》（唐朔飞 箸）这本书的笔记，同时也希望能对阅读这片文章的你有所帮助。 第一篇 概论 本篇主要介绍计算机系统的基本组成、应用与发展，并通过对本书结构的介绍，指出这本书的基本思路。 第一章 计算机系统概论 1.1 计算机系统简介 1.1.1 计算机软硬",
     "thumb": "/posts/计算机组成原理学习笔记（未完成）/images/计算机组成原理学习笔记（未完成）.png",
     "category": "Arch Linux",
-    "views": "51",
+    "views": "54",
     "comments": "0",
     "likes": "0",
     "content_hash": "8b3a4a4ffedb7265f99636fccce1f737368f602022ac220768dc2bd3b56ebcec"
@@ -234,9 +234,25 @@
     "excerpt": "摘要：        \n硬件检查 先确认 CPU 是否支持虚拟化： grep -E 'vmx|svm' /proc/cpuinfo 输出中包含 VT-x（Intel）或 AMD-V（AMD）即表示硬件支持。若无输出，通常是因为 BIOS/UEFI 中禁用了虚拟化，需重启进入固件设置开启。 KVM/QEMU 1. 安装软件包",
     "thumb": "/posts/在-archinux-使用虚拟机（KVM-，Vitual-Box，VMware）/images/在-archinux-使用虚拟机（KVM-，Vitual-Box，VMware）.png",
     "category": "Arch Linux",
-    "views": "1",
+    "views": "4",
     "comments": "0",
     "likes": "0",
     "content_hash": "e7569f61ea517a8df510caed8e5658388dde8c3c701077d6942c732cc76d52d8"
+  },
+  {
+    "id": "22081760",
+    "source": "cnblogs",
+    "title": "在 Archlinux 下使用 WPS 流畅办公",
+    "slug": "在-archlinux-下使用-wps-流畅办公",
+    "dir": "在-Archlinux-下使用-WPS-流畅办公",
+    "date": "2026-07-30",
+    "time": "18:55",
+    "excerpt": "摘要：        \nLinux 版 WPS 简介 下面是 Arch Wiki 的描述 WPS Office for Linux 是金山公司推出的、运行于 Linux 平台上的全功能办公软件。与 Microsoft Office 高度兼容，且更加尊重 Linux 用户特定的使用习惯，并自带方正字体集。 安装 WPS WP",
+    "thumb": "/posts/在-Archlinux-下使用-WPS-流畅办公/images/在-Archlinux-下使用-WPS-流畅办公.png",
+    "category": "Arch Linux",
+    "views": "0",
+    "comments": "0",
+    "likes": "0",
+    "content_hash": "84a6f4b1f58e72ddd26352b57b3ad197668d96f6bf4ac72763cb3e231d131f43"
   }
 ]

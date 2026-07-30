@@ -286,7 +286,7 @@
   tux.setAttribute('aria-label', 'Tux, Linux mascot');
 
   var img = document.createElement('img');
-  img.src = (window.location.pathname.includes('/posts/') ? '../' : '') + 'tux_pet.svg';
+  img.src = (window.location.pathname.includes('/posts/') ? '../../' : '') + 'tux_pet.svg';
   img.alt = '';
   img.style.transform = 'scaleX(-1)';
   tux.appendChild(img);
