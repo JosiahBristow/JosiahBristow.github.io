@@ -3,14 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>在 Archlinux 中添加 archlinuxcn 软件仓库 - Josiah Bristow</title>
+<title>Linux 窗口管理器下的截图编辑利器：grim + slurp + satty - Josiah Bristow</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../../style.css">
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🐧</text></svg>">
 <link rel="alternate icon" href="https://avatars.githubusercontent.com/u/123633729?s=32&v=4">
-<script id="post-meta" type="application/json">{"id": "19122518", "thumb": "/posts/在-Archlinux-中添加-archlinuxcn-软件仓库/images/在-Archlinux-中添加-archlinuxcn-软件仓库.png", "excerpt": "摘要：        \nArchlinuxcn简介 ArchLinuxCN 是由 Arch Linux 中文社区维护的非官方用户存储库。它旨在为 Arch Linux 用户，尤其是华语社区的用户，提供对 Arch Linux 官方存储库中不可用的常用软件、工具、字体和自定义包的访问权限。 它包括中国用户经常使用的软件和工具", "views": "157", "comments": "0", "likes": "0"}</script>
+<script id="post-meta" type="application/json">{"id": "22182722", "thumb": "/posts/Linux-窗口管理器下的截图编辑利器：grim-+-slurp-+-satty/images/Linux-窗口管理器下的截图编辑利器：grim-+-slurp-+-satty.png", "excerpt": "摘要：        \n在 Wayland 环境下，传统的 X11 截图工具 Flameshot 常常面临兼容性问题。而 grim、slurp 和 satty 三者都是为 Wayland 原生设计的工具，组合起来能够提供流畅的截图与标注体验。 slurp：交互式选择屏幕区域，输出区域坐标 grim：Wayland 原生截图", "views": "0", "comments": "0", "likes": "0"}</script>
 </head>
 <body>
 
@@ -37,52 +37,53 @@
 
 <article class="post-article">
   <div class="post-article-heading">
-    <h1 class="post-article-title">在 Archlinux 中添加 archlinuxcn 软件仓库</h1>
+    <h1 class="post-article-title">Linux 窗口管理器下的截图编辑利器：grim + slurp + satty</h1>
     <div class="post-article-meta">
-      <span>🕐 2025-10-01 16:18</span>
-      <span>👁️ 157</span>
+      <span>🕐 2026-08-03 17:35</span>
+      <span>👁️ 0</span>
       <span>💬 0</span>
       <span>👍 0</span>
     </div>
   </div>
   <div class="post-article-body">
-<h2 id="archlinuxcn简介">Archlinuxcn简介</h2>
-<blockquote>
-<p>ArchLinuxCN 是由 Arch Linux 中文社区维护的非官方用户存储库。它旨在为 Arch Linux 用户，尤其是华语社区的用户，提供对 Arch Linux 官方存储库中不可用的常用软件、工具、字体和自定义包的访问权限。</p>
-<ol>
-<li>它包括中国用户经常使用的软件和工具，如字体和美化包</li>
-<li>它由 Arch Linux 中文社区维护，以满足官方存储库未涵盖的特定需求</li>
-</ol>
-</blockquote>
-<h2 id="更换国内-pacman-镜像源">更换国内 pacman 镜像源</h2>
-<p>为保证下载速度，可以切换国内镜像源l</p>
-<pre><code class="language-bash">sudo pacman -S reflector
-sudo reflector --country China --latest 10 --protocol https --sort rate --save /etc/pacman.d/mirrorlist
+<p>在 Wayland 环境下，传统的 X11 截图工具 Flameshot 常常面临兼容性问题。而 <code>grim</code>、<code>slurp</code> 和 <code>satty</code> 三者都是为 Wayland 原生设计的工具，组合起来能够提供流畅的截图与标注体验。</p>
+<ul>
+<li><strong>slurp</strong>：交互式选择屏幕区域，输出区域坐标</li>
+<li><strong>grim</strong>：Wayland 原生截图工具，从合成器中抓取图像</li>
+<li><strong>satty</strong>：现代化截图标注工具，灵感来自 Swappy 和 Flameshot</li>
+</ul>
+<h2 id="解决方案">解决方案</h2>
+<p>直接把下面命令配置为你的 wm 的截图方式</p>
+<pre><code class="language-bash">grim -t ppm -g "$(slurp -d)" - | satty -f - --initial-tool=arrow --copy-command=wl-copy --actions-on-escape="save-to-clipboard,exit" --brush-smooth-history-size=5 --disable-notifications
 </code></pre>
-<h2 id="添加archlinuxcn-软件仓库">添加archlinuxcn 软件仓库</h2>
-<p>编辑 /etc/pacman.conf， 在文件最后加入下面内容：</p>
-<pre><code class="language-bash">[archlinuxcn]
-Server = https://mirrors.tuna.tsinghua.edu.cn/archlinuxcn/$arch
-Server = https://mirrors.tuna.tsinghua.edu.cn/archlinuxcn/$arch
+<p>三个工具各司其职，通过管道（pipe）串联成一个完整的截图编辑流程</p>
+<h2 id="安装">安装</h2>
+<h3 id="arch-linux">Arch Linux</h3>
+<pre><code class="language-bash">sudo pacman -S grim slurp satty
 </code></pre>
-<p>然后安装 archlinuxcn-keyring 包，导入 GPG key。</p>
-<pre><code class="language-bash">sudo pacman -Sy archlinuxcn-keyring：
+<h3 id="debianubuntu">Debian/Ubuntu</h3>
+<pre><code class="language-bash">sudo apt install grim slurp
+# satty 可能需要从源码或第三方仓库安装
 </code></pre>
-<h2 id="faq-解答">FAQ 解答</h2>
-<p>若前一次由于网络问题，更新失败，导致下面问题：：<br>
-<img src="images/3586302-20260624132828340-251677533.png" alt="Screenshot from 2026-06-23 12-40-45"  loading="lazy"><br>
-可以试试如下解决方案：</p>
-<pre><code class="language-bash"># 清理损坏的缓存和残留密钥
-sudo rm -rf /var/lib/pacman/sync/*
-sudo rm -rf /etc/pacman.d/gnupg
-# 重新初始化 keyring
-sudo pacman-key --init
-sudo pacman-key --populate archlinux
-#强制刷新
-sudo pacman -Syy 
-# 再次安装keyring
-sudo pacman -S archlinuxcn-keyring
+<h3 id="fedora">Fedora</h3>
+<pre><code class="language-bash">sudo dnf install grim slurp
+
+# satty 官方仓库没有，需要通过第三方仓库 COPRE 安装：
+sudo dnf copr enable mineiro/satty
+sudo dnf install satty
 </code></pre>
+<h2 id="主流-wm-的配置方法">主流 WM 的配置方法</h2>
+<p>在 Hyprland 中绑定快捷键：</p>
+<pre><code class="language-lua">bind = , XF86SELECTIVESCREENSHOT, exec, grim -t ppm -g "$(slurp -d)" - | satty -f - --initial-tool=arrow --copy-command=wl-copy --actions-on-escape="save-to-clipboard,exit" --brush-smooth-history-size=5 --disable-notifications
+</code></pre>
+<p>在 niri 中绑定快捷键：</p>
+<pre><code>Mod+Shift+S { spawn-sh "grim -t ppm -g "$(slurp -d)" - | satty -f - --initial-tool=arrow --copy-command=wl-copy --actions-on-escape="save-to-clipboard,exit" --brush-smooth-history-size=5 --disable-notifications"}
+</code></pre>
+<h1 id="faq-常见问题与回答">FAQ 常见问题与回答</h1>
+<h3 id="satty-无法启动或显示异常">satty 无法启动或显示异常</h3>
+<p>检查是否安装了 Wayland 相关的依赖库。satty 需要 Wayland 环境支持。</p>
+<h3 id="剪贴板不工作">剪贴板不工作</h3>
+<p>确保安装了 <code>wl-clipboard</code>（提供 <code>wl-copy</code> 和 <code>wl-paste</code> 命令）。</p>
   </div>
 </article>
 

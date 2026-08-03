@@ -1,3 +1,51 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>在 Archlinux 使用主流虚拟机软件（KVM ，Vitual Box，VMware） - Josiah Bristow</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../style.css">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🐧</text></svg>">
+<link rel="alternate icon" href="https://avatars.githubusercontent.com/u/123633729?s=32&v=4">
+<script id="post-meta" type="application/json">{"id": "21973603", "thumb": "/posts/在-Archlinux-使用主流虚拟机软件（KVM-，Vitual-Box，VMware）/images/在-Archlinux-使用主流虚拟机软件（KVM-，Vitual-Box，VMware）.png", "excerpt": "摘要：        \n硬件检查 先确认 CPU 是否支持虚拟化： grep -E 'vmx|svm' /proc/cpuinfo 输出中包含 VT-x（Intel）或 AMD-V（AMD）即表示硬件支持。若无输出，通常是因为 BIOS/UEFI 中禁用了虚拟化，需重启进入固件设置开启。 KVM/QEMU 1. 安装软件包", "views": "7", "comments": "0", "likes": "0"}</script>
+</head>
+<body>
+
+<header class="header">
+  <div class="header-title"><a href="../../index.html">Josiah Bristow</a></div>
+  <div class="header-prompt">Just For Fun!</div>
+  <div class="header-sub">Arch Linux, Linux tools, and developer life</div>
+</header>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="../../index.html">🏠 <span data-i18n="nav-home">首页</span></a>
+    <a href="../../archive.html">📦 <span data-i18n="nav-archive">归档</span></a>
+    <a href="../../categories.html">🏷️ <span data-i18n="nav-categories">分类</span></a>
+    <a href="../../about.html">👤 <span data-i18n="nav-about">关于</span></a>
+    <a href="../../bookshelf.html">📚 <span data-i18n="nav-bookshelf">书架</span></a>
+    <a href="../../gallery.html">📷 <span data-i18n="nav-gallery">相册</span></a>
+    <a href="../../friends.html">🤝 <span data-i18n="nav-friends">友链</span></a>
+    <button class="nav-search-btn" id="searchToggle" aria-label="搜索">🔍</button>
+  </div>
+</nav>
+
+<div class="page-full">
+
+<article class="post-article">
+  <div class="post-article-heading">
+    <h1 class="post-article-title">在 Archlinux 使用主流虚拟机软件（KVM ，Vitual Box，VMware）</h1>
+    <div class="post-article-meta">
+      <span>🕐 2026-07-27 21:54</span>
+      <span>👁️ 7</span>
+      <span>💬 0</span>
+      <span>👍 0</span>
+    </div>
+  </div>
+  <div class="post-article-body">
 <h2 id="硬件检查">硬件检查</h2>
 <p>先确认 CPU 是否支持虚拟化：</p>
 <pre><code class="language-bash">grep -E 'vmx|svm' /proc/cpuinfo
@@ -28,6 +76,11 @@
 <p>使用 NAT 方式让虚拟机访问外网：</p>
 <pre><code class="language-bash">sudo virsh net-start default
 sudo virsh net-autostart default
+</code></pre>
+<p><strong>⚠️注意</strong> 如果你是用防火墙，记得打开出入栈的</p>
+<pre><code class="language-bash"># 以 ufw 防火墙为例
+sudo ufw allow in on virbr0
+sudo ufw allow out on virbr0
 </code></pre>
 <hr>
 <h3 id="5-使用-virt-manager-创建虚拟机">5. 使用 virt-manager 创建虚拟机</h3>
@@ -144,3 +197,56 @@ yay -Rns vmware-workstation vmware-keymaps
 <p>ISO 文件位于 <code>/usr/lib/virtualbox/additions/VBoxGuestAdditions.iso</code>，在虚拟机中挂载后运行安装程序即可。</p>
 <h3 id="5-可选扩展包extension-pack">5. （可选）扩展包（Extension Pack）</h3>
 <p>扩展包提供 USB 2.0/3.0、RDP 远程桌面等特性（许可证为个人免费使用）。可通过 AUR 安装 <code>virtualbox-ext-oracle</code>，或从官网下载 <code>.vbox-extpack</code> 文件，然后在 VirtualBox 图形界面的“文件” → “工具” → “扩展包管理器”中手动安装。</p>
+  </div>
+</article>
+
+<div class="post-comments">
+  <h2 class="post-comments-title">💬 <span data-i18n="comments-title">评论</span></h2>
+  <div id="giscus-container"></div>
+  <script>
+    (function() {
+      var theme = 'catppuccin_latte';
+      var lang = 'zh-CN';
+      try {
+        var ts = localStorage.getItem('theme');
+        if (ts === 'dark') theme = 'catppuccin_mocha';
+        var ls = localStorage.getItem('lang');
+        if (ls === 'en') lang = 'en';
+      } catch(e) {}
+      var c = document.getElementById('giscus-container');
+      var sc = document.createElement('script');
+      sc.src = 'https://giscus.app/client.js';
+      sc.setAttribute('data-repo', 'JosiahBristow/JosiahBristow.github.io');
+      sc.setAttribute('data-repo-id', 'R_kgDOTi7MtA');
+      sc.setAttribute('data-category', 'Announcements');
+      sc.setAttribute('data-category-id', 'DIC_kwDOTi7MtM4DB-Fn');
+      sc.setAttribute('data-mapping', 'pathname');
+      sc.setAttribute('data-strict', '0');
+      sc.setAttribute('data-reactions-enabled', '1');
+      sc.setAttribute('data-emit-metadata', '0');
+      sc.setAttribute('data-input-position', 'bottom');
+      sc.setAttribute('data-theme', theme);
+      sc.setAttribute('data-lang', lang);
+      sc.setAttribute('crossorigin', 'anonymous');
+      sc.async = true;
+      c.appendChild(sc);
+    })();
+  </script>
+</div>
+
+</div>
+
+<div class="float-group">
+  <button class="float-btn" id="langToggle" aria-label="切换语言">EN</button>
+  <button class="float-btn" id="themeToggle" aria-label="切换主题">🌙</button>
+  <button class="back-to-top" id="backToTop" aria-label="返回顶部">↑</button>
+</div>
+
+<footer class="footer">
+  <p>🐧 &copy; 2024-2026 Josiah Bristow. Built with ❤️ for <a href="https://pages.github.com/">GitHub Pages</a>.</p>
+</footer>
+
+<script src="../../script.js"></script>
+<script src="../../lang.js"></script>
+</body>
+</html>
