@@ -265,7 +265,7 @@
     "time": "17:35",
     "excerpt": "摘要：        \n在 Wayland 环境下，传统的 X11 截图工具 Flameshot 常常面临兼容性问题。而 grim、slurp 和 satty 三者都是为 Wayland 原生设计的工具，组合起来能够提供流畅的截图与标注体验。 slurp：交互式选择屏幕区域，输出区域坐标 grim：Wayland 原生截图",
     "thumb": "/posts/Linux-窗口管理器下的截图编辑利器：grim-+-slurp-+-satty/images/Linux-窗口管理器下的截图编辑利器：grim-+-slurp-+-satty.png",
-    "category": "Arch Linux",
+    "category": "Linux",
     "views": "0",
     "comments": "0",
     "likes": "0",
