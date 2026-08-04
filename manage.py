@@ -1019,6 +1019,7 @@ CUSTOM_POST_PAGE_TPL = '''\
     <a href="../../bookshelf.html">📚 <span data-i18n="nav-bookshelf">\u4e66\u67b6</span></a>
     <a href="../../gallery.html">📷 <span data-i18n="nav-gallery">\u76f8\u518c</span></a>
     <a href="../../friends.html">🤝 <span data-i18n="nav-friends">\u53cb\u94fe</span></a>
+    <a target="_blank" rel="noopener" href="https://josiahbristow.github.io/ai-signal/index.html">📡 <span data-i18n="nav-signal">AI \u4fe1\u53f7</span></a>
     <button class="nav-search-btn" id="searchToggle" aria-label="\u641c\u7d22">🔍</button>
   </div>
 </nav>

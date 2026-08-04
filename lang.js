@@ -10,6 +10,7 @@
     'nav-bookshelf': { zh: '书架', en: 'Bookshelf' },
     'nav-gallery': { zh: '相册', en: 'Gallery' },
     'nav-friends': { zh: '友链', en: 'Friends' },
+    'nav-signal': { zh: 'AI 信号', en: 'AI Signal' },
     'sidebar-stats': { zh: '统计数据', en: 'Stats' },
     'stat-posts': { zh: '随笔', en: 'Posts' },
     'stat-likes': { zh: '推荐', en: 'Likes' },
