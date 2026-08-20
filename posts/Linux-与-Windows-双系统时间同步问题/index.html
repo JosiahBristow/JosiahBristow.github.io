@@ -3,14 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>在 Archlinux 下使用 WPS 流畅办公 - Josiah Bristow</title>
+<title>Linux 与 Windows 双系统时间同步问题 - Josiah Bristow</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../../style.css">
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🐧</text></svg>">
 <link rel="alternate icon" href="https://avatars.githubusercontent.com/u/123633729?s=32&v=4">
-<script id="post-meta" type="application/json">{"id": "22081760", "thumb": "/posts/在-Archlinux-下使用-WPS-流畅办公/images/在-Archlinux-下使用-WPS-流畅办公.png", "excerpt": "摘要：        \nLinux 版 WPS 简介 下面是 Arch Wiki 的描述 WPS Office for Linux 是金山公司推出的、运行于 Linux 平台上的全功能办公软件。与 Microsoft Office 高度兼容，且更加尊重 Linux 用户特定的使用习惯，并自带方正字体集。 安装 WPS WP", "views": "45", "comments": "0", "likes": "0"}</script>
+<script id="post-meta" type="application/json">{"id": "22548784", "thumb": "/posts/Linux-与-Windows-双系统时间同步问题/images/Linux-与-Windows-双系统时间同步问题.png", "excerpt": "摘要：        \n问题根因 因为 Windows 和 Linux 对系统时间的处理方式不同 Linux 将硬件时钟（BIOS/UEFI时钟）设置为 UTC（格林尼治标准时间），再根据时区换算显示 Windows 将硬件时钟设置为本地时间 所以一换系统，Windows 一看主板时间“哦现在是 UTC 下午 2 点”，心", "views": "2", "comments": "0", "likes": "0"}</script>
 </head>
 <body>
 
@@ -38,78 +38,43 @@
 
 <article class="post-article">
   <div class="post-article-heading">
-    <h1 class="post-article-title">在 Archlinux 下使用 WPS 流畅办公</h1>
+    <h1 class="post-article-title">Linux 与 Windows 双系统时间同步问题</h1>
     <div class="post-article-meta">
-      <span>🕐 2026-07-30 18:56</span>
-      <span>👁️ 45</span>
+      <span>🕐 2026-08-18 16:20</span>
+      <span>👁️ 2</span>
       <span>💬 0</span>
       <span>👍 0</span>
     </div>
   </div>
   <div class="post-article-body">
-<h2 id="linux-版-wps-简介">Linux 版 WPS 简介</h2>
-<p>下面是 Arch Wiki 的描述</p>
-<blockquote>
-<p>WPS Office for Linux 是金山公司推出的、运行于 Linux 平台上的全功能办公软件。与 Microsoft Office 高度兼容，且更加尊重 Linux 用户特定的使用习惯，并自带方正字体集。</p>
-</blockquote>
-<h2 id="安装-wps">安装 WPS</h2>
-<p>WPS Office for Linux 根据不同的需求被打包成了：</p>
-<table>
-<thead>
-<tr>
-<th style="text-align: center">软件包名称</th>
-<th style="text-align: center">说明</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align: center">wps-office-cn</td>
-<td style="text-align: center">WPS</td>
-</tr>
-<tr>
-<td style="text-align: center">wps-office</td>
-<td style="text-align: center">WPS 国际版</td>
-</tr>
-<tr>
-<td style="text-align: center">wps-office-365</td>
-<td style="text-align: center">WPS 365</td>
-</tr>
-<tr>
-<td style="text-align: center">wps-office-365-edu</td>
-<td style="text-align: center">WPS 365 教育版</td>
-</tr>
-</tbody>
-</table>
-<p>国内用户推荐安装 <code>wps-office-cn</code>。</p>
-<pre><code class="language-bash"># 安装 wps 和
-yay -S wps-office-cn
+<h2 id="问题根因">问题根因</h2>
+<p>因为 Windows 和 Linux 对系统时间的处理方式不同</p>
+<ul>
+<li>Linux 将硬件时钟（BIOS/UEFI时钟）设置为 UTC（格林尼治标准时间），再根据时区换算显示</li>
+<li>Windows 将硬件时钟设置为本地时间</li>
+</ul>
+<p>所以一换系统，Windows 一看主板时间“哦现在是 UTC 下午 2 点”，心想那就是我本地下午 2 点——结果你明明在东八区，直接给你倒退回早上 6 点，完美错开 8 小时。</p>
+<h2 id="解决方法">解决方法</h2>
+<h3 id="方案一将windows配置为使用utc时间推荐">方案一：将Windows配置为使用UTC时间（推荐）</h3>
+<p>让 Windows 也学会把主板时间当 UTC 看。</p>
+<ol>
+<li>Win + R，输入 regedit 打开注册表</li>
+<li>地址栏粘贴这串路径<code>HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\TimeZoneInformation</code></li>
+<li>右边空白处右键 → 新建 → DWORD（32位）值，命名为 RealTimeIsUniversal</li>
+<li>双击它，数值数据改成 1，确定</li>
+<li>重启，完事</li>
+</ol>
+<h3 id="方案二将linux配置为使用本地时间">方案二：将Linux配置为使用本地时间</h3>
+<ol>
+<li>打开Ubuntu终端。</li>
+<li>运行以下命令将硬件时钟设置为本地时间：<pre><code class="language-bash">timedatectl set-local-rtc 1 --adjust-system-clock
 </code></pre>
-<h2 id="设置中文">设置中文</h2>
-<p>因为 wps 默认是英文且不自带中文语言包，还需要安装中文语言包 <code>wps-office-mui-zh-cn</code>。</p>
-<pre><code class="language-bash"># 安装中文语言包
-yay -S wps-office-mui-zh-cn
+</li>
+<li>通过运行以下命令来验证更改：<pre><code class="language-bash">timedatectl
 </code></pre>
-<p>安装好语言包后，使用编辑器打开 <code>$XDG_CONFIG_HOME/Kingsoft/Office.conf</code> (如果系统没有定义$XDG_CONFIG_HOME， 改成 <code>~/.config/Kingsoft/Office.conf</code> 就行) 文件添加以下内容，重启后即可显示中文：</p>
-<pre><code>[General]
-languages=zh_CN
-</code></pre>
-<h2 id="fcitx5-输入法配置">Fcitx5 输入法配置</h2>
-<p>如果你在 wps 中无法使用 Fcitx5 输入法，可以试试下面的方案</p>
-<pre><code class="language-bash"># 编辑 wps 的启动脚本
-sudo vim /usr/bin/wps
-</code></pre>
-<p>把下面内容添加到 <code>gOpt=</code> 下面</p>
-<pre><code>export GTK_IM_MODULE=fcitx
-export QT_IM_MODULE=fcitx5
-export XMODIFIERS=@im=fcitx
-</code></pre>
-<p><img src="images/3586302-20260730185224800-917437888.png" alt="image"  loading="lazy"></p>
-<h2 id="解决字体缺失问题">解决字体缺失问题</h2>
-<p><img src="images/3586302-20260730180905785-129642148.png" alt="Screenshot from 2026-07-30 18-07-10"  loading="lazy"></p>
-<p>可安装 WPS 字体如：<code>ttf-wps-fonts</code> 或 <code>ttf-wps-win10</code> 或 <code>wps-office-fonts</code> 或 <code>wps-office-365-edu-fonts</code>（针对wps-office-365-eduAUR）解决。</p>
-<pre><code class="language-bash"># 推荐安装 `ttf-wps-fonts`
-yay -S ttf-wps-fonts
-</code></pre>
+你应该会看到类似 <code>RTC in local TZ: yes</code> 的输出。</li>
+</ol>
+<p><strong>额外提醒</strong>⚠️ Windows 的“快速启动”有时会捣乱，建议去电源设置里把它关掉，省得时间又抽风</p>
   </div>
 </article>
 

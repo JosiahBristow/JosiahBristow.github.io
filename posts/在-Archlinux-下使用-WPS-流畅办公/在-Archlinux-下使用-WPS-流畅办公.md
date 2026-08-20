@@ -40,7 +40,7 @@ yay -S wps-office-cn
 <pre><code class="language-bash"># 安装中文语言包
 yay -S wps-office-mui-zh-cn
 </code></pre>
-<p>安装好语言包后，使用编辑器打开 <code>$XDG_CONFIG_HOME/Kingsoft/Office.conf</code> (如果系统没有定义$XDG_CONFIG_HOME， 改成 <code>~/Kingsoft/Office.conf</code> 就行) 文件添加以下内容，重启后即可显示中文：</p>
+<p>安装好语言包后，使用编辑器打开 <code>$XDG_CONFIG_HOME/Kingsoft/Office.conf</code> (如果系统没有定义$XDG_CONFIG_HOME， 改成 <code>~/.config/Kingsoft/Office.conf</code> 就行) 文件添加以下内容，重启后即可显示中文：</p>
 <pre><code>[General]
 languages=zh_CN
 </code></pre>
